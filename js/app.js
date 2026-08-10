@@ -1493,59 +1493,33 @@ function renderCommitActivityChart() {
         <div style="display: flex; gap: 4px;">
           ${barsHtml}
         </div>
-      </div>
-    `;
-  }).join('');
-
-  if (feedContainer) {
-    feedContainer.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
-        <strong style="color: var(--text-primary); font-size: 14px;">Recent Git Commit Activity Stream (Microservice Repositories)</strong>
-        <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 2px 8px;">Poly-Repo Commit History</span>
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        ${repos.map(r => {
+              ${repos.map(r => {
           const isExpanded = !!expandedRepos[r.name];
-          const isLoading = repoCommitLoading[r.name];
           const commits = r.recent || [];
-          const visibleLimit = repoVisibleLimits[r.name] || 3;
-          const visibleCommits = commits.slice(0, visibleLimit);
-          const hasMore = commits.length > visibleLimit;
 
-          let commitRowsHtml = '';
-          if (isLoading && (!commits || commits.length === 0)) {
-            commitRowsHtml = `
-              <div style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; color: var(--accent-color); font-size: 13px; font-weight: 600; background: var(--bg-secondary); border-radius: 6px; border: 1px dashed var(--accent-color);">
-                <span class="health-pulse-dot" style="width:10px;height:10px;background:var(--accent-color);"></span>
-                <span>🔄 Fetching Live Commits from GitHub API (https://api.github.com/repos/Ryan181296/${r.name}/commits)...</span>
+          const commitRowsHtml = commits.map(c => `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; gap: 8px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1;">
+                <a href="https://github.com/Ryan181296/${r.name}/commit/${c.hash}" target="_blank" style="text-decoration: none;">
+                  <code style="font-size: 11px; color: ${r.color}; font-weight: 700; background: ${r.color}15; padding: 1px 5px; border-radius: 4px;">${c.hash || 'HEAD'}</code>
+                </a>
+                <span style="color: var(--text-primary); font-weight: 500;">${c.msg}</span>
               </div>
-            `;
-          } else {
-            commitRowsHtml = visibleCommits.map(c => `
-              <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; gap: 8px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1;">
-                  <a href="https://github.com/Ryan181296/${r.name}/commit/${c.hash}" target="_blank" style="text-decoration: none;">
-                    <code style="font-size: 11px; color: ${r.color}; font-weight: 700; background: ${r.color}15; padding: 1px 5px; border-radius: 4px;">${c.hash || 'HEAD'}</code>
-                  </a>
-                  <span style="color: var(--text-primary); font-weight: 500;">${c.msg}</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--text-muted);">
-                  <span>${c.date || ''}</span>
-                  <span>by <strong style="color: var(--text-secondary);">${c.author || 'dev-team'}</strong></span>
-                </div>
+              <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--text-muted);">
+                <span>${c.date || ''}</span>
+                <span>by <strong style="color: var(--text-secondary);">${c.author || 'dev-team'}</strong></span>
               </div>
-            `).join('');
-          }
+            </div>
+          `).join('');
 
-      return `
+          return `
             <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.2s ease;">
               <!-- Accordion Header Bar -->
               <div onclick="window.toggleCommitRepoAccordion('${r.name}')" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-secondary); cursor: pointer; user-select: none;">
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: ${r.color}; display: inline-block;"></span>
                   <strong style="font-size: 13.5px; color: ${r.color};">${r.name}</strong>
-                  <span class="g-badge" style="background: ${r.color}22; color: ${r.color}; font-size: 10.5px; padding: 1px 7px;">Showing ${visibleCommits.length} of ${commits.length} Commits</span>
-                  ${r.isRealTime ? '<span class="g-badge" style="background: rgba(16,185,129,0.2); color: #10b981; font-size: 9.5px; padding: 1px 5px;">🟢 GitHub API Live</span>' : ''}
+                  <span class="g-badge" style="background: ${r.color}22; color: ${r.color}; font-size: 10.5px; padding: 1px 7px;">${commits.length} Commits</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary);">
                   <span>${isExpanded ? '▲ Thu Gọn (Collapse)' : '▼ Mở Rộng (Expand)'}</span>
@@ -1556,20 +1530,11 @@ function renderCommitActivityChart() {
               ${isExpanded ? `
                 <div style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
                   ${commitRowsHtml.length > 0 ? commitRowsHtml : '<div style="font-size: 12px; color: var(--text-muted); padding: 4px;">No commit logs available.</div>'}
-                  <div style="text-align: center; margin-top: 6px;">
-                    ${hasMore ? `
-                      <button onclick="window.loadMoreRepoCommits('${r.name}')" ${isLoading ? 'disabled' : ''} style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--accent-color); padding: 6px 18px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                        ${isLoading ? '🔄 Loading from GitHub...' : `⏬ Load More Commits (+4) — Showing ${visibleCommits.length} of ${commits.length}`}
-                      </button>
-                    ` : `
-                      <span class="g-badge" style="background: rgba(16,185,129,0.1); color: #10b981; font-size: 11px; padding: 3px 10px;">✅ All ${commits.length} Recent Commits Loaded</span>
-                    `}
-                  </div>
                 </div>
               ` : ''}
             </div>
           `;
-    }).join('')}
+        }).join('')}
       </div>
     `;
   }
