@@ -70,7 +70,7 @@ def scan_git_commits():
             target_dir = WORKSPACE_ROOT
 
         try:
-            cmd = ["git", "log", "-n", "5", "--pretty=format:%h|%an|%s|%cd", "--date=short"]
+            cmd = ["git", "log", "-n", "20", "--pretty=format:%h|%an|%s|%cd", "--date=short"]
             res = subprocess.run(cmd, cwd=target_dir, capture_output=True, text=True, check=True)
             lines = res.stdout.strip().split("\n")
             recent_commits = []

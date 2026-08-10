@@ -1198,14 +1198,31 @@ async function syncApiDataFromGitHub() {
   }
 }
 
-// ── Render Microservice Git Commit Activity Velocity Chart ───────────────────
+// ── Interactive Microservice Commit Activity & Load More Pagination ─────────
+let selectedCommitRepo = 'ALL';
+let commitLimit = 5;
+
+function filterCommitRepo(repoName) {
+  selectedCommitRepo = (selectedCommitRepo === repoName) ? 'ALL' : repoName;
+  commitLimit = 5;
+  renderCommitActivityChart();
+}
+
+function loadMoreCommits() {
+  commitLimit += 5;
+  renderCommitActivityChart();
+}
+
+window.filterCommitRepo = filterCommitRepo;
+window.loadMoreCommits = loadMoreCommits;
+
 function renderCommitActivityChart() {
   const chartContainer = document.getElementById('commit-chart-container');
   const feedContainer = document.getElementById('recent-commits-list');
   if (!chartContainer) return;
 
   const defaultRepos = [
-    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 49, recent: [{ author: 'ryan-backend', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token', hash: 'dd30592' }] },
+    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 49, recent: [{ author: 'ryan-backend', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token', hash: 'dd30592' }, { author: 'ryan-backend', msg: 'refactor: bypass rate limiting and OTP dispatching for Firebase', hash: '52b0800' }] },
     { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24], total: 140, recent: [{ author: 'dev-team', msg: 'feat(cart): optimize Redis cache invalidation', hash: '8a2b1c3' }] },
     { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9], total: 58, recent: [{ author: 'ryan-backend', msg: 'feat(pay): add BIDV QR checksum validation', hash: '4f5e6d7' }] },
     { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6], total: 29, recent: [{ author: 'dev-team', msg: 'feat(fcm): add Firebase FCM token batching', hash: '9b8c7d6' }] },
@@ -1229,24 +1246,27 @@ function renderCommitActivityChart() {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   chartContainer.innerHTML = repos.map(repo => {
+    const isSelected = (selectedCommitRepo === repo.name);
+    const borderStyle = isSelected ? `border: 2px solid ${repo.color}; box-shadow: 0 0 12px ${repo.color}44;` : `border: 1px solid var(--border-color);`;
     const weekly = repo.weeklyCommits || [4, 7, 3, 9, 6, 12, 8];
     const maxVal = Math.max(...weekly, 1);
+    
     const barsHtml = weekly.map((val, idx) => {
       const heightPercent = Math.round((val / maxVal) * 100);
       return `
         <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-          <div style="width: 100%; height: 50px; background: rgba(255,255,255,0.04); border-radius: 4px; display: flex; align-items: flex-end; padding: 2px;">
+          <div style="width: 100%; height: 46px; background: rgba(255,255,255,0.04); border-radius: 4px; display: flex; align-items: flex-end; padding: 2px;">
             <div style="width: 100%; height: ${heightPercent}%; background: ${repo.color}; border-radius: 3px; transition: height 0.3s ease;" title="${days[idx]}: ${val} commits"></div>
           </div>
-          <span style="font-size: 9.5px; color: var(--text-muted);">${days[idx]}</span>
+          <span style="font-size: 9px; color: var(--text-muted);">${days[idx]}</span>
         </div>
       `;
     }).join('');
 
     return `
-      <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px;">
+      <div onclick="window.filterCommitRepo('${repo.name}')" style="background: var(--bg-primary); ${borderStyle} border-radius: 8px; padding: 12px; cursor: pointer; transition: all 0.2s ease;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <strong style="font-size: 12px; color: var(--text-primary);">${repo.name}</strong>
+          <strong style="font-size: 12px; color: ${isSelected ? repo.color : 'var(--text-primary)'};">${repo.name}</strong>
           <span class="g-badge" style="background: ${repo.color}22; color: ${repo.color}; font-size: 10px; padding: 1px 6px;">${repo.total} Commits</span>
         </div>
         <div style="display: flex; gap: 4px;">
@@ -1257,22 +1277,31 @@ function renderCommitActivityChart() {
   }).join('');
 
   if (feedContainer) {
-    const allRecent = [];
+    let filteredCommits = [];
     repos.forEach(r => {
-      if (r.recent) {
-        r.recent.forEach(rc => {
-          allRecent.push({ ...rc, repoName: r.name, color: r.color });
-        });
+      if (selectedCommitRepo === 'ALL' || selectedCommitRepo === r.name) {
+        if (r.recent) {
+          r.recent.forEach(rc => {
+            filteredCommits.push({ ...rc, repoName: r.name, color: r.color });
+          });
+        }
       }
     });
 
+    const totalAvailable = filteredCommits.length;
+    const visibleCommits = filteredCommits.slice(0, commitLimit);
+    const hasMore = totalAvailable > commitLimit;
+
     feedContainer.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-        <strong style="color: var(--text-primary);">Recent Git Commit Activity Stream</strong>
-        <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 1px 7px;">Real-Time Git Logs</span>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <strong style="color: var(--text-primary);">Recent Git Commit Activity Stream</strong>
+          ${selectedCommitRepo !== 'ALL' ? `<span class="g-badge" style="background: rgba(59,130,246,0.15); color: #60a5fa; cursor: pointer;" onclick="window.filterCommitRepo('ALL')">Filter: ${selectedCommitRepo} ✖</span>` : ''}
+        </div>
+        <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 1px 7px;">Showing ${visibleCommits.length} / ${totalAvailable} Commits</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 6px;">
-        ${allRecent.slice(0, 5).map(r => `
+        ${visibleCommits.map(r => `
           <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); flex-wrap: wrap; gap: 6px;">
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <span style="width: 8px; height: 8px; border-radius: 50%; background: ${r.color}; display: inline-block;"></span>
@@ -1284,6 +1313,13 @@ function renderCommitActivityChart() {
           </div>
         `).join('')}
       </div>
+      ${hasMore ? `
+        <div style="text-align: center; margin-top: 12px;">
+          <button onclick="window.loadMoreCommits()" style="background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+            ⏬ Load More Commits (+5)
+          </button>
+        </div>
+      ` : ''}
     `;
   }
 }
