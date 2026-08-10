@@ -1219,17 +1219,19 @@ async function fetchRealTimeGitHubCommits(repoName, page = 1) {
     const response = await fetch(url);
     if (response.ok) {
       const data = await response.json();
-      const formatted = data.map(item => ({
-        hash: item.sha ? item.sha.substring(0, 7) : 'HEAD',
-        author: (item.author && item.author.login) ? item.author.login : (item.commit && item.commit.author ? item.commit.author.name : 'dev-team'),
-        msg: (item.commit && item.commit.message) ? item.commit.message.split('\n')[0] : 'commit update',
-        date: (item.commit && item.commit.author && item.commit.author.date) ? item.commit.author.date.substring(0, 10) : ''
-      }));
+      if (Array.isArray(data) && data.length > 0) {
+        const formatted = data.map(item => ({
+          hash: item.sha ? item.sha.substring(0, 7) : 'HEAD',
+          author: (item.author && item.author.login) ? item.author.login : (item.commit && item.commit.author ? item.commit.author.name : 'dev-team'),
+          msg: (item.commit && item.commit.message) ? item.commit.message.split('\n')[0] : 'commit update',
+          date: (item.commit && item.commit.author && item.commit.author.date) ? item.commit.author.date.substring(0, 10) : ''
+        }));
 
-      if (!repoRealCommits[repoName] || page === 1) {
-        repoRealCommits[repoName] = formatted;
-      } else {
-        repoRealCommits[repoName] = [...repoRealCommits[repoName], ...formatted];
+        if (!repoRealCommits[repoName] || page === 1) {
+          repoRealCommits[repoName] = formatted;
+        } else {
+          repoRealCommits[repoName] = [...repoRealCommits[repoName], ...formatted];
+        }
       }
     }
   } catch (err) {
@@ -1242,9 +1244,6 @@ async function fetchRealTimeGitHubCommits(repoName, page = 1) {
 
 function toggleCommitRepoAccordion(repoName) {
   expandedRepos[repoName] = !expandedRepos[repoName];
-  if (expandedRepos[repoName] && !repoRealCommits[repoName]) {
-    fetchRealTimeGitHubCommits(repoName, 1);
-  }
   renderCommitActivityChart();
 }
 
@@ -1273,7 +1272,8 @@ function renderCommitActivityChart() {
         { hash: 'dd30592', author: 'ryan-backend', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token', date: '2026-08-10' },
         { hash: '52b0800', author: 'ryan-backend', msg: 'refactor: bypass rate limiting and OTP dispatching for Firebase requests', date: '2026-08-09' },
         { hash: 'bae245b', author: 'ryan-backend', msg: 'refactor: decouple OTP rate limit checking from counter in OtpService', date: '2026-08-08' },
-        { hash: 'a1b2c3d', author: 'ryan-backend', msg: 'feat(auth): add Merchant Employee JWT multi-tenant token claims', date: '2026-08-07' }
+        { hash: 'a1b2c3d', author: 'ryan-backend', msg: 'feat(auth): add Merchant Employee JWT multi-tenant token claims', date: '2026-08-07' },
+        { hash: 'f4e5d6c', author: 'dev-team', msg: 'fix(customer): resolve address geolocation coordinate parsing error', date: '2026-08-06' }
       ]
     },
     {
@@ -1284,7 +1284,8 @@ function renderCommitActivityChart() {
       recent: [
         { hash: '8a2b1c3', author: 'dev-team', msg: 'feat(cart): optimize Redis Lua script in-memory cart checkout', date: '2026-08-10' },
         { hash: '7d6e5f4', author: 'ryan-backend', msg: 'feat(product): add multi-tier pricing calculation engine', date: '2026-08-09' },
-        { hash: '3c2b1a0', author: 'dev-team', msg: 'fix(inventory): resolve pessimistic lock deadlock on order confirmation', date: '2026-08-08' }
+        { hash: '3c2b1a0', author: 'dev-team', msg: 'fix(inventory): resolve pessimistic lock deadlock on order confirmation', date: '2026-08-08' },
+        { hash: '9e8d7c6', author: 'ryan-backend', msg: 'feat(crm): implement warehouse document import/export REST API', date: '2026-08-07' }
       ]
     },
     {
@@ -1294,7 +1295,8 @@ function renderCommitActivityChart() {
       total: 58,
       recent: [
         { hash: '4f5e6d7', author: 'ryan-backend', msg: 'feat(pay): add BIDV VietQR dynamic checksum validation', date: '2026-08-10' },
-        { hash: '2a3b4c5', author: 'ryan-backend', msg: 'feat(webhook): add MoMo & ZaloPay IPN signature verification', date: '2026-08-09' }
+        { hash: '2a3b4c5', author: 'ryan-backend', msg: 'feat(webhook): add MoMo & ZaloPay IPN signature verification', date: '2026-08-09' },
+        { hash: '6d7e8f9', author: 'dev-team', msg: 'fix(prepaid): add atomic Redis balance deduction for merchant cards', date: '2026-08-08' }
       ]
     },
     {
@@ -1304,7 +1306,8 @@ function renderCommitActivityChart() {
       total: 29,
       recent: [
         { hash: '9b8c7d6', author: 'dev-team', msg: 'feat(fcm): add Firebase FCM push notification token batching', date: '2026-08-10' },
-        { hash: '5a4b3c2', author: 'ryan-backend', msg: 'feat(zalo): add Zalo ZNS Template message dispatcher', date: '2026-08-09' }
+        { hash: '5a4b3c2', author: 'ryan-backend', msg: 'feat(zalo): add Zalo ZNS Template message dispatcher', date: '2026-08-09' },
+        { hash: '1d2e3f4', author: 'dev-team', msg: 'fix(sms): add Brandname SMS fallback provider fallback', date: '2026-08-08' }
       ]
     },
     {
@@ -1314,7 +1317,8 @@ function renderCommitActivityChart() {
       total: 38,
       recent: [
         { hash: '1a2b3c4', author: 'ryan-backend', msg: 'fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter', date: '2026-08-10' },
-        { hash: '8f7e6d5', author: 'dev-team', msg: 'feat(auth-filter): add global RSA signature validation filter', date: '2026-08-09' }
+        { hash: '8f7e6d5', author: 'dev-team', msg: 'feat(auth-filter): add global RSA signature validation filter', date: '2026-08-09' },
+        { hash: '3d4e5f6', author: 'ryan-backend', msg: 'chore(cors): update allowed origins for PROD & UAT web portals', date: '2026-08-08' }
       ]
     }
   ];
@@ -1322,20 +1326,26 @@ function renderCommitActivityChart() {
   const liveCommitData = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : [];
   
   const repos = defaultRepos.map(def => {
-    const realCommits = repoRealCommits[def.name];
-    if (realCommits && realCommits.length > 0) {
-      return { ...def, recent: realCommits, isRealTime: true };
-    }
+    let recentList = def.recent;
+    let isRealTime = false;
 
     const found = liveCommitData.find(c => c.name === def.name);
     if (found && found.recent && found.recent.length > 0) {
-      return {
-        ...def,
-        total: found.total > 0 ? found.total : def.total,
-        recent: found.recent
-      };
+      recentList = found.recent;
     }
-    return def;
+
+    const realCommits = repoRealCommits[def.name];
+    if (realCommits && realCommits.length > 0) {
+      recentList = realCommits;
+      isRealTime = true;
+    }
+
+    return {
+      ...def,
+      total: (found && found.total > 0) ? found.total : def.total,
+      recent: recentList,
+      isRealTime: isRealTime
+    };
   });
 
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -1374,8 +1384,8 @@ function renderCommitActivityChart() {
   if (feedContainer) {
     feedContainer.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
-        <strong style="color: var(--text-primary); font-size: 14px;">Recent Git Commit Activity Stream (Real-Time GitHub API Live Sync)</strong>
-        <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 2px 8px;">⚡ Live GitHub REST API</span>
+        <strong style="color: var(--text-primary); font-size: 14px;">Recent Git Commit Activity Stream (Microservice Repositories)</strong>
+        <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 2px 8px;">Poly-Repo Commit History</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
         ${repos.map(r => {
@@ -1405,21 +1415,21 @@ function renderCommitActivityChart() {
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: ${r.color}; display: inline-block;"></span>
                   <strong style="font-size: 13.5px; color: ${r.color};">${r.name}</strong>
-                  <span class="g-badge" style="background: ${r.color}22; color: ${r.color}; font-size: 10.5px; padding: 1px 7px;">${commits.length} Commits Loaded</span>
+                  <span class="g-badge" style="background: ${r.color}22; color: ${r.color}; font-size: 10.5px; padding: 1px 7px;">${commits.length} Recent / ${r.total} Total Commits</span>
                   ${r.isRealTime ? '<span class="g-badge" style="background: rgba(16,185,129,0.2); color: #10b981; font-size: 9.5px; padding: 1px 5px;">🟢 GitHub API Live</span>' : ''}
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary);">
-                  <span>${isExpanded ? '▲ Thu Gọn (Collapse)' : '▼ Mở Rộng &amp; Load More (Expand)'}</span>
+                  <span>${isExpanded ? '▲ Thu Gọn (Collapse)' : '▼ Mở Rộng (Expand)'}</span>
                 </div>
               </div>
 
               <!-- Accordion Body Content -->
               ${isExpanded ? `
                 <div style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
-                  ${commitRowsHtml.length > 0 ? commitRowsHtml : '<div style="font-size: 12px; color: var(--text-muted); padding: 4px;">Loading commits from GitHub...</div>'}
+                  ${commitRowsHtml.length > 0 ? commitRowsHtml : '<div style="font-size: 12px; color: var(--text-muted); padding: 4px;">No commit logs available.</div>'}
                   <div style="text-align: center; margin-top: 6px;">
                     <button onclick="window.loadMoreRepoCommits('${r.name}')" ${isLoading ? 'disabled' : ''} style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--accent-color); padding: 6px 16px; border-radius: 6px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                      ${isLoading ? '🔄 Loading from GitHub...' : '⏬ Load More Commits Direct From GitHub (+15)'}
+                      ${isLoading ? '🔄 Loading from GitHub...' : '⏬ Load More Commits Direct From GitHub'}
                     </button>
                   </div>
                 </div>
