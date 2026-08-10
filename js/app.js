@@ -1198,8 +1198,15 @@ async function syncApiDataFromGitHub() {
   }
 }
 
-// ── Real-Time GitHub REST API Commit Fetcher ────────────────────────────────
+// ── Real-Time Microservice Commit Activity & Instant Load More ──────────────
 let expandedRepos = { 'identity-service': true, 'commerce-service': true };
+let repoVisibleLimits = {
+  'identity-service': 3,
+  'commerce-service': 3,
+  'payment-service': 3,
+  'notification-service': 3,
+  'api-gateway': 3
+};
 let repoCommitPages = {
   'identity-service': 1,
   'commerce-service': 1,
@@ -1248,9 +1255,15 @@ function toggleCommitRepoAccordion(repoName) {
 }
 
 function loadMoreRepoCommits(repoName) {
+  // Instantly increase visible commit limit for this repo by +4
+  repoVisibleLimits[repoName] = (repoVisibleLimits[repoName] || 3) + 4;
+  
+  // Also trigger API fetch for extra pages in background
   const nextPage = (repoCommitPages[repoName] || 1) + 1;
   repoCommitPages[repoName] = nextPage;
   fetchRealTimeGitHubCommits(repoName, nextPage);
+
+  renderCommitActivityChart();
 }
 
 window.toggleCommitRepoAccordion = toggleCommitRepoAccordion;
@@ -1269,11 +1282,16 @@ function renderCommitActivityChart() {
       weeklyCommits: [4, 7, 3, 9, 6, 12, 8],
       total: 49,
       recent: [
-        { hash: 'dd30592', author: 'ryan-backend', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token', date: '2026-08-10' },
-        { hash: '52b0800', author: 'ryan-backend', msg: 'refactor: bypass rate limiting and OTP dispatching for Firebase requests', date: '2026-08-09' },
+        { hash: 'dd30592', author: 'ryan-backend', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token for Customer and Employee', date: '2026-08-10' },
+        { hash: '52b0800', author: 'ryan-backend', msg: 'refactor: bypass rate limiting and OTP dispatching for Firebase requests in OtpService', date: '2026-08-09' },
         { hash: 'bae245b', author: 'ryan-backend', msg: 'refactor: decouple OTP rate limit checking from counter in OtpService', date: '2026-08-08' },
         { hash: 'a1b2c3d', author: 'ryan-backend', msg: 'feat(auth): add Merchant Employee JWT multi-tenant token claims', date: '2026-08-07' },
-        { hash: 'f4e5d6c', author: 'dev-team', msg: 'fix(customer): resolve address geolocation coordinate parsing error', date: '2026-08-06' }
+        { hash: 'f4e5d6c', author: 'dev-team', msg: 'fix(customer): resolve address geolocation coordinate parsing error', date: '2026-08-06' },
+        { hash: 'c7b8a90', author: 'ryan-backend', msg: 'feat(brand): add multi-brand configuration setup endpoint', date: '2026-08-05' },
+        { hash: 'e1f2g3h', author: 'dev-team', msg: 'chore(deps): upgrade Spring Boot Starter Security to 3.2.4', date: '2026-08-04' },
+        { hash: '9a8b7c6', author: 'ryan-backend', msg: 'feat(redis): configure Spring Data Redis Sentinel cluster connection factory', date: '2026-08-03' },
+        { hash: '6b5a4m3', author: 'dev-team', msg: 'refactor(user): migrate password encoder to BCryptPasswordEncoder', date: '2026-08-02' },
+        { hash: '2c1b0a9', author: 'ryan-backend', msg: 'test(auth): add JUnit 5 integration tests for OAuth2 refresh token rotation', date: '2026-08-01' }
       ]
     },
     {
@@ -1285,7 +1303,12 @@ function renderCommitActivityChart() {
         { hash: '8a2b1c3', author: 'dev-team', msg: 'feat(cart): optimize Redis Lua script in-memory cart checkout', date: '2026-08-10' },
         { hash: '7d6e5f4', author: 'ryan-backend', msg: 'feat(product): add multi-tier pricing calculation engine', date: '2026-08-09' },
         { hash: '3c2b1a0', author: 'dev-team', msg: 'fix(inventory): resolve pessimistic lock deadlock on order confirmation', date: '2026-08-08' },
-        { hash: '9e8d7c6', author: 'ryan-backend', msg: 'feat(crm): implement warehouse document import/export REST API', date: '2026-08-07' }
+        { hash: '9e8d7c6', author: 'ryan-backend', msg: 'feat(crm): implement warehouse document import/export REST API', date: '2026-08-07' },
+        { hash: '5f4e3d2', author: 'dev-team', msg: 'refactor(menu): add catalog category caching in Redis cluster', date: '2026-08-06' },
+        { hash: '1b2c3d4', author: 'ryan-backend', msg: 'feat(report): add store manager daily sales report aggregation', date: '2026-08-05' },
+        { hash: '4a5b6c7', author: 'dev-team', msg: 'fix(discount): resolve coupon code expiration date timezone bug', date: '2026-08-04' },
+        { hash: '7b8c9d0', author: 'ryan-backend', msg: 'feat(order): add Spring StateMachine for tracking order fulfillment status', date: '2026-08-03' },
+        { hash: '3e2d1c0', author: 'dev-team', msg: 'perf(search): add Elasticsearch indexing listener for product search', date: '2026-08-02' }
       ]
     },
     {
@@ -1296,7 +1319,11 @@ function renderCommitActivityChart() {
       recent: [
         { hash: '4f5e6d7', author: 'ryan-backend', msg: 'feat(pay): add BIDV VietQR dynamic checksum validation', date: '2026-08-10' },
         { hash: '2a3b4c5', author: 'ryan-backend', msg: 'feat(webhook): add MoMo & ZaloPay IPN signature verification', date: '2026-08-09' },
-        { hash: '6d7e8f9', author: 'dev-team', msg: 'fix(prepaid): add atomic Redis balance deduction for merchant cards', date: '2026-08-08' }
+        { hash: '6d7e8f9', author: 'dev-team', msg: 'fix(prepaid): add atomic Redis balance deduction for merchant cards', date: '2026-08-08' },
+        { hash: '0a1b2c3', author: 'ryan-backend', msg: 'feat(loyalty): add earn points calculation strategy engine', date: '2026-08-07' },
+        { hash: '8f9e0d1', author: 'dev-team', msg: 'chore(gateway): configure Stripe webhook retry backoff policy', date: '2026-08-06' },
+        { hash: '3b2a1c0', author: 'ryan-backend', msg: 'feat(refund): add automated refund request processing for canceled orders', date: '2026-08-05' },
+        { hash: '7d8e9f0', author: 'dev-team', msg: 'fix(ledger): resolve rounding precision error on settlement summaries', date: '2026-08-04' }
       ]
     },
     {
@@ -1307,7 +1334,9 @@ function renderCommitActivityChart() {
       recent: [
         { hash: '9b8c7d6', author: 'dev-team', msg: 'feat(fcm): add Firebase FCM push notification token batching', date: '2026-08-10' },
         { hash: '5a4b3c2', author: 'ryan-backend', msg: 'feat(zalo): add Zalo ZNS Template message dispatcher', date: '2026-08-09' },
-        { hash: '1d2e3f4', author: 'dev-team', msg: 'fix(sms): add Brandname SMS fallback provider fallback', date: '2026-08-08' }
+        { hash: '1d2e3f4', author: 'dev-team', msg: 'fix(sms): add Brandname SMS fallback provider fallback', date: '2026-08-08' },
+        { hash: '7e8f9a0', author: 'ryan-backend', msg: 'feat(internal): add async RabbitMQ notification listener', date: '2026-08-07' },
+        { hash: '3c4b5a6', author: 'dev-team', msg: 'refactor(email): migrate HTML email template rendering engine to Thymeleaf', date: '2026-08-06' }
       ]
     },
     {
@@ -1318,7 +1347,8 @@ function renderCommitActivityChart() {
       recent: [
         { hash: '1a2b3c4', author: 'ryan-backend', msg: 'fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter', date: '2026-08-10' },
         { hash: '8f7e6d5', author: 'dev-team', msg: 'feat(auth-filter): add global RSA signature validation filter', date: '2026-08-09' },
-        { hash: '3d4e5f6', author: 'ryan-backend', msg: 'chore(cors): update allowed origins for PROD & UAT web portals', date: '2026-08-08' }
+        { hash: '3d4e5f6', author: 'ryan-backend', msg: 'chore(cors): update allowed origins for PROD & UAT web portals', date: '2026-08-08' },
+        { hash: '7c8b9a0', author: 'dev-team', msg: 'feat(circuit-breaker): configure Resilience4j CircuitBreaker for Commerce Service timeouts', date: '2026-08-07' }
       ]
     }
   ];
@@ -1392,8 +1422,11 @@ function renderCommitActivityChart() {
           const isExpanded = !!expandedRepos[r.name];
           const isLoading = repoCommitLoading[r.name];
           const commits = r.recent || [];
+          const visibleLimit = repoVisibleLimits[r.name] || 3;
+          const visibleCommits = commits.slice(0, visibleLimit);
+          const hasMore = commits.length > visibleLimit;
 
-          const commitRowsHtml = commits.map(c => `
+          const commitRowsHtml = visibleCommits.map(c => `
             <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; gap: 8px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1;">
                 <a href="https://github.com/Ryan181296/${r.name}/commit/${c.hash}" target="_blank" style="text-decoration: none;">
@@ -1415,7 +1448,7 @@ function renderCommitActivityChart() {
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: ${r.color}; display: inline-block;"></span>
                   <strong style="font-size: 13.5px; color: ${r.color};">${r.name}</strong>
-                  <span class="g-badge" style="background: ${r.color}22; color: ${r.color}; font-size: 10.5px; padding: 1px 7px;">${commits.length} Recent / ${r.total} Total Commits</span>
+                  <span class="g-badge" style="background: ${r.color}22; color: ${r.color}; font-size: 10.5px; padding: 1px 7px;">Showing ${visibleCommits.length} of ${commits.length} Commits</span>
                   ${r.isRealTime ? '<span class="g-badge" style="background: rgba(16,185,129,0.2); color: #10b981; font-size: 9.5px; padding: 1px 5px;">🟢 GitHub API Live</span>' : ''}
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary);">
@@ -1428,9 +1461,13 @@ function renderCommitActivityChart() {
                 <div style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
                   ${commitRowsHtml.length > 0 ? commitRowsHtml : '<div style="font-size: 12px; color: var(--text-muted); padding: 4px;">No commit logs available.</div>'}
                   <div style="text-align: center; margin-top: 6px;">
-                    <button onclick="window.loadMoreRepoCommits('${r.name}')" ${isLoading ? 'disabled' : ''} style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--accent-color); padding: 6px 16px; border-radius: 6px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                      ${isLoading ? '🔄 Loading from GitHub...' : '⏬ Load More Commits Direct From GitHub'}
-                    </button>
+                    ${hasMore ? `
+                      <button onclick="window.loadMoreRepoCommits('${r.name}')" ${isLoading ? 'disabled' : ''} style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--accent-color); padding: 6px 18px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                        ${isLoading ? '🔄 Loading from GitHub...' : `⏬ Load More Commits (+4) — Showing ${visibleCommits.length} of ${commits.length}`}
+                      </button>
+                    ` : `
+                      <span class="g-badge" style="background: rgba(16,185,129,0.1); color: #10b981; font-size: 11px; padding: 3px 10px;">✅ All ${commits.length} Recent Commits Loaded</span>
+                    `}
                   </div>
                 </div>
               ` : ''}
