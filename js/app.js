@@ -1156,11 +1156,50 @@ function refreshHealthStatus() {
   window.refreshHealthStatus();
 }
 
+// ── Live GitHub Auto-Sync: Fetch Latest API Endpoints Count & Catalog ─────────
+const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/Ryan181296/zap-system-design-docs/main/js/api-data.js';
+
+async function syncApiDataFromGitHub() {
+  const badgeEl = document.querySelector('.g-stats-badge');
+  try {
+    const res = await fetch(`${GITHUB_RAW_URL}?_=${Date.now()}`);
+    if (!res.ok) return;
+
+    const text = await res.text();
+    const match = text.match(/const\s+ZAP_API_DATA\s*=\s*(\{[\s\S]*\});?\s*$/);
+    if (match && match[1]) {
+      const liveData = Function(`"use strict"; return (${match[1]})`)();
+      if (liveData && liveData.endpoints && Array.isArray(liveData.endpoints)) {
+        window.ZAP_API_DATA = liveData;
+        const total = liveData.endpoints.length;
+
+        if (badgeEl) {
+          badgeEl.innerHTML = `
+            <span style="display: inline-flex; align-items: center; gap: 5px;">
+              <span class="health-pulse-dot" style="width:6px;height:6px;background:#10b981;"></span>
+              GitHub Live Sync:
+            </span>
+            <strong style="color: var(--text-primary); font-weight: 700;">${total} Endpoints</strong>
+          `;
+        }
+
+        const activeNav = document.querySelector('.g-nav-item.active');
+        if (activeNav && activeNav.dataset.target) {
+          renderEndpointsForService(activeNav.dataset.target);
+        }
+      }
+    }
+  } catch (e) {
+    // Fail silently and retain local preloaded data
+  }
+}
+
 // ── Run on DOM Initialization ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initDbSearch();
   window.refreshHealthStatus();
   renderDesignSystem();
+  syncApiDataFromGitHub();
 
   // Attach Health Dashboard Event Listeners
   const prodBtn = document.getElementById('env-btn-prod');

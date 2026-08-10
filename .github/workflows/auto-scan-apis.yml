@@ -1,0 +1,33 @@
+name: Auto Scan Java Controllers & Sync API Catalog
+
+on:
+  push:
+    branches:
+      - main
+      - uat
+    paths:
+      - 'backend/**/*.java'
+      - 'scripts/**'
+
+jobs:
+  scan-apis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run Java Controller Scanner
+        run: |
+          python3 scripts/scan_controllers.py
+
+      - name: Commit and Push Updated API Catalog
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add js/api-data.js
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(api): auto-sync scanned Java API endpoints [skip ci]" && git push)
