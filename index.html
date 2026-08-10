@@ -2546,7 +2546,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
           <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#10B981;display:inline-block;"></span><span style="font-size:11.5px;color:var(--text-secondary);">Done</span></span>
           <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#3B82F6;display:inline-block;"></span><span style="font-size:11.5px;color:var(--text-secondary);">In Progress</span></span>
           <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#8E24AA;display:inline-block;"></span><span style="font-size:11.5px;color:var(--text-secondary);">Planned</span></span>
-          <span style="margin-left:auto;font-size:11px;color:var(--text-muted);">&#128197; May&ndash;Aug 2026 &nbsp;|&nbsp; &#128308; TODAY: Aug 10</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text-muted);">&#128197; May&ndash;Aug 2026 &nbsp;|&nbsp; &#128308; TODAY: Aug 10 (W2)</span>
         </div>
 
         <!-- Summary Cards -->
@@ -2564,7 +2564,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
           <div style="background:var(--bg-secondary);border:1px solid rgba(142,36,170,0.35);border-radius:10px;padding:14px;text-align:center;">
             <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">August W2&ndash;W3</div>
             <div style="font-size:18px;font-weight:800;color:#8E24AA;">PROD Launch</div>
-            <div style="font-size:11px;color:var(--text-secondary);margin-top:3px;">Pendogo, Pho24 &amp; New POS App</div>
+            <div style="font-size:11px;color:var(--text-secondary);margin-top:3px;">Pendogo, Pho24 Kiosk &amp; New POS</div>
           </div>
           <div style="background:var(--bg-secondary);border:1px solid rgba(239,68,68,0.35);border-radius:10px;padding:14px;text-align:center;">
             <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">August W4</div>
@@ -2588,12 +2588,13 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             { label:'June 2026',                                     subs:['W1','W2','W3','W4'], bg:'rgba(16,185,129,0.06)', tc:'#059669' },
             { label:'July 2026',                                     subs:['W1','W2','W3','W4'], bg:'rgba(26,115,232,0.10)', tc:'#1a73e8' },
             { label:'Aug 2026 &mdash; Week 1 (Aug 1&ndash;7)',      subs:['W1'],               bg:'rgba(59,130,246,0.13)', tc:'#2563EB' },
-            { label:'Aug 2026 &mdash; Week 2&ndash;3 (Aug 8&ndash;21)', subs:['W2','W3'],      bg:'rgba(142,36,170,0.10)',tc:'#8E24AA' },
+            { label:'Aug 2026 &mdash; Week 2 (Aug 8&ndash;14)',     subs:['W2'],               bg:'rgba(142,36,170,0.12)',tc:'#8E24AA' },
+            { label:'Aug 2026 &mdash; Week 3 (Aug 15&ndash;21)',    subs:['W3'],               bg:'rgba(142,36,170,0.08)',tc:'#8E24AA' },
             { label:'Aug 2026 &mdash; Week 4 (Aug 22&ndash;31)',    subs:['W4'],               bg:'rgba(239,68,68,0.08)', tc:'#EF4444' }
           ];
           var WEEK_LABELS=[]; var WEEK_BG=[];
           COLS.forEach(function(c){ c.subs.forEach(function(s){ WEEK_LABELS.push(s); WEEK_BG.push(c.bg); }); });
-          var TOTAL=16; var TODAY_COL=13; // Aug W2
+          var TOTAL=16; var TODAY_COL=13; // Aug W2 = index 13
 
           var epics = [
             {
@@ -2633,7 +2634,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
               color:'#8E24AA', s:13, e:14, status:'&#9889; In Progress', sc:'#3B82F6',
               tasks:[
                 { label:'Deploy Ordering App to Production for Pendogo',               s:13, e:13, c:'#3B82F6', st:'&#9889; In Progress' },
-                { label:'Deploy KIOSK for Pho24',                                      s:13, e:14, c:'#3B82F6', st:'&#9889; In Progress' },
+                { label:'Complete remaining Kiosk features for Pho24',                s:13, e:13, c:'#3B82F6', st:'&#9889; In Progress' },
+                { label:'Deploy KIOSK to Production for Pho24',                        s:14, e:14, c:'#8E24AA', st:'Planned' },
                 { label:'Account deletion feature for Ordering App',                  s:13, e:14, c:'#8E24AA', st:'Planned' },
                 { label:'Start development of new POS App',                            s:14, e:14, c:'#8E24AA', st:'Planned' }
               ]
