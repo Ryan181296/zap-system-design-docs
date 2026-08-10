@@ -433,9 +433,14 @@ body {
   color: var(--text-secondary);
 }
 
+.g-table td:first-child {
+  min-width: 180px;
+}
+
 .g-table td:first-child,
 .g-table td:nth-child(2) {
-  white-space: nowrap;
+  white-space: normal;
+  word-break: normal;
 }
 
 .g-table td code {
@@ -823,11 +828,7 @@ body.sidebar-open .g-sidebar-overlay {
   }
 
   .g-table th,
-  .g-table td:first-child,
-  .g-table td:nth-child(2),
-  .g-table td:first-child *,
-  .g-table td:nth-child(2) * {
-    white-space: nowrap !important;
+  .g-table td {
     word-break: normal !important;
     hyphens: none !important;
   }
@@ -1006,9 +1007,9 @@ body.sidebar-open .g-sidebar-overlay {
 }
 
 /* Enlarged High-Impact DevOps & Setup Standards Architecture Diagrams */
-#view-devops-fe svg,
-#view-devops-cd svg,
-#view-devops-git svg {
+#view-devops-fe div > svg[viewBox*="1000"],
+#view-devops-cd div > svg[viewBox*="1000"],
+#view-devops-git div > svg[viewBox*="1000"] {
   min-height: 520px !important;
   max-height: 750px !important;
   width: 100% !important;

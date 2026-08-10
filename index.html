@@ -13,7 +13,7 @@
     rel="stylesheet">
   <!-- Prism.js: Syntax Highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=1.0.2">
 </head>
 
 <body>
@@ -1586,7 +1586,8 @@ end</code></pre>
 
         <!-- App Distribution & Flavor Matrix Table -->
         <h2 style="font-size: 20px; margin: 32px 0 16px;">2. Client Application Distribution &amp; Publishing Matrix</h2>
-        <table class="g-table">
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 32px; border-radius: 8px;">
+          <table class="g-table" style="width: 100%; min-width: 780px; margin-bottom: 0;">
           <thead>
             <tr>
               <th style="width: 22%;">Application Category</th>
@@ -1633,6 +1634,7 @@ end</code></pre>
               </td>
             </tr>
         </table>
+        </div>
 
         <!-- Section 3: App-Centric Platform & Environment Inventory Matrix -->
         <h2 style="font-size: 20px; margin: 32px 0 16px;">3. Application Product &amp; Platform Build Inventory Matrix</h2>
@@ -1668,171 +1670,173 @@ end</code></pre>
           </div>
         </div>
 
-        <table class="g-table" style="margin-bottom: 32px;">
-          <thead>
-            <tr>
-              <th style="width: 24%;">Application Product</th>
-              <th style="width: 15%;">Target Platform</th>
-              <th style="width: 23%;">UAT Environment Build</th>
-              <th style="width: 23%;">Production Environment Build</th>
-              <th style="width: 15%;">Managed Apps Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Product 1: ZAP Manager -->
-            <tr>
-              <td rowspan="3" style="background: var(--bg-secondary); vertical-align: middle;">
-                <strong style="color: #FFA000; font-size: 14px;">1. ZAP Manager</strong><br>
-                <span style="font-size: 11px; color: var(--text-secondary);">Merchant Staff CRM, Store Manager &amp; Admin Web</span><br>
-                <code style="font-size: 10px;">flutter_manager</code>
-              </td>
-              <td>
-                <strong style="color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.67-.82 1.13-1.96.99-3.11-.97.04-2.15.65-2.85 1.46-.61.71-1.15 1.87-.99 2.99 1.08.08 2.18-.52 2.85-1.34z"/></svg>
-                  Apple iOS
-                </strong>
-              </td>
-              <td><code>1 App</code> (Manager UAT — TestFlight)</td>
-              <td><code>1 App</code> (Manager Prod — App Store)</td>
-              <td><strong style="color: var(--accent-color);">2 iOS Apps</strong></td>
-            </tr>
-            <tr>
-              <td>
-                <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
-                  Google Android
-                </strong>
-              </td>
-              <td><code>1 App</code> (Manager UAT — Play Internal)</td>
-              <td><code>1 App</code> (Manager Prod — Play Console)</td>
-              <td><strong style="color: #3DDC84;">2 Android Apps</strong></td>
-            </tr>
-            <tr>
-              <td>
-                <strong style="color: #4285F4; display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                  Web &amp; Desktop Browser
-                </strong>
-              </td>
-              <td><code>1 App</code> (Manager UAT Web — uat-manager.zap.vn)</td>
-              <td><code>1 App</code> (Manager Prod Web — manager.zap.vn)</td>
-              <td><strong style="color: #4285F4;">2 Web/Desktop Apps</strong></td>
-            </tr>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 32px; border-radius: 8px;">
+          <table class="g-table" style="width: 100%; min-width: 820px; margin-bottom: 0;">
+            <thead>
+              <tr>
+                <th style="width: 24%;">Application Product</th>
+                <th style="width: 15%;">Target Platform</th>
+                <th style="width: 23%;">UAT Environment Build</th>
+                <th style="width: 23%;">Production Environment Build</th>
+                <th style="width: 15%;">Managed Apps Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Product 1: ZAP Manager -->
+              <tr>
+                <td rowspan="3" style="background: var(--bg-secondary); vertical-align: top; padding: 14px 12px;">
+                  <strong style="color: #FFA000; font-size: 14px; display: block; margin-bottom: 4px;">1. ZAP Manager</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); display: block; line-height: 1.4; margin-bottom: 4px;">Merchant Staff CRM, Store Manager &amp; Admin Web</span>
+                  <code style="font-size: 10px;">flutter_manager</code>
+                </td>
+                <td>
+                  <strong style="color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.67-.82 1.13-1.96.99-3.11-.97.04-2.15.65-2.85 1.46-.61.71-1.15 1.87-.99 2.99 1.08.08 2.18-.52 2.85-1.34z"/></svg>
+                    Apple iOS
+                  </strong>
+                </td>
+                <td><code>1 App</code> (Manager UAT — TestFlight)</td>
+                <td><code>1 App</code> (Manager Prod — App Store)</td>
+                <td><strong style="color: var(--accent-color);">2 iOS Apps</strong></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
+                    Google Android
+                  </strong>
+                </td>
+                <td><code>1 App</code> (Manager UAT — Play Internal)</td>
+                <td><code>1 App</code> (Manager Prod — Play Console)</td>
+                <td><strong style="color: #3DDC84;">2 Android Apps</strong></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong style="color: #4285F4; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    Web &amp; Desktop Browser
+                  </strong>
+                </td>
+                <td><code>1 App</code> (Manager UAT Web — uat-manager.zap.vn)</td>
+                <td><code>1 App</code> (Manager Prod Web — manager.zap.vn)</td>
+                <td><strong style="color: #4285F4;">2 Web/Desktop Apps</strong></td>
+              </tr>
 
-            <!-- Product 2: ZAP POS Desktop (WPF) -->
-            <tr>
-              <td style="background: var(--bg-secondary); vertical-align: middle;">
-                <strong style="color: #512BD4; font-size: 14px;">2. ZAP POS Desktop</strong><br>
-                <span style="font-size: 11px; color: var(--text-secondary);">Windows WPF POS &amp; Thermal Printer Driver</span><br>
-                <code style="font-size: 10px;">pos_wpf (.NET C#)</code>
-              </td>
-              <td>
-                <strong style="color: #0078D4; display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#0078D4"><path d="M0 3.449L9.75 2.1v9.451H0m10.95-9.613L24 0v11.4H10.95M0 12.6h9.75v9.451L0 20.699M10.95 12.6H24V24l-13.05-1.801"/></svg>
-                  Microsoft Windows
-                </strong>
-              </td>
-              <td><code>1 App</code> (POS Cashier UAT Installer)</td>
-              <td><code>1 App</code> (POS Cashier Prod Installer)</td>
-              <td><strong style="color: #0078D4;">2 Windows Apps</strong></td>
-            </tr>
+              <!-- Product 2: ZAP POS Desktop (WPF) -->
+              <tr>
+                <td style="background: var(--bg-secondary); vertical-align: top; padding: 14px 12px;">
+                  <strong style="color: #512BD4; font-size: 14px; display: block; margin-bottom: 4px;">2. ZAP POS Desktop</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); display: block; line-height: 1.4; margin-bottom: 4px;">Windows WPF POS &amp; Thermal Printer Driver</span>
+                  <code style="font-size: 10px;">pos_wpf (.NET C#)</code>
+                </td>
+                <td>
+                  <strong style="color: #0078D4; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#0078D4"><path d="M0 3.449L9.75 2.1v9.451H0m10.95-9.613L24 0v11.4H10.95M0 12.6h9.75v9.451L0 20.699M10.95 12.6H24V24l-13.05-1.801"/></svg>
+                    Microsoft Windows
+                  </strong>
+                </td>
+                <td><code>1 App</code> (POS Cashier UAT Installer)</td>
+                <td><code>1 App</code> (POS Cashier Prod Installer)</td>
+                <td><strong style="color: #0078D4;">2 Windows Apps</strong></td>
+              </tr>
 
-            <!-- Product 3: ZAP POS Mobile -->
-            <tr>
-              <td rowspan="2" style="background: var(--bg-secondary); vertical-align: middle;">
-                <strong style="color: #10B981; font-size: 14px;">3. ZAP POS Mobile</strong><br>
-                <span style="font-size: 11px; color: var(--text-secondary);">Handheld Mobile POS &amp; Sunmi Terminal</span><br>
-                <code style="font-size: 10px;">flutter_pos_mobile</code>
-              </td>
-              <td>
-                <strong style="color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.67-.82 1.13-1.96.99-3.11-.97.04-2.15.65-2.85 1.46-.61.71-1.15 1.87-.99 2.99 1.08.08 2.18-.52 2.85-1.34z"/></svg>
-                  Apple iOS (iPad/iPhone)
-                </strong>
-              </td>
-              <td><code>1 App</code> (POS Mobile UAT — TestFlight)</td>
-              <td><code>1 App</code> (POS Mobile Prod — App Store)</td>
-              <td><strong style="color: var(--accent-color);">2 iOS Apps</strong></td>
-            </tr>
-            <tr>
-              <td>
-                <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
-                  Google Android (Sunmi POS)
-                </strong>
-              </td>
-              <td><code>1 App</code> (POS Mobile UAT — Play Internal)</td>
-              <td><code>1 App</code> (POS Mobile Prod — Sunmi/Play Store)</td>
-              <td><strong style="color: #3DDC84;">2 Android Apps</strong></td>
-            </tr>
+              <!-- Product 3: ZAP POS Mobile -->
+              <tr>
+                <td rowspan="2" style="background: var(--bg-secondary); vertical-align: top; padding: 14px 12px;">
+                  <strong style="color: #10B981; font-size: 14px; display: block; margin-bottom: 4px;">3. ZAP POS Mobile</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); display: block; line-height: 1.4; margin-bottom: 4px;">Handheld Mobile POS &amp; Sunmi Terminal</span>
+                  <code style="font-size: 10px;">flutter_pos_mobile</code>
+                </td>
+                <td>
+                  <strong style="color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.67-.82 1.13-1.96.99-3.11-.97.04-2.15.65-2.85 1.46-.61.71-1.15 1.87-.99 2.99 1.08.08 2.18-.52 2.85-1.34z"/></svg>
+                    Apple iOS (iPad/iPhone)
+                  </strong>
+                </td>
+                <td><code>1 App</code> (POS Mobile UAT — TestFlight)</td>
+                <td><code>1 App</code> (POS Mobile Prod — App Store)</td>
+                <td><strong style="color: var(--accent-color);">2 iOS Apps</strong></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
+                    Google Android (Sunmi POS)
+                  </strong>
+                </td>
+                <td><code>1 App</code> (POS Mobile UAT — Play Internal)</td>
+                <td><code>1 App</code> (POS Mobile Prod — Sunmi/Play Store)</td>
+                <td><strong style="color: #3DDC84;">2 Android Apps</strong></td>
+              </tr>
 
-            <!-- Product 4: ZAP Kiosk -->
-            <tr>
-              <td rowspan="2" style="background: var(--bg-secondary); vertical-align: middle;">
-                <strong style="color: #0175C2; font-size: 14px;">4. ZAP Kiosk</strong><br>
-                <span style="font-size: 11px; color: var(--text-secondary);">Self-Service Touchscreen Kiosk App</span><br>
-                <code style="font-size: 10px;">flutter_kiosk</code>
-              </td>
-              <td>
-                <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
-                  Google Android
-                </strong>
-              </td>
-              <td><code>1 App</code> (Kiosk Android UAT)</td>
-              <td><code>1 App</code> (Kiosk Android Prod)</td>
-              <td><strong style="color: #3DDC84;">2 Android Apps</strong></td>
-            </tr>
-            <tr>
-              <td>
-                <strong style="color: #0078D4; display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#0078D4"><path d="M0 3.449L9.75 2.1v9.451H0m10.95-9.613L24 0v11.4H10.95M0 12.6h9.75v9.451L0 20.699M10.95 12.6H24V24l-13.05-1.801"/></svg>
-                  Microsoft Windows
-                </strong>
-              </td>
-              <td><code>1 App</code> (Kiosk Windows UAT)</td>
-              <td><code>1 App</code> (Kiosk Windows Prod)</td>
-              <td><strong style="color: #0078D4;">2 Windows Apps</strong></td>
-            </tr>
+              <!-- Product 4: ZAP Kiosk -->
+              <tr>
+                <td rowspan="2" style="background: var(--bg-secondary); vertical-align: top; padding: 14px 12px;">
+                  <strong style="color: #0175C2; font-size: 14px; display: block; margin-bottom: 4px;">4. ZAP Kiosk</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); display: block; line-height: 1.4; margin-bottom: 4px;">Self-Service Touchscreen Kiosk App</span>
+                  <code style="font-size: 10px;">flutter_kiosk</code>
+                </td>
+                <td>
+                  <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
+                    Google Android
+                  </strong>
+                </td>
+                <td><code>1 App</code> (Kiosk Android UAT)</td>
+                <td><code>1 App</code> (Kiosk Android Prod)</td>
+                <td><strong style="color: #3DDC84;">2 Android Apps</strong></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong style="color: #0078D4; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#0078D4"><path d="M0 3.449L9.75 2.1v9.451H0m10.95-9.613L24 0v11.4H10.95M0 12.6h9.75v9.451L0 20.699M10.95 12.6H24V24l-13.05-1.801"/></svg>
+                    Microsoft Windows
+                  </strong>
+                </td>
+                <td><code>1 App</code> (Kiosk Windows UAT)</td>
+                <td><code>1 App</code> (Kiosk Windows Prod)</td>
+                <td><strong style="color: #0078D4;">2 Windows Apps</strong></td>
+              </tr>
 
-            <!-- Product 5: ZAP Order App (White-Label) -->
-            <tr>
-              <td rowspan="2" style="background: var(--bg-secondary); vertical-align: middle;">
-                <strong style="color: #8E24AA; font-size: 14px;">5. ZAP Order App</strong><br>
-                <span style="font-size: 11px; color: var(--text-secondary);">Multi-Tenant White-Label Branded App</span><br>
-                <code style="font-size: 10px;">flutter_order_app</code>
-              </td>
-              <td>
-                <strong style="color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.67-.82 1.13-1.96.99-3.11-.97.04-2.15.65-2.85 1.46-.61.71-1.15 1.87-.99 2.99 1.08.08 2.18-.52 2.85-1.34z"/></svg>
-                  Apple iOS
-                </strong>
-              </td>
-              <td><code>1 App</code> (Central ZAP Order UAT App)</td>
-              <td><strong>N Separate Branded Apps</strong> (Pendogo, Pho24...)</td>
-              <td><strong style="color: var(--accent-color);">N + 1 iOS Apps</strong></td>
-            </tr>
-            <tr>
-              <td>
-                <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
-                  Google Android
-                </strong>
-              </td>
-              <td><code>1 App</code> (Central ZAP Order UAT App)</td>
-              <td><strong>N Separate Branded Apps</strong> (Pendogo, Pho24...)</td>
-              <td><strong style="color: #3DDC84;">N + 1 Android Apps</strong></td>
-            </tr>
+              <!-- Product 5: ZAP Order App (White-Label) -->
+              <tr>
+                <td rowspan="2" style="background: var(--bg-secondary); vertical-align: top; padding: 14px 12px;">
+                  <strong style="color: #8E24AA; font-size: 14px; display: block; margin-bottom: 4px;">5. ZAP Order App</strong>
+                  <span style="font-size: 11px; color: var(--text-secondary); display: block; line-height: 1.4; margin-bottom: 4px;">Multi-Tenant White-Label Branded App</span>
+                  <code style="font-size: 10px;">flutter_order_app</code>
+                </td>
+                <td>
+                  <strong style="color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.32c.67-.82 1.13-1.96.99-3.11-.97.04-2.15.65-2.85 1.46-.61.71-1.15 1.87-.99 2.99 1.08.08 2.18-.52 2.85-1.34z"/></svg>
+                    Apple iOS
+                  </strong>
+                </td>
+                <td><code>1 App</code> (Central ZAP Order UAT App)</td>
+                <td><strong>N Separate Branded Apps</strong> (Pendogo, Pho24...)</td>
+                <td><strong style="color: var(--accent-color);">N + 1 iOS Apps</strong></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong style="color: #3DDC84; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5516 0 .9997.4482.9997.9993s-.4481.9997-.9997.9997m11.393-6.2736l1.6373-2.8357c.1232-.2132.05-.4858-.1632-.609-.2132-.1232-.4858-.0504-.609.1628l-1.658 2.8715c-1.5173-.693-3.2307-1.0877-5.0771-1.0877-1.8464 0-3.5598.3947-5.0771 1.0877l-1.658-2.8715c-.1232-.2132-.3958-.286-.609-.1628-.2132.1232-.2864.3958-.1632.609l1.6373 2.8357c-3.176 1.7371-5.3217 4.9625-5.5901 8.7495h22.6105c-.2684-3.787-2.4141-7.0124-5.5901-8.7495"/></svg>
+                    Google Android
+                  </strong>
+                </td>
+                <td><code>1 App</code> (Central ZAP Order UAT App)</td>
+                <td><strong>N Separate Branded Apps</strong> (Pendogo, Pho24...)</td>
+                <td><strong style="color: #3DDC84;">N + 1 Android Apps</strong></td>
+              </tr>
 
-            <!-- Total Summary Row -->
-            <tr style="background: var(--bg-secondary); font-weight: bold;">
-              <td colspan="2" style="text-align: right; padding-right: 16px;">TOTAL ECOSYSTEM APPS TO MANAGE:</td>
-              <td><strong>10 UAT Sandbox Builds</strong></td>
-              <td><strong>2N + 7 Production Builds</strong></td>
-              <td><span class="g-badge g-post" style="background: var(--accent-bg); color: var(--accent-text); padding: 4px 8px;">2N + 17 Active Builds</span></td>
-            </tr>
-          </tbody>
-        </table>
+              <!-- Total Summary Row -->
+              <tr style="background: var(--bg-secondary); font-weight: bold;">
+                <td colspan="2" style="text-align: right; padding-right: 16px;">TOTAL ECOSYSTEM APPS TO MANAGE:</td>
+                <td><strong>10 UAT Sandbox Builds</strong></td>
+                <td><strong>2N + 7 Production Builds</strong></td>
+                <td><span class="g-badge g-post" style="background: var(--accent-bg); color: var(--accent-text); padding: 4px 8px;">2N + 17 Active Builds</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <!-- Section 4: Target OS & Mobile Store Publishing Architecture Diagram -->
         <h2 style="font-size: 20px; margin: 36px 0 16px;">4. Target OS &amp; Mobile Store Publishing Pipeline (iOS, Android &amp; Windows)</h2>
@@ -1929,40 +1933,42 @@ end</code></pre>
 
         <!-- Platform Build & Publishing Specification Matrix -->
         <h2 style="font-size: 20px; margin: 32px 0 16px;">4. Multi-Platform Build &amp; Publishing Specification Matrix</h2>
-        <table class="g-table">
-          <thead>
-            <tr>
-              <th style="width: 18%;">Target OS Platform</th>
-              <th style="width: 16%;">Build Artifact</th>
-              <th style="width: 24%;">Signing &amp; Security Cert</th>
-              <th style="width: 21%;">UAT Testing Channel</th>
-              <th style="width: 21%;">Production Publishing Store</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong style="color: #000000; font-size: 13.5px;">Apple iOS</strong></td>
-              <td><code>.ipa</code> Package</td>
-              <td>Apple Distribution Cert + Provisioning Profile</td>
-              <td>Apple TestFlight (Internal Group)</td>
-              <td>Apple App Store Connect</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #34A853; font-size: 13.5px;">Google Android</strong></td>
-              <td><code>.aab</code> / <code>.apk</code></td>
-              <td>Android Keystore (<code>upload-keystore.jks</code>)</td>
-              <td>Play Internal App Sharing / Firebase</td>
-              <td>Google Play Console</td>
-            </tr>
-            <tr>
-              <td><strong style="color: #0078D4; font-size: 13.5px;">Windows Desktop</strong></td>
-              <td><code>.exe</code> / <code>.msi</code></td>
-              <td>EV Code Signing Certificate</td>
-              <td>Direct MSI / UAT Update Server</td>
-              <td>ZAP Auto-Updater Service</td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 32px; border-radius: 8px;">
+          <table class="g-table" style="width: 100%; min-width: 780px; margin-bottom: 0;">
+            <thead>
+              <tr>
+                <th style="width: 18%;">Target OS Platform</th>
+                <th style="width: 16%;">Build Artifact</th>
+                <th style="width: 24%;">Signing &amp; Security Cert</th>
+                <th style="width: 21%;">UAT Testing Channel</th>
+                <th style="width: 21%;">Production Publishing Store</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: var(--text-primary); font-size: 13.5px;">Apple iOS</strong></td>
+                <td><code>.ipa</code> Package</td>
+                <td>Apple Distribution Cert + Provisioning Profile</td>
+                <td>Apple TestFlight (Internal Group)</td>
+                <td>Apple App Store Connect</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #34A853; font-size: 13.5px;">Google Android</strong></td>
+                <td><code>.aab</code> / <code>.apk</code></td>
+                <td>Android Keystore (<code>upload-keystore.jks</code>)</td>
+                <td>Play Internal App Sharing / Firebase</td>
+                <td>Google Play Console</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #0078D4; font-size: 13.5px;">Windows Desktop</strong></td>
+                <td><code>.exe</code> / <code>.msi</code></td>
+                <td>EV Code Signing Certificate</td>
+                <td>Direct MSI / UAT Update Server</td>
+                <td>ZAP Auto-Updater Service</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <!-- Section: Continuous Deployment & DevOps Pipelines -->
