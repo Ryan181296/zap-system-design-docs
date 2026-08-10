@@ -1472,6 +1472,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.refreshHealthStatus();
   renderDesignSystem();
   syncApiDataFromGitHub();
+  fetchLiveFromGitHubNow();
   renderCommitActivityChart();
 
   // Attach Health Dashboard Event Listeners
