@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if (typeof renderCommitActivityChart === 'function') renderCommitActivityChart();
           if (typeof window.refreshHealthStatus === 'function') window.refreshHealthStatus();
         }
+        if (target === 'view-gantt') {
+          if (typeof window.buildGantt === 'function') window.buildGantt();
+        }
         if (typeof window.initCodeBlocks === 'function') window.initCodeBlocks();
         if (window.Prism) window.Prism.highlightAll();
       }
