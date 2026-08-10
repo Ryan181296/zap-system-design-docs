@@ -7,16 +7,21 @@ on:
       - uat
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   scan-apis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout System Docs Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # 🔐 1. Checkout identity-service Repo
       - name: Checkout identity-service Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'Ryan181296/identity-service'
           token: ${{ secrets.BACKEND_REPO_TOKEN }}
@@ -25,7 +30,7 @@ jobs:
 
       # 🔐 2. Checkout commerce-service Repo
       - name: Checkout commerce-service Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'Ryan181296/commerce-service'
           token: ${{ secrets.BACKEND_REPO_TOKEN }}
@@ -34,7 +39,7 @@ jobs:
 
       # 🔐 3. Checkout payment-service Repo
       - name: Checkout payment-service Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'Ryan181296/payment-service'
           token: ${{ secrets.BACKEND_REPO_TOKEN }}
@@ -43,7 +48,7 @@ jobs:
 
       # 🔐 4. Checkout notification-service Repo
       - name: Checkout notification-service Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'Ryan181296/notification-service'
           token: ${{ secrets.BACKEND_REPO_TOKEN }}
@@ -52,7 +57,7 @@ jobs:
 
       # 🔐 5. Checkout api-gateway Repo
       - name: Checkout api-gateway Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'Ryan181296/api-gateway'
           token: ${{ secrets.BACKEND_REPO_TOKEN }}
@@ -60,7 +65,7 @@ jobs:
         continue-on-error: true
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
@@ -73,4 +78,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add js/api-data.js
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(api): auto-sync scanned Java API endpoints from Poly-Repo BEs [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(api): auto-sync scanned Java API endpoints from Poly-Repo BEs [skip ci]" && git push origin main)
