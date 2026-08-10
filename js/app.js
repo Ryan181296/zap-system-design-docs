@@ -1123,9 +1123,9 @@ window.refreshHealthStatus = async function refreshHealthStatus() {
       };
     });
 
-  const nowStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const nowStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-  container.innerHTML = results.map(node => `
+    container.innerHTML = results.map(node => `
     <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; transition: all 0.2s ease;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -1289,7 +1289,7 @@ function toggleCommitRepoAccordion(repoName) {
 function loadMoreRepoCommits(repoName) {
   // Instantly increase visible commit limit for this repo by +4
   repoVisibleLimits[repoName] = (repoVisibleLimits[repoName] || 5) + 4;
-  
+
   // Also trigger API fetch for extra pages in background
   const nextPage = (repoCommitPages[repoName] || 1) + 1;
   repoCommitPages[repoName] = nextPage;
@@ -1326,7 +1326,7 @@ function renderCommitActivityChart() {
   ];
 
   const liveCommitData = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : [];
-  
+
   const repos = baseRepos.map(def => {
     let recentList = [];
     let totalCount = 0;
@@ -1365,7 +1365,7 @@ function renderCommitActivityChart() {
     const borderStyle = isExpanded ? `border: 2px solid ${repo.color}; box-shadow: 0 0 10px ${repo.color}33;` : `border: 1px solid var(--border-color);`;
     const weekly = repo.weeklyCommits || [4, 7, 3, 9, 6, 12, 8];
     const maxVal = Math.max(...weekly, 1);
-    
+
     const barsHtml = weekly.map((val, idx) => {
       const heightPercent = Math.round((val / maxVal) * 100);
       return `
@@ -1399,29 +1399,36 @@ function renderCommitActivityChart() {
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
         ${repos.map(r => {
-          const isExpanded = !!expandedRepos[r.name];
-          const isLoading = repoCommitLoading[r.name];
-          const commits = r.recent || [];
-          const visibleLimit = repoVisibleLimits[r.name] || 3;
-          const visibleCommits = commits.slice(0, visibleLimit);
-          const hasMore = commits.length > visibleLimit;
-
-          const commitRowsHtml = visibleCommits.map(c => `
-            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; gap: 8px; flex-wrap: wrap;">
-              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1;">
-                <a href="https://github.com/Ryan181296/${r.name}/commit/${c.hash}" target="_blank" style="text-decoration: none;">
-                  <code style="font-size: 11px; color: ${r.color}; font-weight: 700; background: ${r.color}15; padding: 1px 5px; border-radius: 4px;">${c.hash || 'HEAD'}</code>
-                </a>
-                <span style="color: var(--text-primary); font-weight: 500;">${c.msg}</span>
+      const isExpanded = !!expandedRepos[r.name];
+      const isLoading = repoCommitLoading[r.name];
+      const commits = r.recent || [];
+      const visibleLimit = repoVisibleLimits[r.name] || 3;
+          let commitRowsHtml = '';
+          if (isLoading && (!commits || commits.length === 0)) {
+            commitRowsHtml = `
+              <div style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; color: var(--accent-color); font-size: 13px; font-weight: 600; background: var(--bg-secondary); border-radius: 6px; border: 1px dashed var(--accent-color);">
+                <span class="health-pulse-dot" style="width:10px;height:10px;background:var(--accent-color);"></span>
+                <span>🔄 Fetching Live Commits from GitHub API (https://api.github.com/repos/Ryan181296/${r.name}/commits)...</span>
               </div>
-              <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--text-muted);">
-                <span>${c.date || ''}</span>
-                <span>by <strong style="color: var(--text-secondary);">${c.author || 'dev-team'}</strong></span>
+            `;
+          } else {
+            commitRowsHtml = visibleCommits.map(c => `
+              <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; gap: 8px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1;">
+                  <a href="https://github.com/Ryan181296/${r.name}/commit/${c.hash}" target="_blank" style="text-decoration: none;">
+                    <code style="font-size: 11px; color: ${r.color}; font-weight: 700; background: ${r.color}15; padding: 1px 5px; border-radius: 4px;">${c.hash || 'HEAD'}</code>
+                  </a>
+                  <span style="color: var(--text-primary); font-weight: 500;">${c.msg}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--text-muted);">
+                  <span>${c.date || ''}</span>
+                  <span>by <strong style="color: var(--text-secondary);">${c.author || 'dev-team'}</strong></span>
+                </div>
               </div>
-            </div>
-          `).join('');
+            `).join('');
+          }
 
-          return `
+      return `
             <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.2s ease;">
               <!-- Accordion Header Bar -->
               <div onclick="window.toggleCommitRepoAccordion('${r.name}')" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-secondary); cursor: pointer; user-select: none;">
@@ -1453,7 +1460,7 @@ function renderCommitActivityChart() {
               ` : ''}
             </div>
           `;
-        }).join('')}
+    }).join('')}
       </div>
     `;
   }
