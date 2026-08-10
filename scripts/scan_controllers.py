@@ -146,6 +146,10 @@ def scan_java_controllers():
 def generate_js_data():
     endpoints = scan_java_controllers()
 
+    if len(endpoints) == 0:
+        print("⚠️ 0 endpoints scanned. Keeping existing api-data.js safely to prevent data loss!")
+        return
+
     # Update services endpoint count in names
     svc_counts = {}
     for ep in endpoints:
