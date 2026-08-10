@@ -751,13 +751,22 @@ function copyCurl(epId) {
 function renderDesignSystem() {
   const errContainer = document.getElementById('error-codes-table');
   if (errContainer) {
+    const errorCodes = (window.ZAP_API_DATA && Array.isArray(window.ZAP_API_DATA.errorCodes)) ? window.ZAP_API_DATA.errorCodes : [
+      { code: 1000, message: "SUCCESS", category: "200 OK", desc: "Operation executed successfully" },
+      { code: 1001, message: "INVALID_PARAM", category: "400 Bad Request", desc: "Missing or invalid payload parameters" },
+      { code: 1002, message: "UNAUTHORIZED", category: "401 Unauthorized", desc: "Missing or invalid RSA signature/JWT token" },
+      { code: 1003, message: "FORBIDDEN", category: "403 Forbidden", desc: "User lacks permission for requested resource" },
+      { code: 1004, message: "NOT_FOUND", category: "404 Not Found", desc: "Resource entity does not exist" },
+      { code: 1005, message: "INTERNAL_ERROR", category: "500 Server Error", desc: "Unhandled backend exception" }
+    ];
+
     errContainer.innerHTML = `
       <table class="g-table">
         <thead>
           <tr><th>Code</th><th>Error Constant</th><th>HTTP Status / Category</th><th>Description</th></tr>
         </thead>
         <tbody>
-          ${ZAP_API_DATA.errorCodes.map(err => `
+          ${errorCodes.map(err => `
             <tr>
               <td><code>${err.code}</code></td>
               <td><strong style="color: var(--text-primary);">${err.message}</strong></td>
@@ -1399,10 +1408,13 @@ function renderCommitActivityChart() {
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
         ${repos.map(r => {
-      const isExpanded = !!expandedRepos[r.name];
-      const isLoading = repoCommitLoading[r.name];
-      const commits = r.recent || [];
-      const visibleLimit = repoVisibleLimits[r.name] || 3;
+          const isExpanded = !!expandedRepos[r.name];
+          const isLoading = repoCommitLoading[r.name];
+          const commits = r.recent || [];
+          const visibleLimit = repoVisibleLimits[r.name] || 3;
+          const visibleCommits = commits.slice(0, visibleLimit);
+          const hasMore = commits.length > visibleLimit;
+
           let commitRowsHtml = '';
           if (isLoading && (!commits || commits.length === 0)) {
             commitRowsHtml = `
