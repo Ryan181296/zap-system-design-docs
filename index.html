@@ -218,6 +218,18 @@
       </div>
 
       <div class="g-nav-section">
+        <div class="g-nav-title">Project Roadmap</div>
+        <a class="g-nav-item" data-target="view-gantt">
+          <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="3" rx="1"/>
+            <rect x="3" y="10" width="12" height="3" rx="1"/>
+            <rect x="3" y="16" width="16" height="3" rx="1"/>
+          </svg>
+          <span>Development Roadmap</span>
+        </a>
+      </div>
+
+      <div class="g-nav-section">
         <div class="g-nav-title">Developer Guidelines</div>
         <a class="g-nav-item" data-target="view-design">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -2514,6 +2526,343 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
 
         <h2 style="font-size: 20px; margin: 32px 0 12px 0;">Redis Cache Naming Conventions</h2>
         <div id="redis-keys-table"></div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════════
+           SECTION: Development Roadmap Gantt Chart
+      ═══════════════════════════════════════════════════════════════════ -->
+      <section id="view-gantt" class="g-doc-section" style="display: none;">
+        <div class="g-breadcrumb">
+          <span>Docs</span> &rsaquo; <span>Project Roadmap</span> &rsaquo; <span>Development Gantt Chart</span>
+        </div>
+
+        <div class="g-doc-header">
+          <h1 class="g-doc-title">ZAP Platform — Development Roadmap Gantt Chart</h1>
+          <p class="g-doc-subtitle">Chronological delivery timeline across all backend microservices, DevOps infrastructure, and documentation portal. Past milestones derived from real Git commit history. Planned items target end of August 2026.</p>
+        </div>
+
+        <!-- Legend -->
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding: 16px 20px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; align-items: center;">
+          <strong style="font-size: 13px; color: var(--text-primary); margin-right: 4px;">Legend:</strong>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#10B981;display:inline-block;"></span><span style="font-size:12px;color:var(--text-secondary);">Completed (from Git)</span></span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#3B82F6;display:inline-block;"></span><span style="font-size:12px;color:var(--text-secondary);">In Progress</span></span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#8E24AA;display:inline-block;"></span><span style="font-size:12px;color:var(--text-secondary);">Planned</span></span>
+          <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#F59E0B;display:inline-block;"></span><span style="font-size:12px;color:var(--text-secondary);">DevOps / Infra</span></span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text-muted);">Timeline: Aug 1 – Aug 31, 2026</span>
+        </div>
+
+        <!-- Gantt SVG -->
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 28px; overflow-x: auto; margin-bottom: 32px;">
+          <svg viewBox="0 0 1100 820" width="100%" style="min-width: 900px; display: block; font-family: inherit;">
+
+            <!-- ── Header: Month Days ─────────────────────────────────────── -->
+            <!-- Background -->
+            <rect x="200" y="0" width="900" height="36" fill="var(--bg-tertiary)" rx="4"/>
+
+            <!-- Week markers & day numbers -->
+            <!-- W1: Aug 1-7 -->
+            <rect x="200" y="0" width="210" height="36" fill="#1a73e8" opacity="0.12" rx="2"/>
+            <text x="305" y="14" text-anchor="middle" font-size="9" font-weight="bold" fill="#1a73e8">WEEK 1 (Aug 1–7)</text>
+            <text x="215" y="28" font-size="8" fill="var(--text-muted)">1</text>
+            <text x="245" y="28" font-size="8" fill="var(--text-muted)">2</text>
+            <text x="275" y="28" font-size="8" fill="var(--text-muted)">3</text>
+            <text x="305" y="28" font-size="8" fill="var(--text-muted)">4</text>
+            <text x="335" y="28" font-size="8" fill="var(--text-muted)">5</text>
+            <text x="365" y="28" font-size="8" fill="var(--text-muted)">6</text>
+            <text x="395" y="28" font-size="8" fill="var(--text-muted)">7</text>
+
+            <!-- W2: Aug 8-14 -->
+            <rect x="410" y="0" width="210" height="36" fill="#8E24AA" opacity="0.08" rx="2"/>
+            <text x="515" y="14" text-anchor="middle" font-size="9" font-weight="bold" fill="#8E24AA">WEEK 2 (Aug 8–14)</text>
+            <text x="420" y="28" font-size="8" fill="var(--text-muted)">8</text>
+            <text x="450" y="28" font-size="8" fill="var(--text-muted)">9</text>
+            <text x="478" y="28" font-size="8" fill="var(--text-muted)">10</text>
+            <text x="508" y="28" font-size="8" fill="var(--text-muted)">11</text>
+            <text x="538" y="28" font-size="8" fill="var(--text-muted)">12</text>
+            <text x="568" y="28" font-size="8" fill="var(--text-muted)">13</text>
+            <text x="598" y="28" font-size="8" fill="var(--text-muted)">14</text>
+
+            <!-- W3: Aug 15-21 -->
+            <rect x="620" y="0" width="210" height="36" fill="#1a73e8" opacity="0.12" rx="2"/>
+            <text x="725" y="14" text-anchor="middle" font-size="9" font-weight="bold" fill="#1a73e8">WEEK 3 (Aug 15–21)</text>
+            <text x="628" y="28" font-size="8" fill="var(--text-muted)">15</text>
+            <text x="658" y="28" font-size="8" fill="var(--text-muted)">16</text>
+            <text x="688" y="28" font-size="8" fill="var(--text-muted)">17</text>
+            <text x="718" y="28" font-size="8" fill="var(--text-muted)">18</text>
+            <text x="748" y="28" font-size="8" fill="var(--text-muted)">19</text>
+            <text x="778" y="28" font-size="8" fill="var(--text-muted)">20</text>
+            <text x="808" y="28" font-size="8" fill="var(--text-muted)">21</text>
+
+            <!-- W4: Aug 22-31 -->
+            <rect x="830" y="0" width="270" height="36" fill="#8E24AA" opacity="0.08" rx="2"/>
+            <text x="965" y="14" text-anchor="middle" font-size="9" font-weight="bold" fill="#8E24AA">WEEK 4 (Aug 22–31)</text>
+            <text x="836" y="28" font-size="8" fill="var(--text-muted)">22</text>
+            <text x="863" y="28" font-size="8" fill="var(--text-muted)">23</text>
+            <text x="890" y="28" font-size="8" fill="var(--text-muted)">24</text>
+            <text x="917" y="28" font-size="8" fill="var(--text-muted)">25</text>
+            <text x="944" y="28" font-size="8" fill="var(--text-muted)">26</text>
+            <text x="971" y="28" font-size="8" fill="var(--text-muted)">27</text>
+            <text x="998" y="28" font-size="8" fill="var(--text-muted)">28</text>
+            <text x="1025" y="28" font-size="8" fill="var(--text-muted)">29</text>
+            <text x="1052" y="28" font-size="8" fill="var(--text-muted)">30</text>
+            <text x="1079" y="28" font-size="8" fill="var(--text-muted)">31</text>
+
+            <!-- ── Today marker: Aug 10 ──────────────────────────────────── -->
+            <!-- Aug 10 = day 10, offset: 200 + (10-1)*30 = 200+270 = 470 -->
+            <line x1="487" y1="0" x2="487" y2="820" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+            <rect x="475" y="3" width="28" height="14" rx="3" fill="#EF4444"/>
+            <text x="489" y="13" text-anchor="middle" font-size="8" font-weight="bold" fill="white">TODAY</text>
+
+            <!-- ── Grid lines ─────────────────────────────────────────────── -->
+            <line x1="200" y1="36" x2="1100" y2="36" stroke="var(--border-color)" stroke-width="1"/>
+
+            <!-- Helper: each day = 30px wide, origin x=200 for day 1 -->
+            <!-- x(day) = 200 + (day - 1) * 30 -->
+
+            <!-- ══ ROW GROUP 1: DOCUMENTATION PORTAL ══════════════════════ -->
+            <rect x="0" y="44" width="200" height="20" fill="var(--bg-tertiary)"/>
+            <text x="8" y="58" font-size="10" font-weight="bold" fill="var(--text-muted)">📚 DOC PORTAL</text>
+            <line x1="0" y1="64" x2="1100" y2="64" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Portal Init (Aug 10) -->
+            <rect x="0" y="68" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="83" font-size="9.5" fill="var(--text-secondary)">Portal Bootstrap</text>
+            <!-- Aug 10–10: x=470, width=30 -->
+            <rect x="470" y="70" width="30" height="18" rx="4" fill="#10B981"/>
+            <text x="485" y="83" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">✓ Done</text>
+
+            <line x1="0" y1="90" x2="1100" y2="90" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- CI / GitHub Actions (Aug 10) -->
+            <rect x="0" y="94" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="109" font-size="9.5" fill="var(--text-secondary)">CI Auto-Scan APIs</text>
+            <rect x="470" y="96" width="30" height="18" rx="4" fill="#10B981"/>
+            <text x="485" y="109" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">✓ Done</text>
+
+            <line x1="0" y1="116" x2="1100" y2="116" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Health Dashboard (Aug 10) -->
+            <rect x="0" y="120" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="135" font-size="9.5" fill="var(--text-secondary)">Health Dashboard</text>
+            <rect x="470" y="122" width="30" height="18" rx="4" fill="#10B981"/>
+            <text x="485" y="135" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">✓ Done</text>
+
+            <line x1="0" y1="142" x2="1100" y2="142" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Error Codes (Aug 10) -->
+            <rect x="0" y="146" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="161" font-size="9.5" fill="var(--text-secondary)">153 Error Codes Catalog</text>
+            <rect x="470" y="148" width="30" height="18" rx="4" fill="#10B981"/>
+            <text x="485" y="161" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">✓ Done</text>
+
+            <line x1="0" y1="168" x2="1100" y2="168" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- DevOps Diagrams (Aug 10) -->
+            <rect x="0" y="172" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="187" font-size="9.5" fill="var(--text-secondary)">DevOps Architecture Diagrams</text>
+            <rect x="470" y="174" width="30" height="18" rx="4" fill="#10B981"/>
+            <text x="485" y="187" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">✓ Done</text>
+
+            <line x1="0" y1="194" x2="1100" y2="194" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Cloud Run Deploy (Aug 10) -->
+            <rect x="0" y="198" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="213" font-size="9.5" fill="var(--text-secondary)">Cloud Run Deployment</text>
+            <rect x="470" y="200" width="30" height="18" rx="4" fill="#F59E0B"/>
+            <text x="485" y="213" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">✓ Live</text>
+
+            <line x1="0" y1="220" x2="1100" y2="220" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Gantt Chart (Aug 10-11) -->
+            <rect x="0" y="224" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="239" font-size="9.5" fill="var(--text-secondary)">Roadmap Gantt Chart</text>
+            <rect x="470" y="226" width="60" height="18" rx="4" fill="#3B82F6"/>
+            <text x="500" y="239" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">⚡ Now</text>
+
+            <line x1="0" y1="246" x2="1100" y2="246" stroke="var(--border-color)" stroke-width="1"/>
+
+            <!-- ══ ROW GROUP 2: IDENTITY SERVICE ═════════════════════════ -->
+            <rect x="0" y="250" width="200" height="20" fill="var(--bg-tertiary)"/>
+            <text x="8" y="264" font-size="10" font-weight="bold" fill="var(--text-muted)">🔐 IDENTITY SERVICE</text>
+            <line x1="0" y1="270" x2="1100" y2="270" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- JWT Auth Refresh (Done Aug 1-7) -->
+            <rect x="0" y="274" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="289" font-size="9.5" fill="var(--text-secondary)">JWT Access / Refresh Token</text>
+            <rect x="200" y="276" width="270" height="18" rx="4" fill="#10B981"/>
+            <text x="335" y="289" text-anchor="middle" font-size="8" fill="white" font-weight="bold">✓ Completed (Aug 1–10)</text>
+
+            <line x1="0" y1="296" x2="1100" y2="296" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- OTP Flow (Done Aug 1-10) -->
+            <rect x="0" y="300" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="315" font-size="9.5" fill="var(--text-secondary)">OTP SMS + Rate Limiter</text>
+            <rect x="200" y="302" width="270" height="18" rx="4" fill="#10B981"/>
+            <text x="335" y="315" text-anchor="middle" font-size="8" fill="white" font-weight="bold">✓ Completed (Aug 1–10)</text>
+
+            <line x1="0" y1="322" x2="1100" y2="322" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Firebase Auth (In Progress Aug 10-15) -->
+            <rect x="0" y="326" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="341" font-size="9.5" fill="var(--text-secondary)">Firebase Social Auth</text>
+            <rect x="470" y="328" width="180" height="18" rx="4" fill="#3B82F6"/>
+            <text x="560" y="341" text-anchor="middle" font-size="8" fill="white" font-weight="bold">⚡ In Progress (Aug 10–16)</text>
+
+            <line x1="0" y1="348" x2="1100" y2="348" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Employee RBAC (Planned Aug 17-24) -->
+            <rect x="0" y="352" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="367" font-size="9.5" fill="var(--text-secondary)">Employee RBAC Permissions</text>
+            <rect x="680" y="354" width="240" height="18" rx="4" fill="#8E24AA"/>
+            <text x="800" y="367" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Planned (Aug 17–25)</text>
+
+            <line x1="0" y1="374" x2="1100" y2="374" stroke="var(--border-color)" stroke-width="1"/>
+
+            <!-- ══ ROW GROUP 3: COMMERCE SERVICE ══════════════════════════ -->
+            <rect x="0" y="378" width="200" height="20" fill="var(--bg-tertiary)"/>
+            <text x="8" y="392" font-size="10" font-weight="bold" fill="var(--text-muted)">🛒 COMMERCE SERVICE</text>
+            <line x1="0" y1="398" x2="1100" y2="398" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Product Catalog (Done) -->
+            <rect x="0" y="402" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="417" font-size="9.5" fill="var(--text-secondary)">Product / SKU Catalog CRUD</text>
+            <rect x="200" y="404" width="270" height="18" rx="4" fill="#10B981"/>
+            <text x="335" y="417" text-anchor="middle" font-size="8" fill="white" font-weight="bold">✓ Completed (Aug 1–10)</text>
+
+            <line x1="0" y1="424" x2="1100" y2="424" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Order StateMachine (In Progress) -->
+            <rect x="0" y="428" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="443" font-size="9.5" fill="var(--text-secondary)">Order StateMachine Engine</text>
+            <rect x="470" y="430" width="150" height="18" rx="4" fill="#3B82F6"/>
+            <text x="545" y="443" text-anchor="middle" font-size="8" fill="white" font-weight="bold">⚡ In Progress (Aug 10–15)</text>
+
+            <line x1="0" y1="450" x2="1100" y2="450" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Wholesale Tiered Pricing (Planned) -->
+            <rect x="0" y="454" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="469" font-size="9.5" fill="var(--text-secondary)">Wholesale Tier Pricing</text>
+            <rect x="650" y="456" width="210" height="18" rx="4" fill="#8E24AA"/>
+            <text x="755" y="469" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Planned (Aug 16–24)</text>
+
+            <line x1="0" y1="476" x2="1100" y2="476" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Inventory Warehouse Import (Planned) -->
+            <rect x="0" y="480" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="495" font-size="9.5" fill="var(--text-secondary)">Warehouse Inventory Import</text>
+            <rect x="800" y="482" width="270" height="18" rx="4" fill="#8E24AA"/>
+            <text x="935" y="495" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Planned (Aug 23–31)</text>
+
+            <line x1="0" y1="502" x2="1100" y2="502" stroke="var(--border-color)" stroke-width="1"/>
+
+            <!-- ══ ROW GROUP 4: PAYMENT SERVICE ════════════════════════════ -->
+            <rect x="0" y="506" width="200" height="20" fill="var(--bg-tertiary)"/>
+            <text x="8" y="520" font-size="10" font-weight="bold" fill="var(--text-muted)">💳 PAYMENT SERVICE</text>
+            <line x1="0" y1="526" x2="1100" y2="526" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- BIDV VietQR (Done) -->
+            <rect x="0" y="530" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="545" font-size="9.5" fill="var(--text-secondary)">BIDV VietQR EMVCo Integration</text>
+            <rect x="200" y="532" width="270" height="18" rx="4" fill="#10B981"/>
+            <text x="335" y="545" text-anchor="middle" font-size="8" fill="white" font-weight="bold">✓ Completed (Aug 1–10)</text>
+
+            <line x1="0" y1="552" x2="1100" y2="552" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Stripe Card (In Progress) -->
+            <rect x="0" y="556" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="571" font-size="9.5" fill="var(--text-secondary)">Stripe Credit Card Flow</text>
+            <rect x="470" y="558" width="180" height="18" rx="4" fill="#3B82F6"/>
+            <text x="560" y="571" text-anchor="middle" font-size="8" fill="white" font-weight="bold">⚡ In Progress (Aug 10–17)</text>
+
+            <line x1="0" y1="578" x2="1100" y2="578" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Transactional Outbox (Planned) -->
+            <rect x="0" y="582" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="597" font-size="9.5" fill="var(--text-secondary)">Transactional Outbox Pattern</text>
+            <rect x="710" y="584" width="210" height="18" rx="4" fill="#8E24AA"/>
+            <text x="815" y="597" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Planned (Aug 18–26)</text>
+
+            <line x1="0" y1="604" x2="1100" y2="604" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Loyalty Points Wallet (Planned) -->
+            <rect x="0" y="608" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="623" font-size="9.5" fill="var(--text-secondary)">Loyalty Points Wallet</text>
+            <rect x="830" y="610" width="240" height="18" rx="4" fill="#8E24AA"/>
+            <text x="950" y="623" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Planned (Aug 23–31)</text>
+
+            <line x1="0" y1="630" x2="1100" y2="630" stroke="var(--border-color)" stroke-width="1"/>
+
+            <!-- ══ ROW GROUP 5: NOTIFICATION + DEVOPS ═════════════════════ -->
+            <rect x="0" y="634" width="200" height="20" fill="var(--bg-tertiary)"/>
+            <text x="8" y="648" font-size="10" font-weight="bold" fill="var(--text-muted)">🔔 NOTIF + ⚙️ INFRA</text>
+            <line x1="0" y1="654" x2="1100" y2="654" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- FCM Push (Done) -->
+            <rect x="0" y="658" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="673" font-size="9.5" fill="var(--text-secondary)">FCM Push Notifications</text>
+            <rect x="200" y="660" width="270" height="18" rx="4" fill="#10B981"/>
+            <text x="335" y="673" text-anchor="middle" font-size="8" fill="white" font-weight="bold">✓ Completed (Aug 1–10)</text>
+
+            <line x1="0" y1="680" x2="1100" y2="680" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Cloud Run Autoscale (Done) -->
+            <rect x="0" y="684" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="699" font-size="9.5" fill="var(--text-secondary)">Cloud Run Autoscale Deploy</text>
+            <rect x="470" y="686" width="30" height="18" rx="4" fill="#F59E0B"/>
+            <text x="485" y="699" text-anchor="middle" font-size="7" fill="white" font-weight="bold">✓</text>
+
+            <line x1="0" y1="706" x2="1100" y2="706" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- PubSub Event Bus (Planned) -->
+            <rect x="0" y="710" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="725" font-size="9.5" fill="var(--text-secondary)">GCP PubSub Event Bus</text>
+            <rect x="650" y="712" width="270" height="18" rx="4" fill="#F59E0B"/>
+            <text x="785" y="725" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Infra (Aug 16–26)</text>
+
+            <line x1="0" y1="732" x2="1100" y2="732" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Load Testing k6 (Planned) -->
+            <rect x="0" y="736" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="751" font-size="9.5" fill="var(--text-secondary)">k6 Load &amp; Stress Testing</text>
+            <rect x="800" y="738" width="270" height="18" rx="4" fill="#F59E0B"/>
+            <text x="935" y="751" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Infra (Aug 23–31)</text>
+
+            <line x1="0" y1="758" x2="1100" y2="758" stroke="var(--border-color)" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Sprint Review (Planned) -->
+            <rect x="0" y="762" width="200" height="22" fill="var(--bg-secondary)"/>
+            <text x="8" y="777" font-size="9.5" fill="var(--text-secondary)">Sprint Demo &amp; Review</text>
+            <rect x="1040" y="764" width="60" height="18" rx="4" fill="#EF4444"/>
+            <text x="1070" y="777" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Aug 31</text>
+
+            <line x1="0" y1="784" x2="1100" y2="784" stroke="var(--border-color)" stroke-width="1"/>
+
+            <!-- ── Left labels column border ──────────────────────────────── -->
+            <line x1="200" y1="36" x2="200" y2="820" stroke="var(--border-color)" stroke-width="1.5"/>
+
+          </svg>
+        </div>
+
+        <!-- Summary Stats -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+          <div style="background: var(--bg-secondary); border: 1px solid rgba(16,185,129,0.4); border-radius: 10px; padding: 16px; text-align: center;">
+            <div style="font-size: 28px; font-weight: 800; color: #10B981;">12</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Milestones Completed</div>
+          </div>
+          <div style="background: var(--bg-secondary); border: 1px solid rgba(59,130,246,0.4); border-radius: 10px; padding: 16px; text-align: center;">
+            <div style="font-size: 28px; font-weight: 800; color: #3B82F6;">4</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">In Progress</div>
+          </div>
+          <div style="background: var(--bg-secondary); border: 1px solid rgba(142,36,170,0.4); border-radius: 10px; padding: 16px; text-align: center;">
+            <div style="font-size: 28px; font-weight: 800; color: #8E24AA;">8</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Planned This Month</div>
+          </div>
+          <div style="background: var(--bg-secondary); border: 1px solid rgba(239,68,68,0.4); border-radius: 10px; padding: 16px; text-align: center;">
+            <div style="font-size: 28px; font-weight: 800; color: #EF4444;">Aug 31</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Sprint Deadline</div>
+          </div>
+        </div>
+
       </section>
 
     </main>
