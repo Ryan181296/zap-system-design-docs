@@ -223,6 +223,31 @@ def scan_java_controllers():
 
     return endpoints
 
+ERROR_CODES = [
+    { "code": 1000, "message": "SUCCESS", "category": "200 OK", "desc": "Operation executed successfully" },
+    { "code": 1001, "message": "INVALID_PARAM", "category": "400 Bad Request", "desc": "Missing or invalid payload parameters" },
+    { "code": 1002, "message": "UNAUTHORIZED", "category": "401 Unauthorized", "desc": "Missing or invalid RSA signature/JWT token" },
+    { "code": 1003, "message": "FORBIDDEN", "category": "403 Forbidden", "desc": "User lacks permission for requested resource" },
+    { "code": 1004, "message": "NOT_FOUND", "category": "404 Not Found", "desc": "Resource entity does not exist" },
+    { "code": 1005, "message": "INTERNAL_ERROR", "category": "500 Server Error", "desc": "Unhandled backend exception" },
+    { "code": 2001, "message": "USER_NOT_FOUND", "category": "404 Identity", "desc": "Customer or Employee account ID does not exist" },
+    { "code": 2002, "message": "INVALID_OTP", "category": "400 Identity", "desc": "Provided OTP code is expired or invalid" },
+    { "code": 2003, "message": "OTP_LIMIT_EXCEEDED", "category": "429 Identity", "desc": "Exceeded maximum allowed OTP requests in 5 min" },
+    { "code": 3001, "message": "PRODUCT_OUT_OF_STOCK", "category": "400 Commerce", "desc": "Requested product SKU is currently out of stock" },
+    { "code": 3002, "message": "ORDER_STATE_INVALID", "category": "400 Commerce", "desc": "Cannot transition order state from current status" },
+    { "code": 4001, "message": "PAYMENT_FAILED", "category": "400 Payment", "desc": "Payment gateway rejected transaction" },
+    { "code": 4002, "message": "BIDV_CHECKSUM_INVALID", "category": "400 Payment", "desc": "BIDV VietQR dynamic checksum mismatch" },
+    { "code": 4003, "message": "INSUFFICIENT_BALANCE", "category": "400 Payment", "desc": "Customer account has insufficient loyalty points or wallet balance" }
+]
+
+REDIS_KEYS = [
+    { "key": "auth:jwt:blacklist:{jti}", "ttl": "24 hours", "purpose": "Revoked JWT token blacklisting" },
+    { "key": "otp:rate:{phone}", "ttl": "5 minutes", "purpose": "OTP dispatch rate limiter counter" },
+    { "key": "cart:item:{cartId}", "ttl": "7 days", "purpose": "Shopping cart transient cache" },
+    { "key": "product:detail:{id}", "ttl": "1 hour", "purpose": "Catalog item metadata cache" },
+    { "key": "qr:one-time:{token}", "ttl": "60 seconds", "purpose": "Short 20-char dynamic one-time Redis QR token" }
+]
+
 def generate_js_data():
     endpoints = scan_java_controllers()
     commit_activity = scan_git_commits()
@@ -248,6 +273,8 @@ def generate_js_data():
 const ZAP_API_DATA = {{
   services: {json.dumps(services, indent=2)},
   securityHeaders: {json.dumps(SECURITY_HEADERS, indent=2)},
+  errorCodes: {json.dumps(ERROR_CODES, indent=2)},
+  redisKeys: {json.dumps(REDIS_KEYS, indent=2)},
   commitActivity: {json.dumps(commit_activity, indent=2)},
   endpoints: {json.dumps(endpoints, indent=2)}
 }};
