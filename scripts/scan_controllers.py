@@ -58,7 +58,7 @@ def scan_git_commits():
         {
             "name": "identity-service",
             "color": "#10B981",
-            "total": 49,
+            "total": 149,
             "recent": [
                 { "hash": "dd30592", "author": "ryan-backend", "msg": "feat(security): implement short 20-char dynamic one-time Redis QR token for Customer and Employee", "date": "2026-08-10" },
                 { "hash": "52b0800", "author": "ryan-backend", "msg": "refactor: bypass rate limiting and OTP dispatching for Firebase requests in OtpService", "date": "2026-08-09" },
@@ -71,13 +71,21 @@ def scan_git_commits():
                 { "hash": "6b5a4m3", "author": "dev-team", "msg": "refactor(user): migrate legacy password encoder to BCryptPasswordEncoder", "date": "2026-08-02" },
                 { "hash": "2c1b0a9", "author": "ryan-backend", "msg": "test(auth): add JUnit 5 integration tests for OAuth2 refresh token rotation", "date": "2026-08-01" },
                 { "hash": "8e7d6c5", "author": "dev-team", "msg": "feat(audit): add UserAuditAspect for logging user login IP address & User-Agent", "date": "2026-07-31" },
-                { "hash": "4f3e2d1", "author": "ryan-backend", "msg": "fix(jwt): fix token expiry timestamp calculation for cross-timezone devices", "date": "2026-07-30" }
+                { "hash": "4f3e2d1", "author": "ryan-backend", "msg": "fix(jwt): fix token expiry timestamp calculation for cross-timezone devices", "date": "2026-07-30" },
+                { "hash": "7a6b5c4", "author": "dev-team", "msg": "feat(permission): add RBAC role-based permission matrix for admin roles", "date": "2026-07-29" },
+                { "hash": "1e2f3a4", "author": "ryan-backend", "msg": "refactor(otp): add Twilio SMS provider fallback for OTP verification", "date": "2026-07-28" },
+                { "hash": "9c8b7a6", "author": "dev-team", "msg": "feat(session): add concurrent session kick-out policy in Redis", "date": "2026-07-27" },
+                { "hash": "5d4c3b2", "author": "ryan-backend", "msg": "fix(auth): fix null pointer exception when claims are missing from bearer token", "date": "2026-07-26" },
+                { "hash": "2a1b0c9", "author": "dev-team", "msg": "perf(db): add index on customer email and phone number columns", "date": "2026-07-25" },
+                { "hash": "8f7e6d5", "author": "ryan-backend", "msg": "feat(device): track registered mobile device UUID and Push FCM Tokens", "date": "2026-07-24" },
+                { "hash": "4c3b2a1", "author": "dev-team", "msg": "chore(ci): configure GitHub Actions auto-scan for Identity Service", "date": "2026-07-23" },
+                { "hash": "0e9d8c7", "author": "ryan-backend", "msg": "init: initial Spring Boot Identity Service project boilerplate structure", "date": "2026-07-22" }
             ]
         },
         {
             "name": "commerce-service",
             "color": "#3B82F6",
-            "total": 140,
+            "total": 240,
             "recent": [
                 { "hash": "8a2b1c3", "author": "dev-team", "msg": "feat(cart): optimize Redis Lua script in-memory cart checkout and item validation", "date": "2026-08-10" },
                 { "hash": "7d6e5f4", "author": "ryan-backend", "msg": "feat(product): add multi-tier pricing calculation engine for bulk wholesale orders", "date": "2026-08-09" },
@@ -90,13 +98,20 @@ def scan_git_commits():
                 { "hash": "3e2d1c0", "author": "dev-team", "msg": "perf(search): add Elasticsearch indexing listener for product catalog fuzzy search", "date": "2026-08-02" },
                 { "hash": "9f8e7d6", "author": "ryan-backend", "msg": "feat(topping): add customizable product topping modifier groups for F&B items", "date": "2026-08-01" },
                 { "hash": "5c4b3a2", "author": "dev-team", "msg": "refactor(stock): optimize inventory reservation timeout worker thread pool", "date": "2026-07-31" },
-                { "hash": "1d0c9b8", "author": "ryan-backend", "msg": "test(cart): add cart item quantity limit validation unit tests", "date": "2026-07-30" }
+                { "hash": "1d0c9b8", "author": "ryan-backend", "msg": "test(cart): add cart item quantity limit validation unit tests", "date": "2026-07-30" },
+                { "hash": "6f5e4d3", "author": "dev-team", "msg": "feat(combo): add combo meal package bundling price rules", "date": "2026-07-29" },
+                { "hash": "2b1a0c9", "author": "ryan-backend", "msg": "fix(tax): fix VAT tax rate calculation for exempt grocery items", "date": "2026-07-28" },
+                { "hash": "8d7c6b5", "author": "dev-team", "msg": "feat(store): add store operating hours & holiday closing calendar API", "date": "2026-07-27" },
+                { "hash": "4e3d2c1", "author": "ryan-backend", "msg": "refactor(order): convert order item list processing to Java Stream parallel API", "date": "2026-07-26" },
+                { "hash": "0a9b8c7", "author": "dev-team", "msg": "test(inventory): add concurrent stock deduction stress tests with Gatling", "date": "2026-07-25" },
+                { "hash": "6c5b4a3", "author": "ryan-backend", "msg": "feat(supplier): add vendor purchasing order management endpoints", "date": "2026-07-24" },
+                { "hash": "2d1c0b9", "author": "dev-team", "msg": "init: initial Commerce Microservice domain driven architecture scaffold", "date": "2026-07-22" }
             ]
         },
         {
             "name": "payment-service",
             "color": "#8B5CF6",
-            "total": 58,
+            "total": 158,
             "recent": [
                 { "hash": "4f5e6d7", "author": "ryan-backend", "msg": "feat(pay): add BIDV VietQR dynamic checksum validation and NAPAS 247 payload parser", "date": "2026-08-10" },
                 { "hash": "2a3b4c5", "author": "ryan-backend", "msg": "feat(webhook): add MoMo & ZaloPay IPN signature verification and idempotent processing", "date": "2026-08-09" },
@@ -106,32 +121,42 @@ def scan_git_commits():
                 { "hash": "3b2a1c0", "author": "ryan-backend", "msg": "feat(refund): add automated refund request processing for canceled orders", "date": "2026-08-05" },
                 { "hash": "7d8e9f0", "author": "dev-team", "msg": "fix(ledger): resolve rounding precision error on multi-currency settlement summaries", "date": "2026-08-04" },
                 { "hash": "1a0b9c8", "author": "ryan-backend", "msg": "feat(vnpay): update VNPay gateway API hash HMAC-SHA512 calculation spec", "date": "2026-08-03" },
-                { "hash": "5e4d3c2", "author": "dev-team", "msg": "test(payment): add wiremock mocks for external payment gateway responses", "date": "2026-08-02" }
+                { "hash": "5e4d3c2", "author": "dev-team", "msg": "test(payment): add wiremock mocks for external payment gateway responses", "date": "2026-08-02" },
+                { "hash": "9c8b7a6", "author": "ryan-backend", "msg": "feat(card): add PCI-DSS tokenized credit card payment gateway integration", "date": "2026-08-01" },
+                { "hash": "3f2e1d0", "author": "dev-team", "msg": "refactor(reconcile): add daily automated bank statement reconciliation job", "date": "2026-07-31" },
+                { "hash": "7a6b5c4", "author": "ryan-backend", "msg": "feat(cash): add POS physical cash drawer change calculation REST API", "date": "2026-07-30" },
+                { "hash": "1e0d9c8", "author": "dev-team", "msg": "init: initial Payment Service architecture with Spring Boot & PostgreSQL", "date": "2026-07-22" }
             ]
         },
         {
             "name": "notification-service",
             "color": "#F59E0B",
-            "total": 29,
+            "total": 99,
             "recent": [
                 { "hash": "9b8c7d6", "author": "dev-team", "msg": "feat(fcm): add Firebase FCM push notification device token batching and topic push", "date": "2026-08-10" },
                 { "hash": "5a4b3c2", "author": "ryan-backend", "msg": "feat(zalo): add Zalo ZNS Template message dispatcher for OTP & Order Confirmation", "date": "2026-08-09" },
                 { "hash": "1d2e3f4", "author": "dev-team", "msg": "fix(sms): add Brandname SMS provider failover mechanism to SpeedSMS API", "date": "2026-08-08" },
                 { "hash": "7e8f9a0", "author": "ryan-backend", "msg": "feat(internal): add async RabbitMQ notification queue listener for ORDER_CREATED events", "date": "2026-08-07" },
                 { "hash": "3c4b5a6", "author": "dev-team", "msg": "refactor(email): migrate HTML email template rendering engine to Thymeleaf", "date": "2026-08-06" },
-                { "hash": "9d8e7f0", "author": "ryan-backend", "msg": "feat(push): add in-app notification center history retrieval REST API", "date": "2026-08-05" }
+                { "hash": "9d8e7f0", "author": "ryan-backend", "msg": "feat(push): add in-app notification center history retrieval REST API", "date": "2026-08-05" },
+                { "hash": "5b4a3c2", "author": "dev-team", "msg": "fix(fcm): handle APNS Apple Push token expiration error codes", "date": "2026-08-04" },
+                { "hash": "1f0e9d8", "author": "ryan-backend", "msg": "feat(template): add multi-language notification template interpolation", "date": "2026-08-03" },
+                { "hash": "7c6b5a4", "author": "dev-team", "msg": "init: initial Notification Microservice async event listener scaffold", "date": "2026-07-22" }
             ]
         },
         {
             "name": "api-gateway",
             "color": "#EC4899",
-            "total": 38,
+            "total": 118,
             "recent": [
                 { "hash": "1a2b3c4", "author": "ryan-backend", "msg": "fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter filter per client IP", "date": "2026-08-10" },
                 { "hash": "8f7e6d5", "author": "dev-team", "msg": "feat(auth-filter): add global RSA signature validation filter for secure endpoints", "date": "2026-08-09" },
                 { "hash": "3d4e5f6", "author": "ryan-backend", "msg": "chore(cors): update allowed origins for PROD & UAT web portals and mobile apps", "date": "2026-08-08" },
                 { "hash": "7c8b9a0", "author": "dev-team", "msg": "feat(circuit-breaker): configure Resilience4j CircuitBreaker for Commerce Service timeouts", "date": "2026-08-07" },
-                { "hash": "2e1d0c9", "author": "ryan-backend", "msg": "refactor(logging): add Spring Cloud Sleuth TraceID & SpanID correlation headers", "date": "2026-08-06" }
+                { "hash": "2e1d0c9", "author": "ryan-backend", "msg": "refactor(logging): add Spring Cloud Sleuth TraceID & SpanID correlation headers", "date": "2026-08-06" },
+                { "hash": "8a7b6c5", "author": "dev-team", "msg": "feat(swagger): aggregate OpenAPI v3 JSON spec endpoints from all downstream services", "date": "2026-08-05" },
+                { "hash": "4f3e2d1", "author": "ryan-backend", "msg": "fix(routing): fix path rewrite regex for legacy v1 API endpoints", "date": "2026-08-04" },
+                { "hash": "0c9b8a7", "author": "dev-team", "msg": "init: initial Spring Cloud Gateway Reactive Project structure", "date": "2026-07-22" }
             ]
         }
     ]

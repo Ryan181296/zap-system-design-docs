@@ -1201,11 +1201,11 @@ async function syncApiDataFromGitHub() {
 // ── Real-Time Microservice Commit Activity & Instant Load More ──────────────
 let expandedRepos = { 'identity-service': true, 'commerce-service': true };
 let repoVisibleLimits = {
-  'identity-service': 3,
-  'commerce-service': 3,
-  'payment-service': 3,
-  'notification-service': 3,
-  'api-gateway': 3
+  'identity-service': 5,
+  'commerce-service': 5,
+  'payment-service': 5,
+  'notification-service': 5,
+  'api-gateway': 5
 };
 let repoCommitPages = {
   'identity-service': 1,
