@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetSec = document.getElementById(target);
       if (targetSec) {
         targetSec.style.display = 'block';
+        if (target === 'view-env') {
+          if (typeof renderCommitActivityChart === 'function') renderCommitActivityChart();
+          if (typeof window.refreshHealthStatus === 'function') window.refreshHealthStatus();
+        }
         if (typeof window.initCodeBlocks === 'function') window.initCodeBlocks();
         if (window.Prism) window.Prism.highlightAll();
       }
