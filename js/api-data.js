@@ -84,44 +84,74 @@ const ZAP_API_DATA = {
       {
         "hash": "dd30592",
         "author": "ryan-backend",
-        "msg": "feat(security): implement short 20-char dynamic one-time Redis QR token",
+        "msg": "feat(security): implement short 20-char dynamic one-time Redis QR token for Customer and Employee",
         "date": "2026-08-10"
       },
       {
         "hash": "52b0800",
         "author": "ryan-backend",
-        "msg": "refactor: bypass rate limiting and OTP dispatching for Firebase requests",
+        "msg": "refactor: bypass rate limiting and OTP dispatching for Firebase requests in OtpService",
         "date": "2026-08-09"
       },
       {
         "hash": "bae245b",
         "author": "ryan-backend",
-        "msg": "refactor: decouple OTP rate limit checking from counter in OtpService",
+        "msg": "refactor: decouple OTP rate limit checking from counter incrementing in OtpService",
         "date": "2026-08-08"
       },
       {
         "hash": "a1b2c3d",
         "author": "ryan-backend",
-        "msg": "feat(auth): add Merchant Employee JWT multi-tenant token claims",
+        "msg": "feat(auth): add Merchant Employee JWT multi-tenant token claims and RSA signature generator",
         "date": "2026-08-07"
       },
       {
         "hash": "f4e5d6c",
         "author": "dev-team",
-        "msg": "fix(customer): resolve address geolocation coordinate parsing error",
+        "msg": "fix(customer): resolve address geolocation coordinate parsing error on profile update",
         "date": "2026-08-06"
       },
       {
         "hash": "c7b8a90",
         "author": "ryan-backend",
-        "msg": "feat(brand): add multi-brand configuration setup endpoint",
+        "msg": "feat(brand): add multi-brand configuration setup REST API endpoint",
         "date": "2026-08-05"
       },
       {
         "hash": "e1f2g3h",
         "author": "dev-team",
-        "msg": "chore(deps): upgrade Spring Boot Starter Security to 3.2.4",
+        "msg": "chore(deps): upgrade Spring Boot Starter Security to 3.2.4 version",
         "date": "2026-08-04"
+      },
+      {
+        "hash": "9a8b7c6",
+        "author": "ryan-backend",
+        "msg": "feat(redis): configure Spring Data Redis Sentinel cluster connection factory",
+        "date": "2026-08-03"
+      },
+      {
+        "hash": "6b5a4m3",
+        "author": "dev-team",
+        "msg": "refactor(user): migrate legacy password encoder to BCryptPasswordEncoder",
+        "date": "2026-08-02"
+      },
+      {
+        "hash": "2c1b0a9",
+        "author": "ryan-backend",
+        "msg": "test(auth): add JUnit 5 integration tests for OAuth2 refresh token rotation",
+        "date": "2026-08-01"
+      },
+      {
+        "hash": "8e7d6c5",
+        "author": "dev-team",
+        "msg": "feat(audit): add UserAuditAspect for logging user login IP address & User-Agent",
+        "date": "2026-07-31"
+      },
+      {
+        "hash": "4f3e2d1",
+        "author": "ryan-backend",
+        "msg": "fix(jwt): fix token expiry timestamp calculation for cross-timezone devices",
+        "date": "2026-07-30"
       }
     ]
   },
@@ -133,44 +163,74 @@ const ZAP_API_DATA = {
       {
         "hash": "8a2b1c3",
         "author": "dev-team",
-        "msg": "feat(cart): optimize Redis Lua script in-memory cart checkout",
+        "msg": "feat(cart): optimize Redis Lua script in-memory cart checkout and item validation",
         "date": "2026-08-10"
       },
       {
         "hash": "7d6e5f4",
         "author": "ryan-backend",
-        "msg": "feat(product): add multi-tier pricing calculation engine",
+        "msg": "feat(product): add multi-tier pricing calculation engine for bulk wholesale orders",
         "date": "2026-08-09"
       },
       {
         "hash": "3c2b1a0",
         "author": "dev-team",
-        "msg": "fix(inventory): resolve pessimistic lock deadlock on order confirmation",
+        "msg": "fix(inventory): resolve pessimistic lock deadlock on concurrent high-volume order confirmation",
         "date": "2026-08-08"
       },
       {
         "hash": "9e8d7c6",
         "author": "ryan-backend",
-        "msg": "feat(crm): implement warehouse document import/export REST API",
+        "msg": "feat(crm): implement warehouse document import/export REST API with CSV parser",
         "date": "2026-08-07"
       },
       {
         "hash": "5f4e3d2",
         "author": "dev-team",
-        "msg": "refactor(menu): add catalog category caching in Redis cluster",
+        "msg": "refactor(menu): add catalog category caching in Redis cluster with automatic TTL cache invalidation",
         "date": "2026-08-06"
       },
       {
         "hash": "1b2c3d4",
         "author": "ryan-backend",
-        "msg": "feat(report): add store manager daily sales report aggregation",
+        "msg": "feat(report): add store manager daily sales report aggregation and revenue summary",
         "date": "2026-08-05"
       },
       {
         "hash": "4a5b6c7",
         "author": "dev-team",
-        "msg": "fix(discount): resolve coupon code expiration date timezone bug",
+        "msg": "fix(discount): resolve coupon code expiration date timezone boundary condition bug",
         "date": "2026-08-04"
+      },
+      {
+        "hash": "7b8c9d0",
+        "author": "ryan-backend",
+        "msg": "feat(order): add Spring StateMachine for tracking order fulfillment lifecycle status",
+        "date": "2026-08-03"
+      },
+      {
+        "hash": "3e2d1c0",
+        "author": "dev-team",
+        "msg": "perf(search): add Elasticsearch indexing listener for product catalog fuzzy search",
+        "date": "2026-08-02"
+      },
+      {
+        "hash": "9f8e7d6",
+        "author": "ryan-backend",
+        "msg": "feat(topping): add customizable product topping modifier groups for F&B items",
+        "date": "2026-08-01"
+      },
+      {
+        "hash": "5c4b3a2",
+        "author": "dev-team",
+        "msg": "refactor(stock): optimize inventory reservation timeout worker thread pool",
+        "date": "2026-07-31"
+      },
+      {
+        "hash": "1d0c9b8",
+        "author": "ryan-backend",
+        "msg": "test(cart): add cart item quantity limit validation unit tests",
+        "date": "2026-07-30"
       }
     ]
   },
@@ -182,32 +242,56 @@ const ZAP_API_DATA = {
       {
         "hash": "4f5e6d7",
         "author": "ryan-backend",
-        "msg": "feat(pay): add BIDV VietQR dynamic checksum validation",
+        "msg": "feat(pay): add BIDV VietQR dynamic checksum validation and NAPAS 247 payload parser",
         "date": "2026-08-10"
       },
       {
         "hash": "2a3b4c5",
         "author": "ryan-backend",
-        "msg": "feat(webhook): add MoMo & ZaloPay IPN signature verification",
+        "msg": "feat(webhook): add MoMo & ZaloPay IPN signature verification and idempotent processing",
         "date": "2026-08-09"
       },
       {
         "hash": "6d7e8f9",
         "author": "dev-team",
-        "msg": "fix(prepaid): add atomic Redis balance deduction for merchant cards",
+        "msg": "fix(prepaid): add atomic Redis balance deduction for merchant customer loyalty cards",
         "date": "2026-08-08"
       },
       {
         "hash": "0a1b2c3",
         "author": "ryan-backend",
-        "msg": "feat(loyalty): add earn points calculation strategy engine",
+        "msg": "feat(loyalty): add earn points calculation strategy engine based on net order amount",
         "date": "2026-08-07"
       },
       {
         "hash": "8f9e0d1",
         "author": "dev-team",
-        "msg": "chore(gateway): configure Stripe webhook retry backoff policy",
+        "msg": "chore(gateway): configure Stripe webhook retry exponential backoff policy",
         "date": "2026-08-06"
+      },
+      {
+        "hash": "3b2a1c0",
+        "author": "ryan-backend",
+        "msg": "feat(refund): add automated refund request processing for canceled orders",
+        "date": "2026-08-05"
+      },
+      {
+        "hash": "7d8e9f0",
+        "author": "dev-team",
+        "msg": "fix(ledger): resolve rounding precision error on multi-currency settlement summaries",
+        "date": "2026-08-04"
+      },
+      {
+        "hash": "1a0b9c8",
+        "author": "ryan-backend",
+        "msg": "feat(vnpay): update VNPay gateway API hash HMAC-SHA512 calculation spec",
+        "date": "2026-08-03"
+      },
+      {
+        "hash": "5e4d3c2",
+        "author": "dev-team",
+        "msg": "test(payment): add wiremock mocks for external payment gateway responses",
+        "date": "2026-08-02"
       }
     ]
   },
@@ -219,26 +303,38 @@ const ZAP_API_DATA = {
       {
         "hash": "9b8c7d6",
         "author": "dev-team",
-        "msg": "feat(fcm): add Firebase FCM push notification token batching",
+        "msg": "feat(fcm): add Firebase FCM push notification device token batching and topic push",
         "date": "2026-08-10"
       },
       {
         "hash": "5a4b3c2",
         "author": "ryan-backend",
-        "msg": "feat(zalo): add Zalo ZNS Template message dispatcher",
+        "msg": "feat(zalo): add Zalo ZNS Template message dispatcher for OTP & Order Confirmation",
         "date": "2026-08-09"
       },
       {
         "hash": "1d2e3f4",
         "author": "dev-team",
-        "msg": "fix(sms): add Brandname SMS fallback provider fallback",
+        "msg": "fix(sms): add Brandname SMS provider failover mechanism to SpeedSMS API",
         "date": "2026-08-08"
       },
       {
         "hash": "7e8f9a0",
         "author": "ryan-backend",
-        "msg": "feat(internal): add async RabbitMQ notification listener",
+        "msg": "feat(internal): add async RabbitMQ notification queue listener for ORDER_CREATED events",
         "date": "2026-08-07"
+      },
+      {
+        "hash": "3c4b5a6",
+        "author": "dev-team",
+        "msg": "refactor(email): migrate HTML email template rendering engine to Thymeleaf",
+        "date": "2026-08-06"
+      },
+      {
+        "hash": "9d8e7f0",
+        "author": "ryan-backend",
+        "msg": "feat(push): add in-app notification center history retrieval REST API",
+        "date": "2026-08-05"
       }
     ]
   },
@@ -250,20 +346,32 @@ const ZAP_API_DATA = {
       {
         "hash": "1a2b3c4",
         "author": "ryan-backend",
-        "msg": "fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter",
+        "msg": "fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter filter per client IP",
         "date": "2026-08-10"
       },
       {
         "hash": "8f7e6d5",
         "author": "dev-team",
-        "msg": "feat(auth-filter): add global RSA signature validation filter",
+        "msg": "feat(auth-filter): add global RSA signature validation filter for secure endpoints",
         "date": "2026-08-09"
       },
       {
         "hash": "3d4e5f6",
         "author": "ryan-backend",
-        "msg": "chore(cors): update allowed origins for PROD & UAT web portals",
+        "msg": "chore(cors): update allowed origins for PROD & UAT web portals and mobile apps",
         "date": "2026-08-08"
+      },
+      {
+        "hash": "7c8b9a0",
+        "author": "dev-team",
+        "msg": "feat(circuit-breaker): configure Resilience4j CircuitBreaker for Commerce Service timeouts",
+        "date": "2026-08-07"
+      },
+      {
+        "hash": "2e1d0c9",
+        "author": "ryan-backend",
+        "msg": "refactor(logging): add Spring Cloud Sleuth TraceID & SpanID correlation headers",
+        "date": "2026-08-06"
       }
     ]
   }

@@ -1201,11 +1201,11 @@ async function syncApiDataFromGitHub() {
 // ── Interactive Microservice Commit Activity Accordion & Load More ───────────
 let expandedRepos = { 'identity-service': true, 'commerce-service': true };
 let repoCommitLimits = {
-  'identity-service': 3,
-  'commerce-service': 3,
-  'payment-service': 3,
-  'notification-service': 3,
-  'api-gateway': 3
+  'identity-service': 4,
+  'commerce-service': 4,
+  'payment-service': 4,
+  'notification-service': 4,
+  'api-gateway': 4
 };
 
 function toggleCommitRepoAccordion(repoName) {
@@ -1214,7 +1214,7 @@ function toggleCommitRepoAccordion(repoName) {
 }
 
 function loadMoreRepoCommits(repoName) {
-  repoCommitLimits[repoName] = (repoCommitLimits[repoName] || 3) + 3;
+  repoCommitLimits[repoName] = (repoCommitLimits[repoName] || 4) + 5;
   renderCommitActivityChart();
 }
 
