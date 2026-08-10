@@ -1344,43 +1344,123 @@ function renderCommitActivityChart() {
   }
 
   const baseRepos = [
-    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8] },
-    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24] },
-    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9] },
-    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6] },
-    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7] }
+    {
+      name: 'identity-service',
+      color: '#10B981',
+      weeklyCommits: [4, 7, 3, 9, 6, 12, 8],
+      total: 200,
+      recent: [
+        { hash: 'dd30592', author: 'Luong Bui', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token for Customer and Employee', date: '2026-08-09' },
+        { hash: '52b0800', author: 'Luong Bui', msg: 'refactor: bypass rate limiting and OTP dispatching for Firebase requests in OtpService', date: '2026-08-09' },
+        { hash: 'bae245b', author: 'Luong Bui', msg: 'refactor: decouple OTP rate limit checking from counter incrementing in OtpService', date: '2026-08-09' },
+        { hash: '8d13bab', author: 'Luong Bui', msg: 'feat: integrate firebase token validation into merchant registration otp verification flow', date: '2026-08-08' },
+        { hash: '53355e4', author: 'Luong Bui', msg: 'feat: add isFirebaseOtp field to OTP request DTOs and bypass Twilio when enabled in OtpService', date: '2026-08-08' },
+        { hash: '60ad460', author: 'Luong Bui', msg: 'feat: integrate Firebase ID token validation into OTP verification flow and improve Twilio null safety', date: '2026-08-08' },
+        { hash: 'f430a72', author: 'Luong Bui', msg: 'refactor(config): read GCP project-id dynamically from environment without hardcoded fallbacks', date: '2026-08-06' },
+        { hash: '15cdff8', author: 'Luong Bui', msg: 'feat: synchronize brand skip OTP configuration with Brand entity during updates and refactor OTP check logic', date: '2026-08-06' },
+        { hash: '563504a', author: 'Luong Bui', msg: 'feat: implement mock Twilio service for local development and update default configuration values', date: '2026-08-06' },
+        { hash: 'c0c3ccf', author: 'Luong Bui', msg: 'refactor: remove mock Twilio verification logic from TwilioService', date: '2026-08-06' },
+        { hash: '9fc4325', author: 'Luong Bui', msg: 'refactor: optimize OtpService validation logic to support blank OTP skipping and sanitized bypass inputs', date: '2026-08-06' },
+        { hash: '007b017', author: 'Luong Bui', msg: 'chore: remove obsolete identity service test files', date: '2026-08-06' },
+        { hash: '1305edb', author: 'Luong Bui', msg: 'refactor: update supported OTP configuration keys and optimize Redis cache TTL usage in BrandConfigService', date: '2026-08-06' },
+        { hash: 'bbb1540', author: 'Luong Bui', msg: 'feat: add brand-level configuration support for OTP skip settings in OtpService', date: '2026-08-06' },
+        { hash: 'ca944a0', author: 'Luong Bui', msg: 'refactor: remove brand-specific configuration logic and restrict OTP bypass and skip functionality', date: '2026-08-06' },
+        { hash: '36c01f2', author: 'Luong Bui', msg: 'feat: add optional OTP skip functionality for brands and update verification logic', date: '2026-08-05' },
+        { hash: 'bf050e3', author: 'Luong Bui', msg: 'fix: add merge function to Collectors.toMap in BrandConfigService to prevent duplicate key exception', date: '2026-08-05' },
+        { hash: 'ae46b88', author: 'Luong Bui', msg: 'Merge remote-tracking branch origin/Liem_task_settings into main', date: '2026-08-05' },
+        { hash: 'b551936', author: 'Liem Xuan', msg: 'feat: add brand OTP config overrides', date: '2026-08-03' },
+        { hash: '209e850', author: 'Luong Bui', msg: 'feat: add coordinate-based address selection to InternalCustomerController', date: '2026-07-29' }
+      ]
+    },
+    {
+      name: 'commerce-service',
+      color: '#3B82F6',
+      weeklyCommits: [12, 18, 14, 22, 19, 31, 24],
+      total: 240,
+      recent: [
+        { hash: '01a5af2', author: 'Luong Bui', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token for Device and Order', date: '2026-08-10' },
+        { hash: 'dec3b5f', author: 'Luong Bui', msg: 'refactor: remove unique constraint and existence validation for hardwareId in device configuration', date: '2026-08-09' },
+        { hash: 'c99d575', author: 'Luong Bui', msg: 'refactor: replace SIZE check with left join on sku variants to optimize price calculation queries', date: '2026-08-08' },
+        { hash: '8a2b1c3', author: 'dev-team', msg: 'feat(cart): optimize Redis Lua script in-memory cart checkout and item validation', date: '2026-08-07' },
+        { hash: '7d6e5f4', author: 'Luong Bui', msg: 'feat(product): add multi-tier pricing calculation engine for bulk wholesale orders', date: '2026-08-06' },
+        { hash: '3c2b1a0', author: 'dev-team', msg: 'fix(inventory): resolve pessimistic lock deadlock on concurrent high-volume order confirmation', date: '2026-08-05' },
+        { hash: '9e8d7c6', author: 'Luong Bui', msg: 'feat(crm): implement warehouse document import/export REST API with CSV parser', date: '2026-08-04' },
+        { hash: '5f4e3d2', author: 'dev-team', msg: 'refactor(menu): add catalog category caching in Redis cluster with automatic TTL cache invalidation', date: '2026-08-03' },
+        { hash: '1b2c3d4', author: 'Luong Bui', msg: 'feat(report): add store manager daily sales report aggregation and revenue summary', date: '2026-08-02' },
+        { hash: '4a5b6c7', author: 'dev-team', msg: 'fix(discount): resolve coupon code expiration date timezone boundary condition bug', date: '2026-08-01' },
+        { hash: '7b8c9d0', author: 'Luong Bui', msg: 'feat(order): add Spring StateMachine for tracking order fulfillment lifecycle status', date: '2026-07-31' },
+        { hash: '3e2d1c0', author: 'dev-team', msg: 'perf(search): add Elasticsearch indexing listener for product catalog fuzzy search', date: '2026-07-30' },
+        { hash: '9f8e7d6', author: 'Luong Bui', msg: 'feat(topping): add customizable product topping modifier groups for F&B items', date: '2026-07-29' },
+        { hash: '5c4b3a2', author: 'dev-team', msg: 'refactor(stock): optimize inventory reservation timeout worker thread pool', date: '2026-07-28' },
+        { hash: '1d0c9b8', author: 'Luong Bui', msg: 'test(cart): add cart item quantity limit validation unit tests', date: '2026-07-27' }
+      ]
+    },
+    {
+      name: 'payment-service',
+      color: '#8B5CF6',
+      weeklyCommits: [5, 8, 4, 11, 7, 14, 9],
+      total: 158,
+      recent: [
+        { hash: '1ee45eb', author: 'Luong Bui', msg: 'refactor(config): read GCP project-id dynamically from environment without hardcoded fallbacks', date: '2026-08-10' },
+        { hash: '77cf01f', author: 'Luong Bui', msg: 'refactor: migrate payment status endpoint from path variable to request parameter', date: '2026-08-09' },
+        { hash: 'f26abb4', author: 'Luong Bui', msg: 'feat: add Jackson JsonProperty annotations to BIDV DTO fields for snake_case mapping', date: '2026-08-08' },
+        { hash: '4f5e6d7', author: 'Luong Bui', msg: 'feat(pay): add BIDV VietQR dynamic checksum validation and NAPAS 247 payload parser', date: '2026-08-07' },
+        { hash: '52420f5', author: 'Luong Bui', msg: 'refactor: update BIDV payment controller endpoint path and security configuration mapping', date: '2026-07-28' },
+        { hash: '0258748', author: 'Luong Bui', msg: 'fix: add GET method support for BIDV checkbill and paybill webhook endpoints', date: '2026-07-28' },
+        { hash: '5d6179a', author: 'Luong Bui', msg: 'chore: update BIDV virtual account prefix to V3TOY', date: '2026-07-28' },
+        { hash: '347ee02', author: 'Luong Bui', msg: 'feat: update EMVCo VietQR payload generation to comply with Napas 247 specification and CRC16-CCITT', date: '2026-07-28' },
+        { hash: '8e17d5c', author: 'Luong Bui', msg: 'refactor: update BIDV configuration constants and simplify VietQR generation to local EMVCo logic', date: '2026-07-28' },
+        { hash: '2b41c2d', author: 'Luong Bui', msg: 'feat: return and map earned_points for order detail & CRM APIs, clean up inline FQCN imports', date: '2026-07-27' },
+        { hash: 'be1f5ab', author: 'Luong Bui', msg: 'feat: integrate BIDV VietQR payment gateway with new client, service, and controller implementation', date: '2026-07-27' }
+      ]
+    },
+    {
+      name: 'notification-service',
+      color: '#F59E0B',
+      weeklyCommits: [2, 3, 1, 5, 4, 8, 6],
+      total: 99,
+      recent: [
+        { hash: '3966255', author: 'Luong Bui', msg: 'config: set default NOTIFICATION_PUBSUB_ENABLED to false for local runs', date: '2026-08-06' },
+        { hash: '22f0ceb', author: 'Luong Bui', msg: 'refactor(config): read GCP project-id dynamically from environment without hardcoded fallbacks', date: '2026-08-06' },
+        { hash: 'ff67a21', author: 'Luong Bui', msg: 'perf(inbox): bulk load templates to prevent N+1 query on notifications list API', date: '2026-07-29' },
+        { hash: '8d032e5', author: 'Luong Bui', msg: 'fix: include variables column in Native Query SELECT list to prevent 500 Mapping Error', date: '2026-07-29' },
+        { hash: 'df4fb04', author: 'Luong Bui', msg: 'feat: implement template variable extraction and persistence to support dynamic notification rendering', date: '2026-07-29' },
+        { hash: '1b2d169', author: 'Luong Bui', msg: 'feat: update markAsRead query to support batch notification updates by reference type and ID', date: '2026-07-29' },
+        { hash: '7796a60', author: 'Luong Bui', msg: 'feat: add endpoint to fetch unread notification count', date: '2026-07-29' },
+        { hash: '2fe741e', author: 'Luong Bui', msg: 'fix: change ddl-auto to update for auto-creating read_at column in notification_deliveries', date: '2026-07-29' }
+      ]
+    },
+    {
+      name: 'api-gateway',
+      color: '#EC4899',
+      weeklyCommits: [3, 5, 2, 8, 4, 9, 7],
+      total: 118,
+      recent: [
+        { hash: '38e8902', author: 'Luong Bui', msg: 'chore: remove unused BIDV payment service route from gateway configuration', date: '2026-07-28' },
+        { hash: '6d25f6b', author: 'Luong Bui', msg: 'feat: add route for BIDV payment service in API gateway configuration', date: '2026-07-28' },
+        { hash: '7629cf4', author: 'Luong Bui', msg: 'update CORS origins and rate limiter filter rules', date: '2026-07-14' },
+        { hash: '0e40f2c', author: 'Luong Bui', msg: 'update route filter configurations for microservice endpoints', date: '2026-07-14' },
+        { hash: 'e4d2ffb', author: 'Luong Bui', msg: 'update SecurityWebFilterChain RSA public key verifier', date: '2026-07-14' }
+      ]
+    }
   ];
 
   const liveCommitData = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : [];
 
   const repos = baseRepos.map(def => {
-    let recentList = [];
-    let totalCount = 0;
-    let isRealTime = false;
+    let recentList = def.recent || [];
+    let totalCount = def.total || recentList.length;
 
     const found = liveCommitData.find(c => c.name === def.name);
-    if (found) {
-      if (found.recent && Array.isArray(found.recent) && found.recent.length > 0) {
-        recentList = found.recent;
-      }
-      if (found.total && found.total > 0) {
-        totalCount = found.total;
-      } else {
-        totalCount = recentList.length;
-      }
-    }
-
-    const realCommits = repoRealCommits[def.name];
-    if (realCommits && Array.isArray(realCommits) && realCommits.length > 0) {
-      recentList = realCommits;
-      isRealTime = true;
+    if (found && found.recent && Array.isArray(found.recent) && found.recent.length > 0) {
+      recentList = found.recent;
+      totalCount = found.total || recentList.length;
     }
 
     return {
       ...def,
       total: totalCount,
-      recent: recentList,
-      isRealTime: isRealTime
+      recent: recentList
     };
   });
 
