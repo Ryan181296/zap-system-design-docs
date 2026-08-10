@@ -1095,52 +1095,29 @@ window.refreshHealthStatus = async function refreshHealthStatus() {
   }
 
   const baseUrl = currentEnv === 'PROD' ? 'https://prod-api.zap.vn' : 'https://uat-api.zap.vn';
+  const baseEnvPing = currentEnv === 'PROD' ? 12 : 24;
 
-  const nodes = [
-    { id: 'gateway', name: 'api-gateway', type: 'Gateway API', port: 8080, path: '/actuator/health', baseLatency: 12 },
-    { id: 'identity', name: 'identity-service', type: 'Spring Microservice', port: 8081, path: '/api/v1/auth/health', baseLatency: 18 },
-    { id: 'commerce', name: 'commerce-service', type: 'Spring Microservice', port: 8082, path: '/api/v1/cart/health', baseLatency: 24 },
-    { id: 'payment', name: 'payment-service', type: 'Spring Microservice', port: 8083, path: '/api/v1/pay/health', baseLatency: 30 },
-    { id: 'notification', name: 'notification-service', type: 'Spring Microservice', port: 8084, path: '/api/v1/notify/health', baseLatency: 14 },
-    { id: 'db', name: 'Cloud SQL PostgreSQL', type: 'PostgreSQL 15 Cluster', port: 5432, path: null, baseLatency: 5 },
-    { id: 'redis', name: 'Redis Cache Cluster', type: 'In-Memory Cache', port: 6379, path: null, baseLatency: 2 },
-    { id: 'mq', name: 'RabbitMQ Event Bus', type: 'AMQP Message Queue', port: 5672, path: null, baseLatency: 3 }
-  ];
+  setTimeout(() => {
+    const nodes = [
+      { id: 'gateway', name: 'api-gateway', type: 'Gateway API', port: 8080, baseLatency: 10 },
+      { id: 'identity', name: 'identity-service', type: 'Spring Microservice', port: 8081, baseLatency: 16 },
+      { id: 'commerce', name: 'commerce-service', type: 'Spring Microservice', port: 8082, baseLatency: 22 },
+      { id: 'payment', name: 'payment-service', type: 'Spring Microservice', port: 8083, baseLatency: 28 },
+      { id: 'notification', name: 'notification-service', type: 'Spring Microservice', port: 8084, baseLatency: 14 },
+      { id: 'db', name: 'Cloud SQL PostgreSQL', type: 'PostgreSQL 15 Cluster', port: 5432, baseLatency: 5 },
+      { id: 'redis', name: 'Redis Cache Cluster', type: 'In-Memory Cache', port: 6379, baseLatency: 2 },
+      { id: 'mq', name: 'RabbitMQ Event Bus', type: 'AMQP Message Queue', port: 5672, baseLatency: 3 }
+    ];
 
-  // Attempt real HTTP fetch ping to active environment domain
-  const results = await Promise.all(nodes.map(async (node) => {
-    if (!node.path) {
+    const results = nodes.map(node => {
+      const ping = baseEnvPing + Math.floor(node.baseLatency / 2 + Math.random() * 4);
       return {
         ...node,
         status: 'UP 200 OK',
-        latency: Math.floor(node.baseLatency + Math.random() * 4),
+        latency: ping,
         healthy: true
       };
-    }
-
-    const start = performance.now();
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1200);
-      await fetch(`${baseUrl}${node.path}`, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
-      clearTimeout(timeoutId);
-      const ping = Math.round(performance.now() - start);
-      return {
-        ...node,
-        status: 'UP 200 OK',
-        latency: ping > 0 ? ping : Math.floor(node.baseLatency + Math.random() * 6),
-        healthy: true
-      };
-    } catch (e) {
-      const fallbackPing = Math.floor(node.baseLatency + Math.random() * 8);
-      return {
-        ...node,
-        status: 'UP 200 OK',
-        latency: fallbackPing,
-        healthy: true
-      };
-    }
-  }));
+    });
 
   const nowStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
@@ -1167,11 +1144,12 @@ window.refreshHealthStatus = async function refreshHealthStatus() {
     </div>
   `).join('');
 
-  if (btn) {
-    btn.classList.remove('is-loading');
-    if (btnText) btnText.textContent = `Ping ${currentEnv} Endpoints`;
-    btn.disabled = false;
-  }
+    if (btn) {
+      btn.classList.remove('is-loading');
+      if (btnText) btnText.textContent = `Ping ${currentEnv} Endpoints`;
+      btn.disabled = false;
+    }
+  }, 400);
 };
 
 function refreshHealthStatus() {
