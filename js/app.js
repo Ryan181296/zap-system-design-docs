@@ -1265,9 +1265,9 @@ async function fetchRealTimeGitHubCommits(repoName, page = 1) {
     }
 
     const url = `https://api.github.com/repos/Ryan181296/${repoName}/commits?per_page=20&page=${page}`;
-    const response = await fetch(url, { headers });
-    if (response.ok) {
-      const data = await response.json();
+    const response = await fetch(url, { headers }).catch(() => null);
+    if (response && response.ok) {
+      const data = await response.json().catch(() => null);
       if (Array.isArray(data) && data.length > 0) {
         const formatted = data.map(item => ({
           hash: item.sha ? item.sha.substring(0, 7) : 'HEAD',
@@ -1284,7 +1284,7 @@ async function fetchRealTimeGitHubCommits(repoName, page = 1) {
       }
     }
   } catch (err) {
-    console.warn(`GitHub API fetch error for ${repoName}:`, err);
+    // Fail silently and retain local preloaded commits scanned via BACKEND_REPO_TOKEN
   } finally {
     repoCommitLoading[repoName] = false;
     renderCommitActivityChart();
