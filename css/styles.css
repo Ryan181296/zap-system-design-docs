@@ -72,10 +72,9 @@ body.dark-mode {
   padding: 0;
 }
 
-html,
-body {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+html, body {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
 body {
@@ -254,12 +253,13 @@ body {
   stroke: var(--text-primary);
 }
 
-/* Main Content Area - Matching index.html class="g-content" */
+/* Main Content Area - Centered in main viewport area to the right of fixed sidebar */
 .g-content {
-  margin-left: var(--sidebar-width);
+  margin-left: calc(var(--sidebar-width) + max(0px, (100vw - var(--sidebar-width) - 1400px) / 2));
   flex: 1;
   padding: 32px 48px;
   max-width: 1400px;
+  width: 100%;
 }
 
 /* Page Header & Breadcrumbs */
@@ -364,6 +364,9 @@ body {
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  display: inline-block !important;
 }
 
 .g-get {
@@ -428,6 +431,15 @@ body {
   background-color: var(--bg-tertiary);
   font-weight: 600;
   color: var(--text-secondary);
+}
+
+.g-table td:first-child,
+.g-table td:nth-child(2) {
+  white-space: nowrap;
+}
+
+.g-table td code {
+  white-space: nowrap;
 }
 
 /* Code Blocks — Prism.js dark theme (tomorrow night) is applied via CDN */
@@ -766,40 +778,71 @@ body.sidebar-open .g-sidebar-overlay {
     max-width: 100%;
   }
 
-  /* Stack Grid Columns to Single Column on Mobile */
+  /* Stack Grid Columns to Single Column on Mobile with Generous Spacing */
   div[style*="grid-template-columns"] {
     grid-template-columns: 1fr !important;
+    gap: 14px !important;
   }
 
-  /* Responsive Table Touch Scroll & Text Jump Prevention */
+  /* Prevent Flex Elements from Squeezing or Touching Together on Mobile */
+  div[style*="display: flex"],
+  div[style*="display:flex"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Responsive Table Touch Scroll with Ample Column Widths */
   .g-table {
     display: table !important;
     width: 100% !important;
-    min-width: 560px;
-    font-size: 11px !important;
-    -webkit-text-size-adjust: 100% !important;
-    text-size-adjust: 100% !important;
+    min-width: 720px !important;
+    table-layout: auto !important;
+    font-size: 11.5px !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+  }
+
+  /* Uniform Table Text Size Across All Columns (Prevents Text Inflation when Scrolled) */
+  .g-table th,
+  .g-table td {
+    padding: 10px 12px !important;
+    font-size: 11.5px !important;
+    line-height: 1.45 !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+  }
+
+  /* Prevent Badges, Header Names, and Code Tokens from Splitting into Vertical Lines */
+  .g-badge,
+  .g-table td .g-badge,
+  .g-table th .g-badge {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
   }
 
   .g-table th,
-  .g-table td {
-    padding: 8px 10px !important;
-    font-size: 11px !important;
-    line-height: 1.4 !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
-    -webkit-text-size-adjust: 100% !important;
-    text-size-adjust: 100% !important;
+  .g-table td:first-child,
+  .g-table td:nth-child(2),
+  .g-table td:first-child *,
+  .g-table td:nth-child(2) * {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    hyphens: none !important;
   }
 
-  .g-table strong {
-    font-size: 11.5px !important;
+  .g-table td strong {
+    font-size: 12px !important;
   }
 
-  .g-table code {
-    font-size: 9.5px !important;
-    word-break: break-all !important;
+  .g-table td code,
+  .g-table td code * {
+    font-size: 10px !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    hyphens: none !important;
+    line-height: 1.35 !important;
   }
 
   /* Mobile API Endpoint Cards Optimization */
@@ -857,6 +900,67 @@ body.sidebar-open .g-sidebar-overlay {
 
   .g-doc-subtitle {
     font-size: 13px;
+  }
+}
+
+/* Premium Health Monitor Refresh Button & Pulse Indicators */
+.btn-refresh-health {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn-refresh-health:hover {
+  background-color: var(--accent-light);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+.btn-refresh-health:active {
+  transform: translateY(0);
+}
+
+.btn-refresh-health.is-loading .spin-icon {
+  animation: spin-refresh 0.8s linear infinite;
+}
+
+@keyframes spin-refresh {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.health-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: health-pulse 1.8s infinite;
+}
+
+@keyframes health-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
   }
 }
 
