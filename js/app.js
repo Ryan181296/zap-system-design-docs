@@ -1493,7 +1493,18 @@ function renderCommitActivityChart() {
         <div style="display: flex; gap: 4px;">
           ${barsHtml}
         </div>
-              ${repos.map(r => {
+      </div>
+    `;
+  }).join('');
+
+  if (feedContainer) {
+    feedContainer.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
+        <strong style="color: var(--text-primary); font-size: 14px;">Recent Git Commit Activity Stream (Microservice Repositories)</strong>
+        <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 2px 8px;">Poly-Repo Commit History</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        ${repos.map(r => {
           const isExpanded = !!expandedRepos[r.name];
           const commits = r.recent || [];
 
