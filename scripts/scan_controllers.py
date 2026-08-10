@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-ZAP Backend Java Controller Scanner & Real Git Commit Activity Generator
-Scans all Spring Boot @RestController Java files and Git commit logs in backend/
+ZAP Backend Java Controller Scanner & Real Git Commit Log Dynamic Extractor
+Scans Spring Boot @RestController Java files and dynamic Git commit logs directly from backend repos
 Auto-generates docs/system-design/js/api-data.js
 """
 
 import os
 import re
 import json
+import subprocess
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SYSTEM_DESIGN_DIR = os.path.dirname(SCRIPT_DIR)
@@ -54,113 +55,53 @@ def get_service_id(filepath):
     return "commerce", "Commerce Service"
 
 def scan_git_commits():
+    """Extract real git commits dynamically from backend git repositories"""
+    commit_activity = []
     repo_dirs = [
-        {
-            "name": "identity-service",
-            "color": "#10B981",
-            "total": 149,
-            "recent": [
-                { "hash": "dd30592", "author": "ryan-backend", "msg": "feat(security): implement short 20-char dynamic one-time Redis QR token for Customer and Employee", "date": "2026-08-10" },
-                { "hash": "52b0800", "author": "ryan-backend", "msg": "refactor: bypass rate limiting and OTP dispatching for Firebase requests in OtpService", "date": "2026-08-09" },
-                { "hash": "bae245b", "author": "ryan-backend", "msg": "refactor: decouple OTP rate limit checking from counter incrementing in OtpService", "date": "2026-08-08" },
-                { "hash": "a1b2c3d", "author": "ryan-backend", "msg": "feat(auth): add Merchant Employee JWT multi-tenant token claims and RSA signature generator", "date": "2026-08-07" },
-                { "hash": "f4e5d6c", "author": "dev-team", "msg": "fix(customer): resolve address geolocation coordinate parsing error on profile update", "date": "2026-08-06" },
-                { "hash": "c7b8a90", "author": "ryan-backend", "msg": "feat(brand): add multi-brand configuration setup REST API endpoint", "date": "2026-08-05" },
-                { "hash": "e1f2g3h", "author": "dev-team", "msg": "chore(deps): upgrade Spring Boot Starter Security to 3.2.4 version", "date": "2026-08-04" },
-                { "hash": "9a8b7c6", "author": "ryan-backend", "msg": "feat(redis): configure Spring Data Redis Sentinel cluster connection factory", "date": "2026-08-03" },
-                { "hash": "6b5a4m3", "author": "dev-team", "msg": "refactor(user): migrate legacy password encoder to BCryptPasswordEncoder", "date": "2026-08-02" },
-                { "hash": "2c1b0a9", "author": "ryan-backend", "msg": "test(auth): add JUnit 5 integration tests for OAuth2 refresh token rotation", "date": "2026-08-01" },
-                { "hash": "8e7d6c5", "author": "dev-team", "msg": "feat(audit): add UserAuditAspect for logging user login IP address & User-Agent", "date": "2026-07-31" },
-                { "hash": "4f3e2d1", "author": "ryan-backend", "msg": "fix(jwt): fix token expiry timestamp calculation for cross-timezone devices", "date": "2026-07-30" },
-                { "hash": "7a6b5c4", "author": "dev-team", "msg": "feat(permission): add RBAC role-based permission matrix for admin roles", "date": "2026-07-29" },
-                { "hash": "1e2f3a4", "author": "ryan-backend", "msg": "refactor(otp): add Twilio SMS provider fallback for OTP verification", "date": "2026-07-28" },
-                { "hash": "9c8b7a6", "author": "dev-team", "msg": "feat(session): add concurrent session kick-out policy in Redis", "date": "2026-07-27" },
-                { "hash": "5d4c3b2", "author": "ryan-backend", "msg": "fix(auth): fix null pointer exception when claims are missing from bearer token", "date": "2026-07-26" },
-                { "hash": "2a1b0c9", "author": "dev-team", "msg": "perf(db): add index on customer email and phone number columns", "date": "2026-07-25" },
-                { "hash": "8f7e6d5", "author": "ryan-backend", "msg": "feat(device): track registered mobile device UUID and Push FCM Tokens", "date": "2026-07-24" },
-                { "hash": "4c3b2a1", "author": "dev-team", "msg": "chore(ci): configure GitHub Actions auto-scan for Identity Service", "date": "2026-07-23" },
-                { "hash": "0e9d8c7", "author": "ryan-backend", "msg": "init: initial Spring Boot Identity Service project boilerplate structure", "date": "2026-07-22" }
-            ]
-        },
-        {
-            "name": "commerce-service",
-            "color": "#3B82F6",
-            "total": 240,
-            "recent": [
-                { "hash": "8a2b1c3", "author": "dev-team", "msg": "feat(cart): optimize Redis Lua script in-memory cart checkout and item validation", "date": "2026-08-10" },
-                { "hash": "7d6e5f4", "author": "ryan-backend", "msg": "feat(product): add multi-tier pricing calculation engine for bulk wholesale orders", "date": "2026-08-09" },
-                { "hash": "3c2b1a0", "author": "dev-team", "msg": "fix(inventory): resolve pessimistic lock deadlock on concurrent high-volume order confirmation", "date": "2026-08-08" },
-                { "hash": "9e8d7c6", "author": "ryan-backend", "msg": "feat(crm): implement warehouse document import/export REST API with CSV parser", "date": "2026-08-07" },
-                { "hash": "5f4e3d2", "author": "dev-team", "msg": "refactor(menu): add catalog category caching in Redis cluster with automatic TTL cache invalidation", "date": "2026-08-06" },
-                { "hash": "1b2c3d4", "author": "ryan-backend", "msg": "feat(report): add store manager daily sales report aggregation and revenue summary", "date": "2026-08-05" },
-                { "hash": "4a5b6c7", "author": "dev-team", "msg": "fix(discount): resolve coupon code expiration date timezone boundary condition bug", "date": "2026-08-04" },
-                { "hash": "7b8c9d0", "author": "ryan-backend", "msg": "feat(order): add Spring StateMachine for tracking order fulfillment lifecycle status", "date": "2026-08-03" },
-                { "hash": "3e2d1c0", "author": "dev-team", "msg": "perf(search): add Elasticsearch indexing listener for product catalog fuzzy search", "date": "2026-08-02" },
-                { "hash": "9f8e7d6", "author": "ryan-backend", "msg": "feat(topping): add customizable product topping modifier groups for F&B items", "date": "2026-08-01" },
-                { "hash": "5c4b3a2", "author": "dev-team", "msg": "refactor(stock): optimize inventory reservation timeout worker thread pool", "date": "2026-07-31" },
-                { "hash": "1d0c9b8", "author": "ryan-backend", "msg": "test(cart): add cart item quantity limit validation unit tests", "date": "2026-07-30" },
-                { "hash": "6f5e4d3", "author": "dev-team", "msg": "feat(combo): add combo meal package bundling price rules", "date": "2026-07-29" },
-                { "hash": "2b1a0c9", "author": "ryan-backend", "msg": "fix(tax): fix VAT tax rate calculation for exempt grocery items", "date": "2026-07-28" },
-                { "hash": "8d7c6b5", "author": "dev-team", "msg": "feat(store): add store operating hours & holiday closing calendar API", "date": "2026-07-27" },
-                { "hash": "4e3d2c1", "author": "ryan-backend", "msg": "refactor(order): convert order item list processing to Java Stream parallel API", "date": "2026-07-26" },
-                { "hash": "0a9b8c7", "author": "dev-team", "msg": "test(inventory): add concurrent stock deduction stress tests with Gatling", "date": "2026-07-25" },
-                { "hash": "6c5b4a3", "author": "ryan-backend", "msg": "feat(supplier): add vendor purchasing order management endpoints", "date": "2026-07-24" },
-                { "hash": "2d1c0b9", "author": "dev-team", "msg": "init: initial Commerce Microservice domain driven architecture scaffold", "date": "2026-07-22" }
-            ]
-        },
-        {
-            "name": "payment-service",
-            "color": "#8B5CF6",
-            "total": 158,
-            "recent": [
-                { "hash": "4f5e6d7", "author": "ryan-backend", "msg": "feat(pay): add BIDV VietQR dynamic checksum validation and NAPAS 247 payload parser", "date": "2026-08-10" },
-                { "hash": "2a3b4c5", "author": "ryan-backend", "msg": "feat(webhook): add MoMo & ZaloPay IPN signature verification and idempotent processing", "date": "2026-08-09" },
-                { "hash": "6d7e8f9", "author": "dev-team", "msg": "fix(prepaid): add atomic Redis balance deduction for merchant customer loyalty cards", "date": "2026-08-08" },
-                { "hash": "0a1b2c3", "author": "ryan-backend", "msg": "feat(loyalty): add earn points calculation strategy engine based on net order amount", "date": "2026-08-07" },
-                { "hash": "8f9e0d1", "author": "dev-team", "msg": "chore(gateway): configure Stripe webhook retry exponential backoff policy", "date": "2026-08-06" },
-                { "hash": "3b2a1c0", "author": "ryan-backend", "msg": "feat(refund): add automated refund request processing for canceled orders", "date": "2026-08-05" },
-                { "hash": "7d8e9f0", "author": "dev-team", "msg": "fix(ledger): resolve rounding precision error on multi-currency settlement summaries", "date": "2026-08-04" },
-                { "hash": "1a0b9c8", "author": "ryan-backend", "msg": "feat(vnpay): update VNPay gateway API hash HMAC-SHA512 calculation spec", "date": "2026-08-03" },
-                { "hash": "5e4d3c2", "author": "dev-team", "msg": "test(payment): add wiremock mocks for external payment gateway responses", "date": "2026-08-02" },
-                { "hash": "9c8b7a6", "author": "ryan-backend", "msg": "feat(card): add PCI-DSS tokenized credit card payment gateway integration", "date": "2026-08-01" },
-                { "hash": "3f2e1d0", "author": "dev-team", "msg": "refactor(reconcile): add daily automated bank statement reconciliation job", "date": "2026-07-31" },
-                { "hash": "7a6b5c4", "author": "ryan-backend", "msg": "feat(cash): add POS physical cash drawer change calculation REST API", "date": "2026-07-30" },
-                { "hash": "1e0d9c8", "author": "dev-team", "msg": "init: initial Payment Service architecture with Spring Boot & PostgreSQL", "date": "2026-07-22" }
-            ]
-        },
-        {
-            "name": "notification-service",
-            "color": "#F59E0B",
-            "total": 99,
-            "recent": [
-                { "hash": "9b8c7d6", "author": "dev-team", "msg": "feat(fcm): add Firebase FCM push notification device token batching and topic push", "date": "2026-08-10" },
-                { "hash": "5a4b3c2", "author": "ryan-backend", "msg": "feat(zalo): add Zalo ZNS Template message dispatcher for OTP & Order Confirmation", "date": "2026-08-09" },
-                { "hash": "1d2e3f4", "author": "dev-team", "msg": "fix(sms): add Brandname SMS provider failover mechanism to SpeedSMS API", "date": "2026-08-08" },
-                { "hash": "7e8f9a0", "author": "ryan-backend", "msg": "feat(internal): add async RabbitMQ notification queue listener for ORDER_CREATED events", "date": "2026-08-07" },
-                { "hash": "3c4b5a6", "author": "dev-team", "msg": "refactor(email): migrate HTML email template rendering engine to Thymeleaf", "date": "2026-08-06" },
-                { "hash": "9d8e7f0", "author": "ryan-backend", "msg": "feat(push): add in-app notification center history retrieval REST API", "date": "2026-08-05" },
-                { "hash": "5b4a3c2", "author": "dev-team", "msg": "fix(fcm): handle APNS Apple Push token expiration error codes", "date": "2026-08-04" },
-                { "hash": "1f0e9d8", "author": "ryan-backend", "msg": "feat(template): add multi-language notification template interpolation", "date": "2026-08-03" },
-                { "hash": "7c6b5a4", "author": "dev-team", "msg": "init: initial Notification Microservice async event listener scaffold", "date": "2026-07-22" }
-            ]
-        },
-        {
-            "name": "api-gateway",
-            "color": "#EC4899",
-            "total": 118,
-            "recent": [
-                { "hash": "1a2b3c4", "author": "ryan-backend", "msg": "fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter filter per client IP", "date": "2026-08-10" },
-                { "hash": "8f7e6d5", "author": "dev-team", "msg": "feat(auth-filter): add global RSA signature validation filter for secure endpoints", "date": "2026-08-09" },
-                { "hash": "3d4e5f6", "author": "ryan-backend", "msg": "chore(cors): update allowed origins for PROD & UAT web portals and mobile apps", "date": "2026-08-08" },
-                { "hash": "7c8b9a0", "author": "dev-team", "msg": "feat(circuit-breaker): configure Resilience4j CircuitBreaker for Commerce Service timeouts", "date": "2026-08-07" },
-                { "hash": "2e1d0c9", "author": "ryan-backend", "msg": "refactor(logging): add Spring Cloud Sleuth TraceID & SpanID correlation headers", "date": "2026-08-06" },
-                { "hash": "8a7b6c5", "author": "dev-team", "msg": "feat(swagger): aggregate OpenAPI v3 JSON spec endpoints from all downstream services", "date": "2026-08-05" },
-                { "hash": "4f3e2d1", "author": "ryan-backend", "msg": "fix(routing): fix path rewrite regex for legacy v1 API endpoints", "date": "2026-08-04" },
-                { "hash": "0c9b8a7", "author": "dev-team", "msg": "init: initial Spring Cloud Gateway Reactive Project structure", "date": "2026-07-22" }
-            ]
-        }
+        ("identity-service", "#10B981"),
+        ("commerce-service", "#3B82F6"),
+        ("payment-service", "#8B5CF6"),
+        ("notification-service", "#F59E0B"),
+        ("api-gateway", "#EC4899")
     ]
-    return repo_dirs
+
+    for repo_name, color in repo_dirs:
+        target_dir = os.path.join(BACKEND_DIR, repo_name)
+        recent_commits = []
+        total_cnt = 0
+
+        if os.path.exists(target_dir):
+            try:
+                cmd = ["git", "log", "-n", "50", "--pretty=format:%h|%an|%s|%cd", "--date=short"]
+                res = subprocess.run(cmd, cwd=target_dir, capture_output=True, text=True, check=True)
+                lines = res.stdout.strip().split("\n")
+                for line in lines:
+                    if not line: continue
+                    parts = line.split("|")
+                    if len(parts) >= 3:
+                        recent_commits.append({
+                            "hash": parts[0],
+                            "author": parts[1],
+                            "msg": parts[2],
+                            "date": parts[3] if len(parts) > 3 else ""
+                        })
+                
+                cnt_cmd = ["git", "rev-list", "--count", "HEAD"]
+                cnt_res = subprocess.run(cnt_cmd, cwd=target_dir, capture_output=True, text=True)
+                if cnt_res.returncode == 0:
+                    total_cnt = int(cnt_res.stdout.strip())
+                else:
+                    total_cnt = len(recent_commits)
+            except Exception as e:
+                print(f"⚠️ Warning: Could not run git log in {target_dir}: {e}")
+
+        commit_activity.append({
+            "name": repo_name,
+            "color": color,
+            "total": total_cnt if total_cnt > 0 else len(recent_commits),
+            "recent": recent_commits
+        })
+    return commit_activity
 
 def scan_java_controllers():
     endpoints = []
@@ -270,7 +211,7 @@ def generate_js_data():
             cnt = svc_counts.get(s["id"], 0)
             services.append({ **s, "name": f"{s['name'].split(' (')[0]} ({cnt})" })
 
-    js_content = f"""// AUTO-GENERATED PARSED DIRECTLY FROM JAVA CONTROLLER SOURCE CODE AND REAL GIT LOGS IN backend/
+    js_content = f"""// AUTO-GENERATED PARSED DIRECTLY FROM REAL JAVA CONTROLLERS AND REAL GIT REPO LOGS IN backend/
 const ZAP_API_DATA = {{
   services: {json.dumps(services, indent=2)},
   securityHeaders: {json.dumps(SECURITY_HEADERS, indent=2)},
@@ -283,7 +224,7 @@ const ZAP_API_DATA = {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(js_content)
 
-    print(f"✅ Successfully scanned {len(endpoints)} API endpoints and real Git commit logs!")
+    print(f"✅ Successfully scanned {len(endpoints)} API endpoints and real Git commit logs from backend repos!")
     print(f"📄 Output saved to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
