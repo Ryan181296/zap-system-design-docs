@@ -1174,7 +1174,11 @@ async function syncApiDataFromGitHub() {
     if (match && match[1]) {
       const liveData = Function(`"use strict"; return (${match[1]})`)();
       if (liveData && liveData.endpoints && Array.isArray(liveData.endpoints)) {
+        const localCommits = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : null;
         window.ZAP_API_DATA = liveData;
+        if (localCommits && (!liveData.commitActivity || !liveData.commitActivity.some(c => c.recent && c.recent.length > 0))) {
+          window.ZAP_API_DATA.commitActivity = localCommits;
+        }
         const total = liveData.endpoints.length;
 
         if (badgeEl) {
