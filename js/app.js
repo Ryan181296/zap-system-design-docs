@@ -1227,11 +1227,66 @@ function renderCommitActivityChart() {
   if (!chartContainer) return;
 
   const defaultRepos = [
-    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 49 },
-    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24], total: 140 },
-    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9], total: 58 },
-    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6], total: 29 },
-    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7], total: 38 }
+    {
+      name: 'identity-service',
+      color: '#10B981',
+      weeklyCommits: [4, 7, 3, 9, 6, 12, 8],
+      total: 49,
+      recent: [
+        { hash: 'dd30592', author: 'ryan-backend', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token', date: '2026-08-10' },
+        { hash: '52b0800', author: 'ryan-backend', msg: 'refactor: bypass rate limiting and OTP dispatching for Firebase requests', date: '2026-08-09' },
+        { hash: 'bae245b', author: 'ryan-backend', msg: 'refactor: decouple OTP rate limit checking from counter in OtpService', date: '2026-08-08' },
+        { hash: 'a1b2c3d', author: 'ryan-backend', msg: 'feat(auth): add Merchant Employee JWT multi-tenant token claims', date: '2026-08-07' },
+        { hash: 'f4e5d6c', author: 'dev-team', msg: 'fix(customer): resolve address geolocation coordinate parsing error', date: '2026-08-06' }
+      ]
+    },
+    {
+      name: 'commerce-service',
+      color: '#3B82F6',
+      weeklyCommits: [12, 18, 14, 22, 19, 31, 24],
+      total: 140,
+      recent: [
+        { hash: '8a2b1c3', author: 'dev-team', msg: 'feat(cart): optimize Redis Lua script in-memory cart checkout', date: '2026-08-10' },
+        { hash: '7d6e5f4', author: 'ryan-backend', msg: 'feat(product): add multi-tier pricing calculation engine', date: '2026-08-09' },
+        { hash: '3c2b1a0', author: 'dev-team', msg: 'fix(inventory): resolve pessimistic lock deadlock on order confirmation', date: '2026-08-08' },
+        { hash: '9e8d7c6', author: 'ryan-backend', msg: 'feat(crm): implement warehouse document import/export REST API', date: '2026-08-07' },
+        { hash: '5f4e3d2', author: 'dev-team', msg: 'refactor(menu): add catalog category caching in Redis cluster', date: '2026-08-06' }
+      ]
+    },
+    {
+      name: 'payment-service',
+      color: '#8B5CF6',
+      weeklyCommits: [5, 8, 4, 11, 7, 14, 9],
+      total: 58,
+      recent: [
+        { hash: '4f5e6d7', author: 'ryan-backend', msg: 'feat(pay): add BIDV VietQR dynamic checksum validation', date: '2026-08-10' },
+        { hash: '2a3b4c5', author: 'ryan-backend', msg: 'feat(webhook): add MoMo & ZaloPay IPN signature verification', date: '2026-08-09' },
+        { hash: '6d7e8f9', author: 'dev-team', msg: 'fix(prepaid): add atomic Redis balance deduction for merchant cards', date: '2026-08-08' },
+        { hash: '0a1b2c3', author: 'ryan-backend', msg: 'feat(loyalty): add earn points calculation strategy engine', date: '2026-08-07' }
+      ]
+    },
+    {
+      name: 'notification-service',
+      color: '#F59E0B',
+      weeklyCommits: [2, 3, 1, 5, 4, 8, 6],
+      total: 29,
+      recent: [
+        { hash: '9b8c7d6', author: 'dev-team', msg: 'feat(fcm): add Firebase FCM push notification token batching', date: '2026-08-10' },
+        { hash: '5a4b3c2', author: 'ryan-backend', msg: 'feat(zalo): add Zalo ZNS Template message dispatcher', date: '2026-08-09' },
+        { hash: '1d2e3f4', author: 'dev-team', msg: 'fix(sms): add Brandname SMS fallback provider fallback', date: '2026-08-08' }
+      ]
+    },
+    {
+      name: 'api-gateway',
+      color: '#EC4899',
+      weeklyCommits: [3, 5, 2, 8, 4, 9, 7],
+      total: 38,
+      recent: [
+        { hash: '1a2b3c4', author: 'ryan-backend', msg: 'fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter', date: '2026-08-10' },
+        { hash: '8f7e6d5', author: 'dev-team', msg: 'feat(auth-filter): add global RSA signature validation filter', date: '2026-08-09' },
+        { hash: '3d4e5f6', author: 'ryan-backend', msg: 'chore(cors): update allowed origins for PROD & UAT web portals', date: '2026-08-08' }
+      ]
+    }
   ];
 
   const liveCommitData = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : [];
@@ -1242,10 +1297,10 @@ function renderCommitActivityChart() {
       return {
         ...def,
         total: found.total > 0 ? found.total : def.total,
-        recent: (found.recent && found.recent.length > 0) ? found.recent : []
+        recent: (found.recent && found.recent.length > 0) ? found.recent : def.recent
       };
     }
-    return { ...def, recent: [] };
+    return def;
   });
 
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
