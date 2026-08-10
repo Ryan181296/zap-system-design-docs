@@ -1,4 +1,4 @@
-name: Auto Scan Java Controllers & Sync API Catalog
+name: Auto Scan Java Controllers & Sync API Catalog (Poly-Repo)
 
 on:
   push:
@@ -14,20 +14,57 @@ jobs:
       - name: Checkout System Docs Repo
         uses: actions/checkout@v3
 
-      # 🔐 Checkout Real Backend Source Code Repository using GitHub Secret Token
-      - name: Checkout Backend Private Repository (BE Source Code)
+      # 🔐 1. Checkout identity-service Repo
+      - name: Checkout identity-service Repo
         uses: actions/checkout@v3
         with:
-          repository: 'Ryan181296/zap-system'
+          repository: 'Ryan181296/identity-service'
           token: ${{ secrets.BACKEND_REPO_TOKEN }}
-          path: 'backend'
+          path: 'backend/identity-service'
+        continue-on-error: true
+
+      # 🔐 2. Checkout commerce-service Repo
+      - name: Checkout commerce-service Repo
+        uses: actions/checkout@v3
+        with:
+          repository: 'Ryan181296/commerce-service'
+          token: ${{ secrets.BACKEND_REPO_TOKEN }}
+          path: 'backend/commerce-service'
+        continue-on-error: true
+
+      # 🔐 3. Checkout payment-service Repo
+      - name: Checkout payment-service Repo
+        uses: actions/checkout@v3
+        with:
+          repository: 'Ryan181296/payment-service'
+          token: ${{ secrets.BACKEND_REPO_TOKEN }}
+          path: 'backend/payment-service'
+        continue-on-error: true
+
+      # 🔐 4. Checkout notification-service Repo
+      - name: Checkout notification-service Repo
+        uses: actions/checkout@v3
+        with:
+          repository: 'Ryan181296/notification-service'
+          token: ${{ secrets.BACKEND_REPO_TOKEN }}
+          path: 'backend/notification-service'
+        continue-on-error: true
+
+      # 🔐 5. Checkout api-gateway Repo
+      - name: Checkout api-gateway Repo
+        uses: actions/checkout@v3
+        with:
+          repository: 'Ryan181296/api-gateway'
+          token: ${{ secrets.BACKEND_REPO_TOKEN }}
+          path: 'backend/api-gateway'
+        continue-on-error: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Run Java Controller Scanner on Backend
+      - name: Run Java Controller Scanner on Poly-Repo Backend
         run: |
           python3 scripts/scan_controllers.py
 
@@ -36,4 +73,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add js/api-data.js
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(api): auto-sync scanned Java API endpoints from BE Repos [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(api): auto-sync scanned Java API endpoints from Poly-Repo BEs [skip ci]" && git push)
