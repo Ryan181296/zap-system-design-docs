@@ -1004,3 +1004,22 @@ body.sidebar-open .g-sidebar-overlay {
   stroke-dasharray: 6, 4 !important;
   animation: zapDashFlow 0.6s linear infinite !important;
 }
+
+/* Enlarged High-Impact DevOps & Setup Standards Architecture Diagrams */
+#view-devops-fe svg,
+#view-devops-cd svg,
+#view-devops-git svg {
+  min-height: 520px !important;
+  max-height: 750px !important;
+  width: 100% !important;
+  transform: scale(1.1);
+  transform-origin: top center;
+  margin: 16px auto !important;
+}
+
+#view-devops-fe div[style*="overflow-x: auto"],
+#view-devops-cd div[style*="overflow-x: auto"],
+#view-devops-git div[style*="overflow-x: auto"] {
+  padding: 36px 28px !important;
+  border-radius: 14px !important;
+}
