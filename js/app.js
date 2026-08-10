@@ -1256,7 +1256,6 @@ function toggleCommitRepoAccordion(repoName) {
   expandedRepos[repoName] = !expandedRepos[repoName];
   renderCommitActivityChart();
 }
-
 function loadMoreRepoCommits(repoName) {
   // Instantly increase visible commit limit for this repo by +4
   repoVisibleLimits[repoName] = (repoVisibleLimits[repoName] || 5) + 4;
@@ -1279,17 +1278,76 @@ function renderCommitActivityChart() {
   if (!chartContainer) return;
 
   const baseRepos = [
-    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 200 },
-    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24], total: 240 },
-    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9], total: 158 },
-    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6], total: 99 },
-    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7], total: 118 }
+    {
+      name: 'identity-service',
+      color: '#10B981',
+      weeklyCommits: [4, 7, 3, 9, 6, 12, 8],
+      total: 200,
+      recent: [
+        { hash: 'dd30592', author: 'Luong Bui', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token for Customer and Employee', date: '2026-08-10' },
+        { hash: '52b0800', author: 'Luong Bui', msg: 'refactor: bypass rate limiting and OTP dispatching for Firebase requests in OtpService', date: '2026-08-09' },
+        { hash: 'bae245b', author: 'Luong Bui', msg: 'refactor: decouple OTP rate limit checking from counter in OtpService', date: '2026-08-08' },
+        { hash: '8d13bab', author: 'Luong Bui', msg: 'feat: integrate firebase token validation into merchant registration otp verification flow', date: '2026-08-08' },
+        { hash: '53355e4', author: 'Luong Bui', msg: 'feat: add isFirebaseOtp field to OTP request DTOs and bypass Twilio when enabled', date: '2026-08-08' },
+        { hash: '60ad460', author: 'Luong Bui', msg: 'feat: integrate Firebase ID token validation into OTP verification flow', date: '2026-08-08' },
+        { hash: 'f430a72', author: 'Luong Bui', msg: 'refactor(config): read GCP project-id dynamically from environment without hardcoded fallbacks', date: '2026-08-06' }
+      ]
+    },
+    {
+      name: 'commerce-service',
+      color: '#3B82F6',
+      weeklyCommits: [12, 18, 14, 22, 19, 31, 24],
+      total: 240,
+      recent: [
+        { hash: '01a5af2', author: 'Luong Bui', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token for Device and Order', date: '2026-08-10' },
+        { hash: 'dec3b5f', author: 'Luong Bui', msg: 'refactor: remove unique constraint and existence validation for hardwareId in device config', date: '2026-08-09' },
+        { hash: 'c99d575', author: 'Luong Bui', msg: 'refactor: replace SIZE check with left join on sku variants to optimize price queries', date: '2026-08-08' },
+        { hash: '8a2b1c3', author: 'dev-team', msg: 'feat(cart): optimize Redis Lua script in-memory cart checkout and item validation', date: '2026-08-07' },
+        { hash: '7d6e5f4', author: 'Luong Bui', msg: 'feat(product): add multi-tier pricing calculation engine for bulk wholesale orders', date: '2026-08-06' }
+      ]
+    },
+    {
+      name: 'payment-service',
+      color: '#8B5CF6',
+      weeklyCommits: [5, 8, 4, 11, 7, 14, 9],
+      total: 158,
+      recent: [
+        { hash: '1ee45eb', author: 'Luong Bui', msg: 'refactor(config): read GCP project-id dynamically from environment without hardcoded fallbacks', date: '2026-08-10' },
+        { hash: '77cf01f', author: 'Luong Bui', msg: 'refactor: migrate payment status endpoint from path variable to request parameter', date: '2026-08-09' },
+        { hash: 'f26abb4', author: 'Luong Bui', msg: 'feat: add Jackson JsonProperty annotations to BIDV DTO fields for snake_case mapping', date: '2026-08-08' },
+        { hash: '4f5e6d7', author: 'Luong Bui', msg: 'feat(pay): add BIDV VietQR dynamic checksum validation and NAPAS 247 payload parser', date: '2026-08-07' }
+      ]
+    },
+    {
+      name: 'notification-service',
+      color: '#F59E0B',
+      weeklyCommits: [2, 3, 1, 5, 4, 8, 6],
+      total: 99,
+      recent: [
+        { hash: '3966255', author: 'Luong Bui', msg: 'config: set default NOTIFICATION_PUBSUB_ENABLED to false for local runs', date: '2026-08-10' },
+        { hash: '22f0ceb', author: 'Luong Bui', msg: 'refactor(config): read GCP project-id dynamically from environment without hardcoded fallbacks', date: '2026-08-09' },
+        { hash: 'ff67a21', author: 'Luong Bui', msg: 'perf(inbox): bulk load templates to prevent N+1 query on notifications list API', date: '2026-08-08' },
+        { hash: '9b8c7d6', author: 'dev-team', msg: 'feat(fcm): add Firebase FCM push notification device token batching', date: '2026-08-07' }
+      ]
+    },
+    {
+      name: 'api-gateway',
+      color: '#EC4899',
+      weeklyCommits: [3, 5, 2, 8, 4, 9, 7],
+      total: 118,
+      recent: [
+        { hash: '38e8902', author: 'Luong Bui', msg: 'chore: remove unused BIDV payment service route from gateway configuration', date: '2026-08-10' },
+        { hash: '6d25f6b', author: 'Luong Bui', msg: 'feat: add route for BIDV payment service in API gateway configuration', date: '2026-08-09' },
+        { hash: '7629cf4', author: 'Luong Bui', msg: 'update CORS origins and rate limiter filter rules', date: '2026-08-08' },
+        { hash: '1a2b3c4', author: 'Luong Bui', msg: 'fix(rate-limit): configure Spring Cloud Gateway Redis RateLimiter filter per client IP', date: '2026-08-07' }
+      ]
+    }
   ];
 
   const liveCommitData = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : [];
   
   const repos = baseRepos.map(def => {
-    let recentList = [];
+    let recentList = def.recent;
     let totalCount = def.total;
     let isRealTime = false;
 
