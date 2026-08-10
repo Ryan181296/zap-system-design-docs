@@ -1191,6 +1191,9 @@ async function syncApiDataFromGitHub() {
         if (activeNav && activeNav.dataset.target) {
           renderEndpointsForService(activeNav.dataset.target);
         }
+        if (typeof renderCommitActivityChart === 'function') {
+          renderCommitActivityChart();
+        }
       }
     }
   } catch (e) {
@@ -1229,7 +1232,7 @@ async function fetchRealTimeGitHubCommits(repoName, page = 1) {
       if (Array.isArray(data) && data.length > 0) {
         const formatted = data.map(item => ({
           hash: item.sha ? item.sha.substring(0, 7) : 'HEAD',
-          author: (item.author && item.author.login) ? item.author.login : (item.commit && item.commit.author ? item.commit.author.name : 'dev-team'),
+          author: (item.author && item.author.login) ? item.author.login : (item.commit && item.commit.author ? item.commit.author.author.name : 'dev-team'),
           msg: (item.commit && item.commit.message) ? item.commit.message.split('\n')[0] : 'commit update',
           date: (item.commit && item.commit.author && item.commit.author.date) ? item.commit.author.date.substring(0, 10) : ''
         }));
@@ -1256,7 +1259,7 @@ function toggleCommitRepoAccordion(repoName) {
 
 function loadMoreRepoCommits(repoName) {
   // Instantly increase visible commit limit for this repo by +4
-  repoVisibleLimits[repoName] = (repoVisibleLimits[repoName] || 3) + 4;
+  repoVisibleLimits[repoName] = (repoVisibleLimits[repoName] || 5) + 4;
   
   // Also trigger API fetch for extra pages in background
   const nextPage = (repoCommitPages[repoName] || 1) + 1;
@@ -1276,23 +1279,22 @@ function renderCommitActivityChart() {
   if (!chartContainer) return;
 
   const baseRepos = [
-    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8] },
-    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24] },
-    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9] },
-    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6] },
-    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7] }
+    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 200 },
+    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24], total: 240 },
+    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9], total: 158 },
+    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6], total: 99 },
+    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7], total: 118 }
   ];
 
   const liveCommitData = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : [];
   
   const repos = baseRepos.map(def => {
     let recentList = [];
-    let totalCount = 0;
+    let totalCount = def.total;
     let isRealTime = false;
 
     const found = liveCommitData.find(c => c.name === def.name);
     if (found) {
-      recentList = found.recent || [];
       totalCount = found.total || recentList.length;
     }
 
