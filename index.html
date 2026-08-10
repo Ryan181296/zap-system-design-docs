@@ -1165,6 +1165,17 @@ end</pre>
             <span class="g-badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 11px;">Poly-Repo Commit Frequency</span>
           </div>
 
+          <!-- Live GitHub REST API Token Synchronization Bar -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; background: var(--bg-primary); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 280px;">
+              <span style="font-size: 12px; color: var(--text-secondary); white-space: nowrap; font-weight: 600;">🔑 GitHub Token (PAT):</span>
+              <input type="password" id="github-pat-token" placeholder="Dán GitHub Personal Access Token (ghp_... hoặc github_pat_...)" style="flex: 1; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; font-size: 12px;" onchange="window.saveGitHubToken(this.value)">
+            </div>
+            <button onclick="window.fetchLiveFromGitHubNow()" style="background: var(--accent-color); color: white; border: none; padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+              ⚡ Đồng Bộ Live Từ GitHub REST API
+            </button>
+          </div>
+
           <!-- Commit Activity Bar Chart Grid -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 16px;" id="commit-chart-container">
             <!-- Populated dynamically via JS -->

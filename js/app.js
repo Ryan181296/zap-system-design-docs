@@ -1220,19 +1220,45 @@ let repoCommitPages = {
 let repoRealCommits = {};
 let repoCommitLoading = {};
 
+let githubPatToken = localStorage.getItem('zap_github_pat') || '';
+
+function saveGitHubToken(token) {
+  githubPatToken = token ? token.trim() : '';
+  if (githubPatToken) {
+    localStorage.setItem('zap_github_pat', githubPatToken);
+  } else {
+    localStorage.removeItem('zap_github_pat');
+  }
+  fetchLiveFromGitHubNow();
+}
+
+function fetchLiveFromGitHubNow() {
+  const repos = ['identity-service', 'commerce-service', 'payment-service', 'notification-service', 'api-gateway'];
+  repos.forEach(repo => fetchRealTimeGitHubCommits(repo, 1));
+}
+
+window.saveGitHubToken = saveGitHubToken;
+window.fetchLiveFromGitHubNow = fetchLiveFromGitHubNow;
+
 async function fetchRealTimeGitHubCommits(repoName, page = 1) {
   if (repoCommitLoading[repoName]) return;
   repoCommitLoading[repoName] = true;
 
   try {
-    const url = `https://api.github.com/repos/Ryan181296/${repoName}/commits?per_page=15&page=${page}`;
-    const response = await fetch(url);
+    const token = githubPatToken || localStorage.getItem('zap_github_pat') || '';
+    const headers = { 'Accept': 'application/vnd.github.v3+json' };
+    if (token) {
+      headers['Authorization'] = token.startsWith('Bearer ') || token.startsWith('token ') ? token : `token ${token}`;
+    }
+
+    const url = `https://api.github.com/repos/Ryan181296/${repoName}/commits?per_page=20&page=${page}`;
+    const response = await fetch(url, { headers });
     if (response.ok) {
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0) {
         const formatted = data.map(item => ({
           hash: item.sha ? item.sha.substring(0, 7) : 'HEAD',
-          author: (item.author && item.author.login) ? item.author.login : (item.commit && item.commit.author ? item.commit.author.author.name : 'dev-team'),
+          author: (item.author && item.author.login) ? item.author.login : (item.commit && item.commit.author ? item.commit.author.name : 'dev-team'),
           msg: (item.commit && item.commit.message) ? item.commit.message.split('\n')[0] : 'commit update',
           date: (item.commit && item.commit.author && item.commit.author.date) ? item.commit.author.date.substring(0, 10) : ''
         }));
