@@ -782,13 +782,20 @@ function renderDesignSystem() {
 
   const redisContainer = document.getElementById('redis-keys-table');
   if (redisContainer) {
+    const redisKeys = (window.ZAP_API_DATA && Array.isArray(window.ZAP_API_DATA.redisKeys)) ? window.ZAP_API_DATA.redisKeys : [
+      { key: "auth:jwt:blacklist:{jti}", ttl: "24 hours", purpose: "Revoked JWT token blacklisting" },
+      { key: "otp:rate:{phone}", ttl: "5 minutes", purpose: "OTP dispatch rate limiter counter" },
+      { key: "cart:item:{cartId}", ttl: "7 days", purpose: "Shopping cart transient cache" },
+      { key: "product:detail:{id}", ttl: "1 hour", purpose: "Catalog item metadata cache" }
+    ];
+
     redisContainer.innerHTML = `
       <table class="g-table">
         <thead>
           <tr><th>Redis Key Pattern</th><th>TTL</th><th>Purpose</th></tr>
         </thead>
         <tbody>
-          ${ZAP_API_DATA.redisKeys.map(rk => `
+          ${redisKeys.map(rk => `
             <tr>
               <td><code>${rk.key}</code></td>
               <td><strong style="color: var(--text-primary);">${rk.ttl}</strong></td>
