@@ -1253,16 +1253,33 @@ function fetchLiveFromGitHubNow() {
 window.saveGitHubToken = saveGitHubToken;
 window.fetchLiveFromGitHubNow = fetchLiveFromGitHubNow;
 
+// Auto-detect ?token=... or ?pat=... in URL query string
+const urlParams = new URLSearchParams(window.location.search);
+const tokenFromUrl = urlParams.get('token') || urlParams.get('pat');
+if (tokenFromUrl) {
+  localStorage.setItem('zap_github_pat', tokenFromUrl.trim());
+  githubPatToken = tokenFromUrl.trim();
+}
+
 async function fetchRealTimeGitHubCommits(repoName, page = 1) {
+  const token = githubPatToken || localStorage.getItem('zap_github_pat') || '';
+  
+  // Guard: If no token is provided in browser, don't trigger unauthenticated requests to private repos
+  // This prevents Chrome DevTools from logging red 404/403 network errors, while rendering preloaded commits scanned via BACKEND_REPO_TOKEN.
+  if (!token) {
+    repoCommitLoading[repoName] = false;
+    renderCommitActivityChart();
+    return;
+  }
+
   if (repoCommitLoading[repoName]) return;
   repoCommitLoading[repoName] = true;
 
   try {
-    const token = githubPatToken || localStorage.getItem('zap_github_pat') || '';
-    const headers = { 'Accept': 'application/vnd.github.v3+json' };
-    if (token) {
-      headers['Authorization'] = token.startsWith('Bearer ') || token.startsWith('token ') ? token : `token ${token}`;
-    }
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json',
+      'Authorization': token.startsWith('Bearer ') || token.startsWith('token ') ? token : `token ${token}`
+    };
 
     const url = `https://api.github.com/repos/Ryan181296/${repoName}/commits?per_page=20&page=${page}`;
     const response = await fetch(url, { headers }).catch(() => null);
@@ -1284,7 +1301,7 @@ async function fetchRealTimeGitHubCommits(repoName, page = 1) {
       }
     }
   } catch (err) {
-    // Fail silently and retain local preloaded commits scanned via BACKEND_REPO_TOKEN
+    // Fail silently
   } finally {
     repoCommitLoading[repoName] = false;
     renderCommitActivityChart();
