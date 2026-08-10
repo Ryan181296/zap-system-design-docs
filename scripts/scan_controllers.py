@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ZAP Backend Java Controller Scanner & Real Git Commit Log Dynamic Extractor
-Scans Spring Boot @RestController Java files and dynamic Git commit logs directly from backend repos
+Scans Spring Boot @RestController Java files and dynamic Git commit logs directly from GitHub API using BACKEND_REPO_TOKEN
 Auto-generates docs/system-design/js/api-data.js
 """
 
@@ -9,6 +9,7 @@ import os
 import re
 import json
 import subprocess
+import urllib.request
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SYSTEM_DESIGN_DIR = os.path.dirname(SCRIPT_DIR)
@@ -55,7 +56,7 @@ def get_service_id(filepath):
     return "commerce", "Commerce Service"
 
 def scan_git_commits():
-    """Extract real git commits dynamically from backend git repositories"""
+    """Extract real git commits dynamically from backend git repositories and GitHub REST API"""
     commit_activity = []
     repo_dirs = [
         ("identity-service", "#10B981"),
@@ -65,35 +66,67 @@ def scan_git_commits():
         ("api-gateway", "#EC4899")
     ]
 
+    token = os.environ.get("BACKEND_REPO_TOKEN") or os.environ.get("GITHUB_TOKEN") or ""
+
     for repo_name, color in repo_dirs:
         target_dir = os.path.join(BACKEND_DIR, repo_name)
         recent_commits = []
         total_cnt = 0
 
-        if os.path.exists(target_dir):
+        # Method 1: GitHub REST API using BACKEND_REPO_TOKEN
+        if token:
+            try:
+                url = f"https://api.github.com/repos/Ryan181296/{repo_name}/commits?per_page=50"
+                req = urllib.request.Request(url, headers={
+                    "Authorization": f"token {token}",
+                    "User-Agent": "Zap-System-Scanner",
+                    "Accept": "application/vnd.github.v3+json"
+                })
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    if resp.status == 200:
+                        data = json.loads(resp.read().decode('utf-8'))
+                        if isinstance(data, list):
+                            for item in data:
+                                sha = item.get("sha", "")[:7]
+                                author_obj = item.get("author") or {}
+                                commit_obj = item.get("commit") or {}
+                                commit_author = commit_obj.get("author") or {}
+                                author_name = author_obj.get("login") or commit_author.get("name") or "dev-team"
+                                msg = commit_obj.get("message", "").split("\n")[0]
+                                date = commit_author.get("date", "")[:10]
+                                recent_commits.append({
+                                    "hash": sha,
+                                    "author": author_name,
+                                    "msg": msg,
+                                    "date": date
+                                })
+                            total_cnt = len(recent_commits)
+            except Exception as e:
+                print(f"⚠️ Warning: GitHub API fetch with token for {repo_name} failed: {e}")
+
+        # Method 2: Local git log in checked-out repo
+        if not recent_commits and os.path.exists(target_dir):
             try:
                 cmd = ["git", "log", "-n", "50", "--pretty=format:%h|%an|%s|%cd", "--date=short"]
-                res = subprocess.run(cmd, cwd=target_dir, capture_output=True, text=True, check=True)
-                lines = res.stdout.strip().split("\n")
-                for line in lines:
-                    if not line: continue
-                    parts = line.split("|")
-                    if len(parts) >= 3:
-                        recent_commits.append({
-                            "hash": parts[0],
-                            "author": parts[1],
-                            "msg": parts[2],
-                            "date": parts[3] if len(parts) > 3 else ""
-                        })
-                
-                cnt_cmd = ["git", "rev-list", "--count", "HEAD"]
-                cnt_res = subprocess.run(cnt_cmd, cwd=target_dir, capture_output=True, text=True)
-                if cnt_res.returncode == 0:
-                    total_cnt = int(cnt_res.stdout.strip())
-                else:
-                    total_cnt = len(recent_commits)
+                res = subprocess.run(cmd, cwd=target_dir, capture_output=True, text=True)
+                if res.returncode == 0 and res.stdout.strip():
+                    lines = res.stdout.strip().split("\n")
+                    for line in lines:
+                        if not line: continue
+                        parts = line.split("|")
+                        if len(parts) >= 3:
+                            recent_commits.append({
+                                "hash": parts[0],
+                                "author": parts[1],
+                                "msg": parts[2],
+                                "date": parts[3] if len(parts) > 3 else ""
+                            })
+                    cnt_cmd = ["git", "rev-list", "--count", "HEAD"]
+                    cnt_res = subprocess.run(cnt_cmd, cwd=target_dir, capture_output=True, text=True)
+                    if cnt_res.returncode == 0:
+                        total_cnt = int(cnt_res.stdout.strip())
             except Exception as e:
-                print(f"⚠️ Warning: Could not run git log in {target_dir}: {e}")
+                print(f"⚠️ Warning: git log in {target_dir} failed: {e}")
 
         commit_activity.append({
             "name": repo_name,
