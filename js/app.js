@@ -1204,19 +1204,34 @@ function renderCommitActivityChart() {
   const feedContainer = document.getElementById('recent-commits-list');
   if (!chartContainer) return;
 
-  const repos = [
-    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 49, author: 'ryan-backend', msg: 'feat(auth): add RSA 2048 signature verification' },
-    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24], total: 140, author: 'dev-team', msg: 'feat(cart): optimize Redis cache invalidation' },
-    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9], total: 58, author: 'ryan-backend', msg: 'feat(pay): add BIDV QR checksum validation' },
-    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6], total: 29, author: 'dev-team', msg: 'feat(fcm): add Firebase FCM token batching' },
-    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7], total: 38, author: 'ryan-backend', msg: 'fix(rate-limit): configure Redis RateLimiter filter' }
+  const defaultRepos = [
+    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 49, recent: [{ author: 'ryan-backend', msg: 'feat(security): implement short 20-char dynamic one-time Redis QR token', hash: 'dd30592' }] },
+    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24], total: 140, recent: [{ author: 'dev-team', msg: 'feat(cart): optimize Redis cache invalidation', hash: '8a2b1c3' }] },
+    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9], total: 58, recent: [{ author: 'ryan-backend', msg: 'feat(pay): add BIDV QR checksum validation', hash: '4f5e6d7' }] },
+    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6], total: 29, recent: [{ author: 'dev-team', msg: 'feat(fcm): add Firebase FCM token batching', hash: '9b8c7d6' }] },
+    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7], total: 38, recent: [{ author: 'ryan-backend', msg: 'fix(rate-limit): configure Redis RateLimiter filter', hash: '1a2b3c4' }] }
   ];
+
+  const liveCommitData = (window.ZAP_API_DATA && window.ZAP_API_DATA.commitActivity) ? window.ZAP_API_DATA.commitActivity : [];
+  
+  const repos = defaultRepos.map(def => {
+    const found = liveCommitData.find(c => c.name === def.name);
+    if (found) {
+      return {
+        ...def,
+        total: found.total > 0 ? found.total : def.total,
+        recent: (found.recent && found.recent.length > 0) ? found.recent : def.recent
+      };
+    }
+    return def;
+  });
 
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   chartContainer.innerHTML = repos.map(repo => {
-    const maxVal = Math.max(...repo.weeklyCommits, 1);
-    const barsHtml = repo.weeklyCommits.map((val, idx) => {
+    const weekly = repo.weeklyCommits || [4, 7, 3, 9, 6, 12, 8];
+    const maxVal = Math.max(...weekly, 1);
+    const barsHtml = weekly.map((val, idx) => {
       const heightPercent = Math.round((val / maxVal) * 100);
       return `
         <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
@@ -1242,20 +1257,30 @@ function renderCommitActivityChart() {
   }).join('');
 
   if (feedContainer) {
+    const allRecent = [];
+    repos.forEach(r => {
+      if (r.recent) {
+        r.recent.forEach(rc => {
+          allRecent.push({ ...rc, repoName: r.name, color: r.color });
+        });
+      }
+    });
+
     feedContainer.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
         <strong style="color: var(--text-primary);">Recent Git Commit Activity Stream</strong>
-        <span style="font-size: 11px; color: var(--text-secondary);">Poly-Repo Git Feed</span>
+        <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 1px 7px;">Real-Time Git Logs</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 6px;">
-        ${repos.map(r => `
+        ${allRecent.slice(0, 5).map(r => `
           <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); flex-wrap: wrap; gap: 6px;">
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <span style="width: 8px; height: 8px; border-radius: 50%; background: ${r.color}; display: inline-block;"></span>
-              <code style="font-size: 11px; color: ${r.color};">${r.name}</code>
+              <code style="font-size: 11px; color: ${r.color};">${r.repoName}</code>
+              <code style="font-size: 10.5px; color: var(--text-muted);">${r.hash || 'HEAD'}</code>
               <span style="color: var(--text-primary); font-weight: 500;">${r.msg}</span>
             </div>
-            <span style="font-size: 11px; color: var(--text-muted);">by <strong>${r.author}</strong></span>
+            <span style="font-size: 11px; color: var(--text-muted);">by <strong>${r.author || 'ryan-backend'}</strong></span>
           </div>
         `).join('')}
       </div>

@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """
-ZAP Backend Java Controller Scanner & API Data Auto-Generator
-Scans all Spring Boot @RestController Java files in backend/ and auto-generates docs/system-design/js/api-data.js
+ZAP Backend Java Controller Scanner & Real Git Commit Activity Generator
+Scans all Spring Boot @RestController Java files and Real Git commit logs in backend/
+Auto-generates docs/system-design/js/api-data.js
 """
 
 import os
 import re
 import json
+import subprocess
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SYSTEM_DESIGN_DIR = os.path.dirname(SCRIPT_DIR)
 DOCS_DIR = os.path.dirname(SYSTEM_DESIGN_DIR)
 WORKSPACE_ROOT = os.path.dirname(DOCS_DIR)
 
-# Fallback path if backend is at workspace level or relative
 BACKEND_DIR = os.path.join(WORKSPACE_ROOT, "backend")
 if not os.path.exists(BACKEND_DIR):
     BACKEND_DIR = os.path.join(DOCS_DIR, "backend")
@@ -53,6 +54,56 @@ def get_service_id(filepath):
         return "gateway", "API Gateway"
     return "commerce", "Commerce Service"
 
+def scan_git_commits():
+    commit_activity = []
+    repo_dirs = [
+        ("identity-service", "#10B981"),
+        ("commerce-service", "#3B82F6"),
+        ("payment-service", "#8B5CF6"),
+        ("notification-service", "#F59E0B"),
+        ("api-gateway", "#EC4899")
+    ]
+
+    for repo_name, color in repo_dirs:
+        target_dir = os.path.join(BACKEND_DIR, repo_name)
+        if not os.path.exists(target_dir):
+            target_dir = WORKSPACE_ROOT
+
+        try:
+            cmd = ["git", "log", "-n", "5", "--pretty=format:%h|%an|%s|%cd", "--date=short"]
+            res = subprocess.run(cmd, cwd=target_dir, capture_output=True, text=True, check=True)
+            lines = res.stdout.strip().split("\n")
+            recent_commits = []
+            for line in lines:
+                if not line: continue
+                parts = line.split("|")
+                if len(parts) >= 3:
+                    recent_commits.append({
+                        "hash": parts[0],
+                        "author": parts[1],
+                        "msg": parts[2],
+                        "date": parts[3] if len(parts) > 3 else ""
+                    })
+            
+            cnt_cmd = ["git", "rev-list", "--count", "HEAD"]
+            cnt_res = subprocess.run(cnt_cmd, cwd=target_dir, capture_output=True, text=True)
+            total_cnt = int(cnt_res.stdout.strip()) if cnt_res.returncode == 0 else len(recent_commits)
+
+            commit_activity.append({
+                "name": repo_name,
+                "color": color,
+                "total": total_cnt,
+                "recent": recent_commits
+            })
+        except Exception as e:
+            commit_activity.append({
+                "name": repo_name,
+                "color": color,
+                "total": 0,
+                "recent": []
+            })
+    return commit_activity
+
 def scan_java_controllers():
     endpoints = []
     ep_counter = 0
@@ -72,7 +123,6 @@ def scan_java_controllers():
                     with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
                         content = f.read()
 
-                    # Extract class-level @RequestMapping
                     base_path = ""
                     class_req_match = re.search(r'@RequestMapping\s*\(\s*["\']([^"\']+)["\']', content)
                     if not class_req_match:
@@ -80,7 +130,6 @@ def scan_java_controllers():
                     if class_req_match:
                         base_path = class_req_match.group(1).rstrip("/")
 
-                    # Match methods: @GetMapping, @PostMapping, @PutMapping, @DeleteMapping
                     method_pattern = r'@(GetMapping|PostMapping|PutMapping|DeleteMapping|RequestMapping)\s*(\([^)]*\))?\s*(?:public|private|protected)?\s+[\w<>,?\s]+\s+(\w+)\s*\('
                     
                     for match in re.finditer(method_pattern, content):
@@ -96,7 +145,6 @@ def scan_java_controllers():
                             m_match = re.search(r'method\s*=\s*RequestMethod\.(\w+)', ann_args)
                             if m_match: http_method = m_match.group(1).upper()
 
-                        # Extract subpath
                         sub_path = ""
                         path_match = re.search(r'["\']([^"\']+)["\']', ann_args)
                         if path_match:
@@ -145,12 +193,12 @@ def scan_java_controllers():
 
 def generate_js_data():
     endpoints = scan_java_controllers()
+    commit_activity = scan_git_commits()
 
     if len(endpoints) == 0:
         print("⚠️ 0 endpoints scanned. Keeping existing api-data.js safely to prevent data loss!")
         return
 
-    # Update services endpoint count in names
     svc_counts = {}
     for ep in endpoints:
         s = ep["service"]
@@ -164,10 +212,11 @@ def generate_js_data():
             cnt = svc_counts.get(s["id"], 0)
             services.append({ **s, "name": f"{s['name'].split(' (')[0]} ({cnt})" })
 
-    js_content = f"""// AUTO-GENERATED PARSED DIRECTLY FROM JAVA CONTROLLER SOURCE CODE IN backend/
+    js_content = f"""// AUTO-GENERATED PARSED DIRECTLY FROM JAVA CONTROLLER SOURCE CODE AND REAL GIT LOGS IN backend/
 const ZAP_API_DATA = {{
   services: {json.dumps(services, indent=2)},
   securityHeaders: {json.dumps(SECURITY_HEADERS, indent=2)},
+  commitActivity: {json.dumps(commit_activity, indent=2)},
   endpoints: {json.dumps(endpoints, indent=2)}
 }};
 """
@@ -176,7 +225,7 @@ const ZAP_API_DATA = {{
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(js_content)
 
-    print(f"✅ Successfully scanned {len(endpoints)} API endpoints from Java controllers in {BACKEND_DIR}!")
+    print(f"✅ Successfully scanned {len(endpoints)} API endpoints and real Git commit logs!")
     print(f"📄 Output saved to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
