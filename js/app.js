@@ -1298,10 +1298,20 @@ window.toggleCommitRepoAccordion = toggleCommitRepoAccordion;
 window.loadMoreRepoCommits = loadMoreRepoCommits;
 window.fetchRealTimeGitHubCommits = fetchRealTimeGitHubCommits;
 
+let hasFiredGitHubFetchOnLoad = false;
+
 function renderCommitActivityChart() {
   const chartContainer = document.getElementById('commit-chart-container');
   const feedContainer = document.getElementById('recent-commits-list');
   if (!chartContainer) return;
+
+  // Automatically trigger live client-side GitHub REST API fetch requests on load
+  if (!hasFiredGitHubFetchOnLoad) {
+    hasFiredGitHubFetchOnLoad = true;
+    setTimeout(() => {
+      fetchLiveFromGitHubNow();
+    }, 150);
+  }
 
   const baseRepos = [
     {
