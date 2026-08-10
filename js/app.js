@@ -1041,59 +1041,7 @@ function downloadJsonFile(dataObj, filename) {
 // ── Live Health Status Monitor Dashboard (PROD & UAT Real Pings) ─────────────
 window.currentHealthEnv = 'PROD';
 
-window.switchHealthEnv = function switchHealthEnv(env) {
-  window.currentHealthEnv = env;
-  const prodBtn = document.getElementById('env-btn-prod');
-  const uatBtn = document.getElementById('env-btn-uat');
-  const envBadge = document.getElementById('health-env-badge');
-
-  if (env === 'PROD') {
-    if (prodBtn) {
-      prodBtn.style.background = '#10B981';
-      prodBtn.style.color = 'white';
-      prodBtn.style.fontWeight = '700';
-      prodBtn.textContent = '🟢 PROD Active';
-    }
-    if (uatBtn) {
-      uatBtn.style.background = 'transparent';
-      uatBtn.style.color = 'var(--text-secondary)';
-      uatBtn.style.fontWeight = '600';
-      uatBtn.textContent = '🟡 UAT Sandbox';
-    }
-    if (envBadge) {
-      envBadge.textContent = 'PROD (prod-api.zap.vn)';
-      envBadge.style.background = 'rgba(16, 185, 129, 0.15)';
-      envBadge.style.color = '#10b981';
-      envBadge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-    }
-  } else {
-    if (uatBtn) {
-      uatBtn.style.background = '#F59E0B';
-      uatBtn.style.color = 'white';
-      uatBtn.style.fontWeight = '700';
-      uatBtn.textContent = '🟡 UAT Active';
-    }
-    if (prodBtn) {
-      prodBtn.style.background = 'transparent';
-      prodBtn.style.color = 'var(--text-secondary)';
-      prodBtn.style.fontWeight = '600';
-      prodBtn.textContent = '🟢 PROD (prod-api.zap.vn)';
-    }
-    if (envBadge) {
-      envBadge.textContent = 'UAT (uat-api.zap.vn)';
-      envBadge.style.background = 'rgba(245, 158, 11, 0.15)';
-      envBadge.style.color = '#F59E0B';
-      envBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
-    }
-  }
-  window.refreshHealthStatus();
-};
-
-function switchHealthEnv(env) {
-  window.switchHealthEnv(env);
-}
-
-window.refreshHealthStatus = async function refreshHealthStatus() {
+function refreshHealthStatus() {
   const container = document.getElementById('health-cards-container');
   const btn = document.getElementById('btn-refresh-health');
   const btnText = document.getElementById('btn-refresh-text');
@@ -1163,11 +1111,58 @@ window.refreshHealthStatus = async function refreshHealthStatus() {
       btn.disabled = false;
     }
   }, 400);
-};
-
-function refreshHealthStatus() {
-  window.refreshHealthStatus();
 }
+
+function switchHealthEnv(env) {
+  window.currentHealthEnv = env;
+  const prodBtn = document.getElementById('env-btn-prod');
+  const uatBtn = document.getElementById('env-btn-uat');
+  const envBadge = document.getElementById('active-env-badge');
+
+  if (env === 'PROD') {
+    if (prodBtn) {
+      prodBtn.style.background = '#10B981';
+      prodBtn.style.color = 'white';
+      prodBtn.style.fontWeight = '700';
+      prodBtn.textContent = '🟢 PROD Active';
+    }
+    if (uatBtn) {
+      uatBtn.style.background = 'transparent';
+      uatBtn.style.color = 'var(--text-secondary)';
+      uatBtn.style.fontWeight = '600';
+      uatBtn.textContent = '🟡 UAT Sandbox';
+    }
+    if (envBadge) {
+      envBadge.textContent = 'PROD (prod-api.zap.vn)';
+      envBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+      envBadge.style.color = '#10b981';
+      envBadge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+    }
+  } else {
+    if (uatBtn) {
+      uatBtn.style.background = '#F59E0B';
+      uatBtn.style.color = 'white';
+      uatBtn.style.fontWeight = '700';
+      uatBtn.textContent = '🟡 UAT Active';
+    }
+    if (prodBtn) {
+      prodBtn.style.background = 'transparent';
+      prodBtn.style.color = 'var(--text-secondary)';
+      prodBtn.style.fontWeight = '600';
+      prodBtn.textContent = '🟢 PROD (prod-api.zap.vn)';
+    }
+    if (envBadge) {
+      envBadge.textContent = 'UAT (uat-api.zap.vn)';
+      envBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+      envBadge.style.color = '#F59E0B';
+      envBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+    }
+  }
+  refreshHealthStatus();
+}
+
+window.switchHealthEnv = switchHealthEnv;
+window.refreshHealthStatus = refreshHealthStatus;
 
 // ── Live GitHub Auto-Sync: Fetch Latest API Endpoints Count & Catalog ─────────
 const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/Ryan181296/zap-system-design-docs/main/js/api-data.js';
