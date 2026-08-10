@@ -1194,12 +1194,78 @@ async function syncApiDataFromGitHub() {
   }
 }
 
+// ── Render Microservice Git Commit Activity Velocity Chart ───────────────────
+function renderCommitActivityChart() {
+  const chartContainer = document.getElementById('commit-chart-container');
+  const feedContainer = document.getElementById('recent-commits-list');
+  if (!chartContainer) return;
+
+  const repos = [
+    { name: 'identity-service', color: '#10B981', weeklyCommits: [4, 7, 3, 9, 6, 12, 8], total: 49, author: 'ryan-backend', msg: 'feat(auth): add RSA 2048 signature verification' },
+    { name: 'commerce-service', color: '#3B82F6', weeklyCommits: [12, 18, 14, 22, 19, 31, 24], total: 140, author: 'dev-team', msg: 'feat(cart): optimize Redis cache invalidation' },
+    { name: 'payment-service', color: '#8B5CF6', weeklyCommits: [5, 8, 4, 11, 7, 14, 9], total: 58, author: 'ryan-backend', msg: 'feat(pay): add BIDV QR checksum validation' },
+    { name: 'notification-service', color: '#F59E0B', weeklyCommits: [2, 3, 1, 5, 4, 8, 6], total: 29, author: 'dev-team', msg: 'feat(fcm): add Firebase FCM token batching' },
+    { name: 'api-gateway', color: '#EC4899', weeklyCommits: [3, 5, 2, 8, 4, 9, 7], total: 38, author: 'ryan-backend', msg: 'fix(rate-limit): configure Redis RateLimiter filter' }
+  ];
+
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  chartContainer.innerHTML = repos.map(repo => {
+    const maxVal = Math.max(...repo.weeklyCommits, 1);
+    const barsHtml = repo.weeklyCommits.map((val, idx) => {
+      const heightPercent = Math.round((val / maxVal) * 100);
+      return `
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+          <div style="width: 100%; height: 50px; background: rgba(255,255,255,0.04); border-radius: 4px; display: flex; align-items: flex-end; padding: 2px;">
+            <div style="width: 100%; height: ${heightPercent}%; background: ${repo.color}; border-radius: 3px; transition: height 0.3s ease;" title="${days[idx]}: ${val} commits"></div>
+          </div>
+          <span style="font-size: 9.5px; color: var(--text-muted);">${days[idx]}</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="font-size: 12px; color: var(--text-primary);">${repo.name}</strong>
+          <span class="g-badge" style="background: ${repo.color}22; color: ${repo.color}; font-size: 10px; padding: 1px 6px;">${repo.total} Commits</span>
+        </div>
+        <div style="display: flex; gap: 4px;">
+          ${barsHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  if (feedContainer) {
+    feedContainer.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+        <strong style="color: var(--text-primary);">Recent Git Commit Activity Stream</strong>
+        <span style="font-size: 11px; color: var(--text-secondary);">Poly-Repo Git Feed</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        ${repos.map(r => `
+          <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); flex-wrap: wrap; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: ${r.color}; display: inline-block;"></span>
+              <code style="font-size: 11px; color: ${r.color};">${r.name}</code>
+              <span style="color: var(--text-primary); font-weight: 500;">${r.msg}</span>
+            </div>
+            <span style="font-size: 11px; color: var(--text-muted);">by <strong>${r.author}</strong></span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+}
+
 // ── Run on DOM Initialization ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initDbSearch();
   window.refreshHealthStatus();
   renderDesignSystem();
   syncApiDataFromGitHub();
+  renderCommitActivityChart();
 
   // Attach Health Dashboard Event Listeners
   const prodBtn = document.getElementById('env-btn-prod');
