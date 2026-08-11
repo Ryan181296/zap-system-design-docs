@@ -3,7 +3,7 @@ let currentScale = 1.0;
 let panX = 0;
 let panY = 0;
 
-document.addEventListener('DOMContentLoaded', () => {
+function initDocsApp() {
   // Dark / Light Theme Toggle Logic with Clean SVG Icons
   const themeBtn = document.getElementById('theme-toggle');
   const iconContainer = document.getElementById('theme-icon-container');
@@ -28,71 +28,199 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Sidebar Navigation Items
+  // Sidebar Navigation & Tab Selection Persistence with Clean URL Hashes
   const navItems = document.querySelectorAll('.g-nav-item');
   const docSections = document.querySelectorAll('.g-doc-section');
+  const chips = document.querySelectorAll('.g-chip');
 
-  navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      navItems.forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
+  function getHashForTab(target, svcId) {
+    if (!target) return '#system';
+    const name = target.replace(/^view-/, '');
+    if (target === 'view-api' && svcId && svcId !== 'all') {
+      return '#' + 'api-' + svcId;
+    }
+    return '#' + name;
+  }
 
-      const target = item.dataset.target;
-      docSections.forEach(sec => sec.style.display = 'none');
+  function getTabFromHash(hashStr) {
+    if (!hashStr) return null;
+    let h = hashStr.replace(/^#/, '').trim().toLowerCase();
+    if (!h) return null;
 
-      const targetSec = document.getElementById(target);
-      if (targetSec) {
-        targetSec.style.display = 'block';
-        if (target === 'view-env') {
-          if (typeof renderCommitActivityChart === 'function') renderCommitActivityChart();
-          if (typeof window.refreshHealthStatus === 'function') window.refreshHealthStatus();
-        }
-        if (target === 'view-gantt') {
-          if (typeof window.buildGantt === 'function') window.buildGantt();
-        }
-        if (typeof window.initCodeBlocks === 'function') window.initCodeBlocks();
-        if (window.Prism) window.Prism.highlightAll();
-      }
+    if (document.getElementById(h)) {
+      return { target: h, svcId: null };
+    }
+    if (document.getElementById('view-' + h)) {
+      return { target: 'view-' + h, svcId: null };
+    }
+    if (h.startsWith('api-')) {
+      const svc = h.substring(4);
+      return { target: 'view-api', svcId: svc };
+    }
+    if (h === 'api') {
+      return { target: 'view-api', svcId: 'all' };
+    }
+    if (h.includes(':')) {
+      const parts = h.split(':');
+      let target = parts[0].startsWith('view-') ? parts[0] : 'view-' + parts[0];
+      return { target: target, svcId: parts[1] };
+    }
+    return null;
+  }
 
-      // Handle Service filter click from sidebar
-      if (item.dataset.svc) {
-        const svcId = item.dataset.svc;
-        renderEndpoints(svcId);
-        const bcrumb = document.getElementById('breadcrumb-svc');
-        if (bcrumb) {
-          const svcInfo = ZAP_API_DATA.services.find(s => s.id === svcId);
-          bcrumb.textContent = svcInfo ? svcInfo.name : 'All Services';
-        }
+  window.switchTab = function switchTab(target, svcId = null, saveState = true) {
+    if (!target) return;
+    const targetSec = document.getElementById(target);
+    if (!targetSec) return;
+
+    let matchedItem = null;
+    navItems.forEach(n => {
+      const matchesTarget = n.dataset.target === target;
+      const matchesSvc = svcId ? n.dataset.svc === svcId : (!n.dataset.svc || n.dataset.svc === 'all');
+      if (matchesTarget && matchesSvc && !matchedItem) {
+        matchedItem = n;
       }
     });
+
+    navItems.forEach(n => n.classList.remove('active'));
+    if (matchedItem) {
+      matchedItem.classList.add('active');
+    } else {
+      const targetOnlyItem = Array.from(navItems).find(n => n.dataset.target === target);
+      if (targetOnlyItem) targetOnlyItem.classList.add('active');
+    }
+
+    docSections.forEach(sec => sec.style.display = 'none');
+    targetSec.style.display = 'block';
+
+    if (target === 'view-env') {
+      if (typeof renderCommitActivityChart === 'function') renderCommitActivityChart();
+      if (typeof window.refreshHealthStatus === 'function') window.refreshHealthStatus();
+    }
+    if (target === 'view-gantt') {
+      if (typeof window.buildGantt === 'function') window.buildGantt();
+    }
+    if (target === 'view-sequence') {
+      const savedSeq = localStorage.getItem('zap_active_seq_tab');
+      if (savedSeq && document.getElementById(savedSeq)) {
+        showSequenceTab(savedSeq);
+      }
+    }
+    if (typeof window.initCodeBlocks === 'function') window.initCodeBlocks();
+    if (window.Prism) window.Prism.highlightAll();
+
+    if (target === 'view-api' || svcId) {
+      const activeSvc = svcId || (matchedItem && matchedItem.dataset.svc) || 'all';
+      renderEndpoints(activeSvc);
+      const bcrumb = document.getElementById('breadcrumb-svc');
+      if (bcrumb && typeof ZAP_API_DATA !== 'undefined' && ZAP_API_DATA.services) {
+        const svcInfo = ZAP_API_DATA.services.find(s => s.id === activeSvc);
+        bcrumb.textContent = svcInfo ? svcInfo.name : 'All Services';
+      }
+    }
+
+    if (saveState) {
+      localStorage.setItem('zap_active_target', target);
+      if (svcId) {
+        localStorage.setItem('zap_active_svc', svcId);
+      } else {
+        localStorage.removeItem('zap_active_svc');
+      }
+
+      const hashStr = getHashForTab(target, svcId);
+      if (window.location.hash !== hashStr) {
+        window.location.hash = hashStr;
+      }
+    }
+  };
+
+  window.restoreTabState = function restoreTabState() {
+    let resolved = getTabFromHash(window.location.hash);
+    let target = resolved ? resolved.target : '';
+    let svcId = resolved ? resolved.svcId : '';
+
+    if (!target) {
+      const savedTarget = localStorage.getItem('zap_active_target');
+      if (savedTarget && document.getElementById(savedTarget)) {
+        target = savedTarget;
+        svcId = localStorage.getItem('zap_active_svc') || '';
+      }
+    }
+
+    if (!target) {
+      const defaultActive = document.querySelector('.g-nav-item.active');
+      if (defaultActive) {
+        target = defaultActive.dataset.target || 'view-system';
+        svcId = defaultActive.dataset.svc || '';
+      } else {
+        target = 'view-system';
+      }
+    }
+
+    window.switchTab(target, svcId, false);
+  };
+
+  navItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.switchTab(item.dataset.target, item.dataset.svc, true);
+    });
+  });
+
+  window.addEventListener('hashchange', () => {
+    window.restoreTabState();
+  });
+
+  window.addEventListener('popstate', () => {
+    window.restoreTabState();
   });
 
   // Render Topology SVG
   renderEcosystemDiagram();
 
-  // Render Initial API Catalog
-  renderEndpoints('all');
+  // Type Chips Filtering with persistence
+  const savedChip = localStorage.getItem('zap_active_chip');
+  if (savedChip) {
+    chips.forEach(chip => {
+      if (chip.textContent.trim() === savedChip) {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      }
+    });
+  }
 
-  // Type Chips Filtering
-  const chips = document.querySelectorAll('.g-chip');
   chips.forEach(chip => {
     chip.addEventListener('click', () => {
       chips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
+      localStorage.setItem('zap_active_chip', chip.textContent.trim());
       renderEndpoints();
     });
   });
 
+  // Restore active tab & section selection on page load
+  window.restoreTabState();
+
   // Search Bar
-  document.getElementById('api-search').addEventListener('input', () => {
-    navItems.forEach(n => n.classList.remove('active'));
-    docSections.forEach(sec => sec.style.display = 'none');
-    document.getElementById('view-api').style.display = 'block';
-    renderEndpoints();
-  });
+  const searchInput = document.getElementById('api-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      window.switchTab('view-api', 'all', true);
+    });
+  }
 
   // Render Design System Tables
   renderDesignSystem();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDocsApp);
+} else {
+  initDocsApp();
+}
+
+window.addEventListener('load', () => {
+  if (typeof window.restoreTabState === 'function') window.restoreTabState();
 });
 
 // Render System Architecture SVG with FE SSL/TLS Certificate Pinning Security Badges
@@ -987,8 +1115,10 @@ function showSequenceTab(tabId) {
 
   const buttons = document.querySelectorAll('#view-sequence .g-chip');
   buttons.forEach(btn => btn.classList.remove('active'));
-  const clickedBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(tabId));
+  const clickedBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId));
   if (clickedBtn) clickedBtn.classList.add('active');
+
+  localStorage.setItem('zap_active_seq_tab', tabId);
 }
 
 // ── 1-Click Postman Collection Exporter ──────────────────────────────────────
@@ -1318,7 +1448,7 @@ if (tokenFromUrl) {
 
 async function fetchRealTimeGitHubCommits(repoName, page = 1) {
   const token = githubPatToken || localStorage.getItem('zap_github_pat') || '';
-  
+
   // Guard: If no token is provided in browser, don't trigger unauthenticated requests to private repos
   // This prevents Chrome DevTools from logging red 404/403 network errors, while rendering preloaded commits scanned via BACKEND_REPO_TOKEN.
   if (!token) {
@@ -1560,10 +1690,10 @@ function renderCommitActivityChart() {
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
         ${repos.map(r => {
-          const isExpanded = !!expandedRepos[r.name];
-          const commits = r.recent || [];
+      const isExpanded = !!expandedRepos[r.name];
+      const commits = r.recent || [];
 
-          const commitRowsHtml = commits.map(c => `
+      const commitRowsHtml = commits.map(c => `
             <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; gap: 8px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1;">
                 <a href="https://github.com/Ryan181296/${r.name}/commit/${c.hash}" target="_blank" style="text-decoration: none;">
@@ -1578,7 +1708,7 @@ function renderCommitActivityChart() {
             </div>
           `).join('');
 
-          return `
+      return `
             <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.2s ease;">
               <!-- Accordion Header Bar -->
               <div onclick="window.toggleCommitRepoAccordion('${r.name}')" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-secondary); cursor: pointer; user-select: none;">
@@ -1600,7 +1730,7 @@ function renderCommitActivityChart() {
               ` : ''}
             </div>
           `;
-        }).join('')}
+    }).join('')}
       </div>
     `;
   }
