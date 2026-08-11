@@ -39,6 +39,8 @@
           else if (h === 'design') target = 'view-design';
           else if (h === 'circuit') target = 'view-circuit';
           else if (h === 'gcs') target = 'view-gcs';
+          else if (h === 'terms' || h === 'terms-and-conditions') target = 'view-terms';
+          else if (h === 'privacy' || h === 'privacy-policy') target = 'view-privacy';
           else if (h.startsWith('view-')) target = h;
         }
         if (!target) target = 'view-system';
@@ -312,6 +314,25 @@
             <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
           </svg>
           <span>GCS Media Upload Flow</span>
+        </a>
+      </div>
+
+      <div class="g-nav-section">
+        <div class="g-nav-title">Legal &amp; Compliance</div>
+        <a class="g-nav-item" href="#terms" data-target="view-terms">
+          <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+          <span>Terms of Service</span>
+        </a>
+        <a class="g-nav-item" href="#privacy" data-target="view-privacy">
+          <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span>Privacy Policy</span>
         </a>
       </div>
     </nav>
@@ -3841,6 +3862,142 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             window.buildGantt();
           </script>
 
+        </section>
+
+        <!-- Section: ZAP CRM Terms of Service -->
+        <section id="view-terms" class="g-doc-section">
+          <div class="g-breadcrumb">
+            <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span>Terms of Service</span>
+          </div>
+
+          <div class="g-doc-header">
+            <h1 class="g-doc-title">ZAP CRM Terms of Service</h1>
+            <p class="g-doc-subtitle">Welcome to ZAP CRM! By downloading, installing, registering, or using the ZAP CRM Application, you agree to be bound by the terms and conditions set forth below.</p>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <a href="terms-and-conditions" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 13px;">
+              🔗 Standalone URL: docs.zap.vn/terms-and-conditions
+            </a>
+          </div>
+
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 28px; line-height: 1.7; font-size: 14.5px;">
+            <h2 style="font-size: 20px; font-weight: 700; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 18px;">PART I. TERMS OF SERVICE</h2>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.1. Definitions</h3>
+            <ul style="margin: 0 0 20px 20px;">
+              <li><strong>“ZAP” / “We” / “Us”:</strong> The entity that owns, develops, and operates the ZAP CRM customer relationship management software system.</li>
+              <li><strong>“ZAP CRM Application” (hereinafter referred to as "ZAP"):</strong> The official mobile application distributed on application stores (Apple App Store, Google Play Store) running on mobile devices (Smartphones, Tablets, iPads).</li>
+              <li><strong>“Services”:</strong> CRM management features, customer management, reporting, and channel integrations provided on the ZAP Application.</li>
+              <li><strong>“Account Owner”:</strong> An individual or business representative who registers the initial account and holds the highest administrative rights.</li>
+              <li><strong>“You” / “User”:</strong> The Account Owner or employees authorized to access and experience the ZAP Application.</li>
+              <li><strong>“Business Data”:</strong> All information and data (customers, orders, receipts/vouchers, reports, etc.) created, entered, or stored by You on the ZAP Application.</li>
+            </ul>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.2. Registration and Login Methods</h3>
+            <p>To use ZAP CRM, You may register/log in through the following methods:</p>
+            <ul style="margin: 0 0 20px 20px;">
+              <li><strong>Phone Number:</strong> Authentication via an OTP code sent to Your personal/business phone number.</li>
+              <li><strong>Facebook Account (Facebook Login):</strong> Quick login via Meta's official SDK.</li>
+              <li><strong>Google Account (Google Sign-In):</strong> Quick login via Google's OAuth 2.0 protocol.</li>
+            </ul>
+            <p>You are responsible for maintaining the confidentiality and security of Your mobile device, password, and login credentials. ZAP shall not be liable for any losses arising from Your negligence or disclosure of login information.</p>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.3. Acceptable Use</h3>
+            <p>You commit to using ZAP CRM solely for lawful business activities in compliance with the laws of Vietnam and applicable regulations. The following actions are strictly prohibited:</p>
+            <ul style="margin: 0 0 20px 20px;">
+              <li>Using ZAP to commit fraud, send spam messages, disseminate false information, or violate the law.</li>
+              <li>Uploading or storing obscene content, copyright-infringing materials, or content that compromises national security.</li>
+              <li>Interfering with, reverse-engineering, or damaging system integrity or ZAP’s databases.</li>
+            </ul>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.4. Intellectual Property Rights</h3>
+            <p>All source code, user interface designs, logos, the ZAP trademark, and related intellectual property belong exclusively to ZAP. You are not permitted to copy, redistribute, or sublicense any part of the service to any third party without prior written consent from ZAP.</p>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.5. Limitation of Liability</h3>
+            <p>ZAP makes every reasonable effort to ensure stable and uninterrupted Services. However, the Services rely on Internet infrastructure, user devices, and third-party platform providers (Apple, Google). ZAP shall not be held liable for temporary disruptions caused by network errors, force majeure cyberattacks, or compromised/damaged user devices.</p>
+            <p>ZAP is not responsible for the accuracy of Business Data entered into the system by You, nor for Your business performance results.</p>
+
+            <h2 style="font-size: 20px; font-weight: 700; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin: 32px 0 18px;">PART II. CONTACT AND SUPPORT INFORMATION</h2>
+            <p>If You have any questions, complaints, or support requests regarding the Terms of Service, please contact ZAP via:</p>
+            <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 16px; border-radius: 8px; margin-top: 12px;">
+              <div><strong>Service Name:</strong> ZAP CRM</div>
+              <div><strong>Support Channel:</strong> Directly in Help / Support Center section within ZAP app</div>
+              <div><strong>Support Email:</strong> <a href="mailto:support@zap.vn" style="color: #1a73e8; font-weight: 700;">support@zap.vn</a></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: ZAP CRM Privacy Policy -->
+        <section id="view-privacy" class="g-doc-section">
+          <div class="g-breadcrumb">
+            <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span>Privacy Policy</span>
+          </div>
+
+          <div class="g-doc-header">
+            <h1 class="g-doc-title">ZAP CRM Privacy Policy</h1>
+            <p class="g-doc-subtitle">This policy details how ZAP collects, uses, and protects Your personal information in compliance with Decree No. 13/2023/ND-CP of Vietnam and Apple &amp; Google Store privacy requirements.</p>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <a href="privacy-policy" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 13px;">
+              🔗 Standalone URL: docs.zap.vn/privacy-policy
+            </a>
+          </div>
+
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 28px; line-height: 1.7; font-size: 14.5px;">
+            <h2 style="font-size: 20px; font-weight: 700; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 18px;">PART I. PRIVACY POLICY</h2>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.1. Data We Collect</h3>
+            <ul style="margin: 0 0 20px 20px;">
+              <li><strong>Account Identification Information:</strong> Registered phone number. Profile information from Google/Facebook accounts (Full Name, Email address, Profile Picture/Avatar) when You choose to log in via Google or Facebook.</li>
+              <li><strong>Business &amp; CRM Data:</strong> Customer lists, interaction history, order details, and documents proactively created by You on the app.</li>
+              <li><strong>Technical Device Information:</strong> Device type (iOS/Android), operating system version, IP address, and crash logs for application optimization purposes.</li>
+            </ul>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.2. App Permissions Details</h3>
+            <p>ZAP requests mobile device permissions (Mobile, Tablet, iPad) only when essential for business features, and always seeks Your permission prior to access:</p>
+            <ul style="margin: 0 0 20px 20px;">
+              <li><strong>Contacts:</strong> To assist You in selecting and quickly syncing customer contacts from Your phone/tablet into the CRM system.</li>
+              <li><strong>Camera:</strong> To take product photos, scan QR codes on invoices/vouchers, or capture transaction proof images.</li>
+              <li><strong>Photos / Storage:</strong> To temporarily store offline data and select photo documents/files to upload to the CRM.</li>
+              <li><strong>Location (GPS):</strong> To support sales point check-ins, customer locating, or staff work location tracking when You enable this feature.</li>
+              <li><strong>Internet Connection &amp; Push Notifications:</strong> To synchronize real-time data and send push notifications for customer care schedules and new orders.</li>
+            </ul>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.3. Third-Party Integrations and Services (Facebook, Google)</h3>
+            <ul style="margin: 0 0 20px 20px;">
+              <li><strong>Google Account (Google Sign-In):</strong> ZAP uses Google Sign-In via standard protocols for identity verification and to support secure, quick logins.</li>
+              <li><strong>Facebook Account (Facebook Login):</strong> ZAP utilizes Facebook Login SDK solely to authenticate user identity and assist You in creating/logging into Your ZAP CRM account using Your personal Facebook account. ZAP does not request Page management permissions, nor does it read or interfere with messages, comments, or any other administrative data on Your Facebook account.</li>
+            </ul>
+            <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 12px 16px; border-radius: 6px; margin: 16px 0;">
+              <strong>Third-Party Data Security Commitment:</strong> ZAP commits not to arbitrarily share, sell, rent, or trade any personal data collected from Google or Facebook with any advertising entity or external third party.
+            </div>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.4. Data Storage and Security</h3>
+            <ul style="margin: 0 0 20px 20px;">
+              <li><strong>Security:</strong> Your data is encrypted during transmission (SSL/TLS) and stored securely on cloud server infrastructure meeting industry security standards.</li>
+              <li><strong>Retention Period:</strong> Data is stored for as long as You maintain Your ZAP CRM account or until the account is deleted.</li>
+            </ul>
+
+            <h3 style="font-size: 16px; font-weight: 700; margin: 20px 0 10px;">1.5. User Rights &amp; Account Deletion Procedure</h3>
+            <p>You possess full rights regarding Your personal data, including:</p>
+            <ul style="margin: 0 0 20px 20px;">
+              <li>Viewing and editing personal information directly within the ZAP Application.</li>
+              <li>Requesting the export of Your Business Data from the system.</li>
+            </ul>
+            <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 12px 16px; border-radius: 6px; margin: 16px 0;">
+              <strong>Right to Account Deletion:</strong> You have the right to request the complete deletion of Your ZAP CRM account and all associated data at any time. You may submit an account deletion request via ZAP's official support email (<a href="mailto:support@zap.vn" style="color: #1a73e8; font-weight: 700;">support@zap.vn</a>). Upon receipt and verification, ZAP will permanently delete Your account and all personal data from our servers within <strong>30 days</strong>.
+            </div>
+
+            <h2 style="font-size: 20px; font-weight: 700; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin: 32px 0 18px;">PART II. CONTACT AND SUPPORT INFORMATION</h2>
+            <p>If You have any questions, complaints, or support requests regarding the Privacy Policy, please contact ZAP via:</p>
+            <div style="background: var(--bg-primary); border: 1px solid var(--border-color); padding: 16px; border-radius: 8px; margin-top: 12px;">
+              <div><strong>Service Name:</strong> ZAP CRM</div>
+              <div><strong>Support Channel:</strong> Directly in Help / Support Center section within ZAP app</div>
+              <div><strong>Support Email:</strong> <a href="mailto:support@zap.vn" style="color: #1a73e8; font-weight: 700;">support@zap.vn</a></div>
+            </div>
+          </div>
         </section>
 
     </main>
