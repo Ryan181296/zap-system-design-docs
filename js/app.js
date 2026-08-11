@@ -73,8 +73,11 @@ function initDocsApp() {
     const targetSec = document.getElementById(target);
     if (!targetSec) return;
 
+    const currentNavItems = document.querySelectorAll('.g-nav-item');
+    const currentDocSections = document.querySelectorAll('.g-doc-section');
+
     let matchedItem = null;
-    navItems.forEach(n => {
+    currentNavItems.forEach(n => {
       const matchesTarget = n.dataset.target === target;
       const matchesSvc = svcId ? n.dataset.svc === svcId : (!n.dataset.svc || n.dataset.svc === 'all');
       if (matchesTarget && matchesSvc && !matchedItem) {
@@ -82,19 +85,22 @@ function initDocsApp() {
       }
     });
 
-    navItems.forEach(n => n.classList.remove('active'));
+    currentNavItems.forEach(n => n.classList.remove('active'));
     if (matchedItem) {
       matchedItem.classList.add('active');
     } else {
-      const targetOnlyItem = Array.from(navItems).find(n => n.dataset.target === target);
+      const targetOnlyItem = Array.from(currentNavItems).find(n => n.dataset.target === target);
       if (targetOnlyItem) targetOnlyItem.classList.add('active');
     }
 
-    docSections.forEach(sec => {
+    currentDocSections.forEach(sec => {
       sec.classList.remove('active-section');
-      sec.style.display = '';
+      sec.style.display = 'none';
     });
     targetSec.classList.add('active-section');
+    targetSec.style.display = 'block';
+
+    document.body.classList.remove('sidebar-open');
 
     if (target === 'view-env') {
       if (typeof renderCommitActivityChart === 'function') renderCommitActivityChart();
@@ -109,8 +115,9 @@ function initDocsApp() {
         showSequenceTab(savedSeq);
       }
     }
-    if (typeof window.initCodeBlocks === 'function') window.initCodeBlocks();
-    if (window.Prism) window.Prism.highlightAll();
+    if (typeof window.initCodeBlocks === 'function') {
+      window.initCodeBlocks(targetSec);
+    }
 
     if (target === 'view-api' || svcId) {
       const activeSvc = svcId || (matchedItem && matchedItem.dataset.svc) || 'all';
@@ -143,21 +150,8 @@ function initDocsApp() {
     let svcId = resolved ? resolved.svcId : '';
 
     if (!target) {
-      const savedTarget = localStorage.getItem('zap_active_target');
-      if (savedTarget && document.getElementById(savedTarget)) {
-        target = savedTarget;
-        svcId = localStorage.getItem('zap_active_svc') || '';
-      }
-    }
-
-    if (!target) {
-      const defaultActive = document.querySelector('.g-nav-item.active');
-      if (defaultActive) {
-        target = defaultActive.dataset.target || 'view-system';
-        svcId = defaultActive.dataset.svc || '';
-      } else {
-        target = 'view-system';
-      }
+      target = 'view-system';
+      svcId = '';
     }
 
     window.switchTab(target, svcId, false);
@@ -204,11 +198,15 @@ function initDocsApp() {
   // Restore active tab & section selection on page load
   window.restoreTabState();
 
-  // Search Bar
+  // Search Bar with 150ms Debounce for Mobile Smooth Typing
   const searchInput = document.getElementById('api-search');
   if (searchInput) {
+    let searchDebounce = null;
     searchInput.addEventListener('input', () => {
-      window.switchTab('view-api', 'all', true);
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        window.switchTab('view-api', 'all', true);
+      }, 150);
     });
   }
 
@@ -817,7 +815,11 @@ function renderEndpoints(selectedSvcId = null) {
     return;
   }
 
-  container.innerHTML = filtered.map(ep => `
+  const limit = window.apiLimit || 40;
+  const itemsToRender = filtered.slice(0, limit);
+  const remaining = filtered.length - limit;
+
+  let html = itemsToRender.map(ep => `
     <div class="g-api-card" id="card-${ep.id}">
       <div class="g-api-header" onclick="toggleCard('card-${ep.id}')">
         <div class="g-api-main">
@@ -862,6 +864,21 @@ function renderEndpoints(selectedSvcId = null) {
       </div>
     </div>
   `).join('');
+
+  if (remaining > 0) {
+    html += `
+      <div style="text-align: center; padding: 20px; margin-top: 16px;">
+        <button onclick="window.apiLimit = ${filtered.length}; renderEndpoints('${currentSvc}')" style="background: var(--accent-color); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: opacity 0.2s;">
+          ⚡ Load All Remaining ${remaining} APIs (Showing ${limit} of ${filtered.length})
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+  if (typeof window.initCodeBlocks === 'function') {
+    window.initCodeBlocks(container);
+  }
 }
 
 function toggleCard(id) {
@@ -1519,9 +1536,17 @@ window.fetchRealTimeGitHubCommits = fetchRealTimeGitHubCommits;
 let hasFiredGitHubFetchOnLoad = false;
 
 function renderCommitActivityChart() {
-  const chartContainer = document.getElementById('commit-chart-container');
-  const feedContainer = document.getElementById('recent-commits-list');
-  if (!chartContainer) return;
+  const chartContainers = [
+    document.getElementById('commit-chart-container'),
+    document.getElementById('commit-chart-container-standalone')
+  ].filter(Boolean);
+
+  const feedContainers = [
+    document.getElementById('recent-commits-list'),
+    document.getElementById('recent-commits-list-standalone')
+  ].filter(Boolean);
+
+  if (chartContainers.length === 0) return;
 
   // Automatically trigger live client-side GitHub REST API fetch requests on load
   if (!hasFiredGitHubFetchOnLoad) {
@@ -1654,7 +1679,7 @@ function renderCommitActivityChart() {
 
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  chartContainer.innerHTML = repos.map(repo => {
+  const chartHtml = repos.map(repo => {
     const isExpanded = !!expandedRepos[repo.name];
     const borderStyle = isExpanded ? `border: 2px solid ${repo.color}; box-shadow: 0 0 10px ${repo.color}33;` : `border: 1px solid var(--border-color);`;
     const weekly = repo.weeklyCommits || [4, 7, 3, 9, 6, 12, 8];
@@ -1685,8 +1710,10 @@ function renderCommitActivityChart() {
     `;
   }).join('');
 
-  if (feedContainer) {
-    feedContainer.innerHTML = `
+  chartContainers.forEach(c => c.innerHTML = chartHtml);
+
+  if (feedContainers.length > 0) {
+    const feedHtml = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
         <strong style="color: var(--text-primary); font-size: 14px;">Recent Git Commit Activity Stream (Microservice Repositories)</strong>
         <span class="g-badge" style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10.5px; padding: 2px 8px;">Poly-Repo Commit History</span>

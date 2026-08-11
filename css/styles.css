@@ -66,6 +66,12 @@ body.dark-mode {
 }
 
 /* Reset & Base Styles */
+.g-doc-section {
+  display: none;
+}
+.g-doc-section.active-section {
+  display: block;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -878,10 +884,24 @@ body.sidebar-open .g-sidebar-overlay {
     padding: 12px !important;
   }
 
-  /* Wrap all tables for smooth touch scroll on mobile */
+  /* Wrap all tables for smooth touch scroll on mobile & GPU hardware acceleration */
+  .g-sidebar {
+    will-change: transform;
+    transform: translateZ(0);
+  }
   .g-doc-section {
+    display: none;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px;
+  }
+  .g-doc-section.active-section {
+    display: block;
+  }
+  .g-api-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 160px;
   }
 
   /* Responsive SVG Architecture Diagrams Touch Scroll */
