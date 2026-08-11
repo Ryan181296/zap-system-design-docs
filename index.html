@@ -16,7 +16,8 @@
   <link rel="stylesheet" href="css/styles.css?v=1.0.2">
   <style>
     /* Prevent flash of first tab during page reload */
-    .g-doc-section { display: none !important; }
+    .g-doc-section { display: none; }
+    .g-doc-section.active-section { display: block !important; }
   </style>
   <script>
     (function () {
@@ -50,7 +51,7 @@
         if (!target) {
           target = 'view-system';
         }
-        document.write('<style>#' + target + ' { display: block !important; }</style>');
+        document.write('<style>#' + target + ' { display: block; }</style>');
       } catch (e) { }
     })();
   </script>

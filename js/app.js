@@ -90,8 +90,11 @@ function initDocsApp() {
       if (targetOnlyItem) targetOnlyItem.classList.add('active');
     }
 
-    docSections.forEach(sec => sec.style.display = 'none');
-    targetSec.style.display = 'block';
+    docSections.forEach(sec => {
+      sec.classList.remove('active-section');
+      sec.style.display = '';
+    });
+    targetSec.classList.add('active-section');
 
     if (target === 'view-env') {
       if (typeof renderCommitActivityChart === 'function') renderCommitActivityChart();
