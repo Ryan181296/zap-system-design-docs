@@ -4143,6 +4143,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                   <th style="padding: 10px 12px;">Customer Phone</th>
                   <th style="padding: 10px 12px;">Order Code</th>
                   <th style="padding: 10px 12px;">Order Number</th>
+                  <th style="padding: 10px 12px;">Qty</th>
+                  <th style="padding: 10px 12px;">Total Amount</th>
                   <th style="padding: 10px 12px;">Order ID (System UUID)</th>
                   <th style="padding: 10px 12px;">Status</th>
                   <th style="padding: 10px 12px; text-align: right;">JSON Inspector</th>
@@ -4257,6 +4259,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 const phone = '0356465' + String(600 + (workerId % 101)).padStart(3, '0');
                 const latency = Math.floor(180 + Math.random() * 350 + (stepInfo.name === 'auth_login' ? 400 : 0));
                 const status = 200;
+                const qty = (workerId % 10) + 1;
 
                 const reqHeaderObj = {
                   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -4275,8 +4278,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                   reqBodyObj = { dialing_code: "+84", phone_number: phone, password: "Theluong1503@" };
                   resBodyObj.data = { access_token: "eyJhbGciOi...", refresh_token: "eyJhbG..." };
                 } else if (stepInfo.name === 'add_cart_item') {
-                  reqBodyObj = { product_id: "018f567b-2222-4abc-9def-0123456789ab", quantity: 1 };
-                  resBodyObj.data = { cart_items_count: 1, total_amount: 283500 };
+                  reqBodyObj = { product_id: "018f567b-2222-4abc-9def-0123456789ab", quantity: qty };
+                  resBodyObj.data = { cart_items_count: qty, total_amount: 283500 * qty };
                 } else if (stepInfo.name === 'set_cart_payment') {
                   reqBodyObj = { id: "f1f8c471-5726-4f95-b56c-4ba8c8a50587", title: "Cash", type: "CASH" };
                 } else if (stepInfo.name === 'place_order') {
@@ -4289,7 +4292,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                     id: orderUuid,
                     order_code: orderCode,
                     order_number: orderNum,
-                    total_amount: 283500,
+                    item_quantity: qty,
+                    total_amount: 283500 * qty,
                     status: "NEW"
                   };
 
@@ -4298,6 +4302,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                     order_code: orderCode,
                     order_number: orderNum,
                     order_id: orderUuid,
+                    quantity: qty,
+                    total_amount: (283500 * qty).toLocaleString() + ' VND',
                     status: "NEW",
                     details: resBodyObj.data
                   });
@@ -4374,6 +4380,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <td style="padding: 8px 12px; font-family: monospace; font-weight: 700; color: #1e8e3e;">${ord.phone}</td>
                 <td style="padding: 8px 12px; font-family: monospace; font-weight: 700; color: #1a73e8;">${ord.order_code}</td>
                 <td style="padding: 8px 12px; font-family: monospace;">${ord.order_number}</td>
+                <td style="padding: 8px 12px; font-family: monospace; font-weight: 700; color: #b06000;">${ord.quantity} items</td>
+                <td style="padding: 8px 12px; font-family: monospace; font-weight: 700; color: #137333;">${ord.total_amount}</td>
                 <td style="padding: 8px 12px; font-family: monospace; color: #5f6368;">${ord.order_id}</td>
                 <td style="padding: 8px 12px;"><span style="background: #e6f4ea; color: #137333; padding: 2px 8px; border-radius: 4px; font-weight: 700;">${ord.status}</span></td>
                 <td style="padding: 8px 12px; text-align: right;">
