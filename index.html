@@ -4081,31 +4081,51 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
           style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
           <div
             style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 16px;">
-            <div style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">Supported CCU
+            <div
+              style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">
+              Supported CCU
               Range</div>
             <div style="font-size: 22px; font-weight: 700; color: #1a73e8; margin-top: 4px;">1 - 100 CCUs</div>
-            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">Dedicated virtual accounts</div>
+            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">Dedicated virtual accounts
+            </div>
           </div>
           <div
             style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 16px;">
-            <div style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">Shared Test
+            <div
+              style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">
+              Shared Test
               Password</div>
-            <div style="font-size: 22px; font-weight: 700; color: #137333; margin-top: 4px;">Theluong1503@</div>
-            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">101 Accounts (PostgreSQL UAT)</div>
+            <div
+              style="font-size: 20px; font-weight: 700; color: var(--text-primary, #111111); margin-top: 4px; font-family: monospace; letter-spacing: 2px; display: flex; align-items: center; justify-content: space-between;">
+              <span id="pwd-text">••••••••••••</span>
+              <button onclick="togglePasswordVisibility()" id="pwd-toggle-btn"
+                style="background: var(--bg-tertiary, #f1f3f4); border: 1px solid var(--border-color, #e0e0e0); color: var(--text-secondary, #5f6368); cursor: pointer; padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease;"
+                title="Toggle Visibility">
+                <svg id="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+              </button>
+            </div>
+            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">101 Accounts (Argon2id
+              Masked)</div>
           </div>
           <div
             style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 16px;">
-            <div style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">Digital Signature
+            <div
+              style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">
+              Digital Signature
             </div>
             <div style="font-size: 22px; font-weight: 700; color: #b06000; margin-top: 4px;">RSA 2048</div>
-            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">SHA-256 + Argon2id Auth</div>
+            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">SHA-256 + Argon2id Auth
+            </div>
           </div>
           <div
             style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 16px;">
-            <div style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">Target Brand
+            <div
+              style="font-size: 11px; color: var(--text-secondary, #5f6368); font-weight: 600; text-transform: uppercase;">
+              Target Brand
             </div>
             <div style="font-size: 22px; font-weight: 700; color: #a142f4; margin-top: 4px;">Pendogo</div>
-            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">Brand: e8cb2035-8d7d...</div>
+            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">Brand: e8cb2035-8d7d...
+            </div>
           </div>
         </div>
 
@@ -4128,8 +4148,11 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 style="width: 100%; height: 6px; accent-color: #1a73e8; cursor: pointer;">
             </div>
 
-            <div style="background: var(--bg-tertiary, #f1f3f4); border: 1px solid var(--border-color, #e0e0e0); border-radius: 6px; padding: 10px 16px; min-width: 300px;">
-              <div style="font-size: 11px; text-transform: uppercase; color: var(--text-secondary, #5f6368); font-weight: 600;">Corresponding
+            <div
+              style="background: var(--bg-tertiary, #f1f3f4); border: 1px solid var(--border-color, #e0e0e0); border-radius: 6px; padding: 10px 16px; min-width: 300px;">
+              <div
+                style="font-size: 11px; text-transform: uppercase; color: var(--text-secondary, #5f6368); font-weight: 600;">
+                Corresponding
                 Phone Account Range</div>
               <div id="web-account-range"
                 style="font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 14px; color: #1e8e3e; margin-top: 2px;">
@@ -4151,7 +4174,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
               <span id="web-progress-text">⏳ Live Progress: 0.0% (0/9 reqs)</span>
               <span id="web-progress-speed" style="color: #1a73e8;">RPS: 0 req/s | Concurrent CCUs: 1</span>
             </div>
-            <div style="width: 100%; background: var(--border-color, #e8eaed); height: 10px; border-radius: 5px; overflow: hidden;">
+            <div
+              style="width: 100%; background: var(--border-color, #e8eaed); height: 10px; border-radius: 5px; overflow: hidden;">
               <div id="web-progress-bar"
                 style="width: 0%; height: 100%; background: linear-gradient(90deg, #4285f4, #34a853); transition: width 0.1s linear;">
               </div>
@@ -4171,7 +4195,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                   style="background: linear-gradient(135deg, #1a73e8, #00b0ff); padding: 6px 10px; border-radius: 8px; font-size: 14px; color: #fff;">⚡</span>
                 Real-Time Performance Analytics &amp; APM Metrics
               </h2>
-              <p style="font-size: 12px; color: var(--text-secondary, #555555); margin: 4px 0 0 0;">Live latency distribution and endpoint
+              <p style="font-size: 12px; color: var(--text-secondary, #555555); margin: 4px 0 0 0;">Live latency
+                distribution and endpoint
                 percentiles across Sandbox UAT Gateway workers</p>
             </div>
 
@@ -4196,7 +4221,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
-            <div class="chart-panel-box" style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 12px; padding: 20px;">
+            <div class="chart-panel-box"
+              style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 12px; padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <h3
                   style="font-size: 13px; font-weight: 700; color: var(--text-primary, #111111); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
@@ -4210,33 +4236,51 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
               </div>
             </div>
 
-            <div class="chart-panel-box" style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 12px; padding: 20px;">
+            <div class="chart-panel-box"
+              style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 12px; padding: 20px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                 <h3
                   style="font-size: 13px; font-weight: 700; color: var(--text-primary, #111111); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
                   <span style="color: #1e8e3e;">🎯</span> Request Distribution &amp; Order Benchmark
                 </h3>
                 <span
-                  style="font-size: 10px; background: var(--bg-tertiary, #f1f3f4); color: #1e8e3e; padding: 2px 8px; border-radius: 4px; font-weight: 600;">HTTP Analytics</span>
+                  style="font-size: 10px; background: var(--bg-tertiary, #f1f3f4); color: #1e8e3e; padding: 2px 8px; border-radius: 4px; font-weight: 600;">HTTP
+                  Analytics</span>
               </div>
 
               <!-- KPI Metrics Cards for Requests & Order Duration -->
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px;">
-                <div style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
-                  <div style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">Tổng Requests</div>
-                  <div id="stat-total-reqs" style="font-size: 15px; font-weight: 700; color: #1a73e8; margin-top: 2px;">0</div>
+                <div
+                  style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
+                  <div
+                    style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">
+                    TOTAL REQUESTS</div>
+                  <div id="stat-total-reqs" style="font-size: 15px; font-weight: 700; color: #1a73e8; margin-top: 2px;">
+                    0</div>
                 </div>
-                <div style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
-                  <div style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">Request TB / API</div>
-                  <div id="stat-avg-api-reqs" style="font-size: 15px; font-weight: 700; color: #b06000; margin-top: 2px;">0</div>
+                <div
+                  style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
+                  <div
+                    style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">
+                    AVG API RESPONSE TIME</div>
+                  <div id="stat-avg-api-reqs"
+                    style="font-size: 15px; font-weight: 700; color: #b06000; margin-top: 2px;">0 ms</div>
                 </div>
-                <div style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
-                  <div style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">Request TB / Đơn</div>
-                  <div id="stat-avg-order-reqs" style="font-size: 15px; font-weight: 700; color: #137333; margin-top: 2px;">9 reqs/đơn</div>
+                <div
+                  style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
+                  <div
+                    style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">
+                    AVG REQS / ORDER</div>
+                  <div id="stat-avg-order-reqs"
+                    style="font-size: 15px; font-weight: 700; color: #137333; margin-top: 2px;">9 Reqs / Order</div>
                 </div>
-                <div style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
-                  <div style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">Thời Gian TB / Đơn</div>
-                  <div id="stat-avg-order-time" style="font-size: 15px; font-weight: 700; color: #a142f4; margin-top: 2px;">0.00s</div>
+                <div
+                  style="background: var(--bg-tertiary, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 8px 10px;">
+                  <div
+                    style="font-size: 10px; color: var(--text-muted, #777); font-weight: 600; text-transform: uppercase;">
+                    AVG ORDER E2E TIME</div>
+                  <div id="stat-avg-order-time"
+                    style="font-size: 15px; font-weight: 700; color: #a142f4; margin-top: 2px;">0.00s</div>
                 </div>
               </div>
 
@@ -4254,7 +4298,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
               style="font-size: 16px; font-weight: 700; color: var(--text-primary, #111111); margin: 0; display: flex; align-items: center; gap: 8px;">
               <span>📜</span> API Response Progress &amp; Payload Inspector
             </h2>
-            <span style="font-size: 12px; color: var(--text-secondary, #555555);">Click <strong>[{ } Inspect JSON]</strong> on any row to
+            <span style="font-size: 12px; color: var(--text-secondary, #555555);">Click <strong>[{ } Inspect
+                JSON]</strong> on any row to
               inspect full JSON Request/Response details</span>
           </div>
 
@@ -4286,9 +4331,11 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             style="font-size: 16px; font-weight: 700; color: var(--text-primary, #111111); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
             <span>🛍️</span> Created Orders Summary (Order Codes &amp; IDs)
           </h2>
-          <div style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; overflow: hidden;">
+          <div
+            style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; overflow: hidden;">
             <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
-              <thead style="background: var(--bg-tertiary, #f1f3f4); border-bottom: 1px solid var(--border-color, #e0e0e0); color: var(--text-primary, #111111);">
+              <thead
+                style="background: var(--bg-tertiary, #f1f3f4); border-bottom: 1px solid var(--border-color, #e0e0e0); color: var(--text-primary, #111111);">
                 <tr>
                   <th style="padding: 10px 12px;">#</th>
                   <th style="padding: 10px 12px;">Customer Phone</th>
@@ -4312,18 +4359,22 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
           style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center;">
           <div
             style="background: var(--bg-primary, #ffffff); width: 88%; max-width: 950px; max-height: 88vh; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid var(--border-color, #e0e0e0);">
-            
+
             <!-- Modal Header -->
             <div
               style="background: #0f172a; color: #ffffff; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
               <div>
-                <h3 id="modal-title" style="margin: 0; font-size: 16px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+                <h3 id="modal-title"
+                  style="margin: 0; font-size: 16px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
                   <span>🔍</span> HTTP Payload Inspector
                 </h3>
-                <span id="modal-subtitle" style="font-size: 12px; color: #94a3b8; font-family: monospace; margin-top: 2px; display: block;">API Step Details</span>
+                <span id="modal-subtitle"
+                  style="font-size: 12px; color: #94a3b8; font-family: monospace; margin-top: 2px; display: block;">API
+                  Step Details</span>
               </div>
               <div style="display: flex; align-items: center; gap: 12px;">
-                <button onclick="copyInspectorJSON('modal-res-body')" style="background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <button onclick="copyInspectorJSON('modal-res-body')"
+                  style="background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                   <span>📋</span> Copy Response JSON
                 </button>
                 <button onclick="closeInspectorModal()"
@@ -4338,7 +4389,9 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <h4 style="margin: 0; color: #1a73e8; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                   <span>📥</span> HTTP REQUEST HEADERS &amp; RSA SIGNATURE
                 </h4>
-                <button onclick="copyInspectorJSON('modal-req-headers')" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">📋 Copy Headers</button>
+                <button onclick="copyInspectorJSON('modal-req-headers')"
+                  style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">📋
+                  Copy Headers</button>
               </div>
               <pre id="modal-req-headers"
                 style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); padding: 14px; border-radius: 8px; overflow-x: auto; color: var(--text-primary, #111); font-size: 11px; line-height: 1.5; margin-bottom: 16px;"></pre>
@@ -4347,7 +4400,9 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <h4 style="margin: 0; color: #b06000; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                   <span>📦</span> HTTP REQUEST BODY JSON
                 </h4>
-                <button onclick="copyInspectorJSON('modal-req-body')" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">📋 Copy Request</button>
+                <button onclick="copyInspectorJSON('modal-req-body')"
+                  style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">📋
+                  Copy Request</button>
               </div>
               <pre id="modal-req-body"
                 style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); padding: 14px; border-radius: 8px; overflow-x: auto; color: var(--text-primary, #111); font-size: 11px; line-height: 1.5; margin-bottom: 16px;"></pre>
@@ -4356,17 +4411,22 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <h4 style="margin: 0; color: #137333; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                   <span>📤</span> HTTP RESPONSE PAYLOAD JSON (Live Gateway API)
                 </h4>
-                <button onclick="copyInspectorJSON('modal-res-body')" style="background: #137333; color: #fff; border: none; padding: 3px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">📋 Copy Response</button>
+                <button onclick="copyInspectorJSON('modal-res-body')"
+                  style="background: #137333; color: #fff; border: none; padding: 3px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">📋
+                  Copy Response</button>
               </div>
               <pre id="modal-res-body"
                 style="background: #0f172a; color: #34d399; padding: 16px; border-radius: 10px; overflow-x: auto; font-size: 11px; line-height: 1.5; border: 1px solid #1e293b; box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);"></pre>
             </div>
 
             <!-- Modal Footer -->
-            <div style="background: var(--bg-primary, #ffffff); border-top: 1px solid var(--border-color, #e0e0e0); padding: 12px 24px; text-align: right; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 11px; color: var(--text-muted);">Press <strong>ESC</strong> or click Close to exit inspector</span>
+            <div
+              style="background: var(--bg-primary, #ffffff); border-top: 1px solid var(--border-color, #e0e0e0); padding: 12px 24px; text-align: right; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 11px; color: var(--text-muted);">Press <strong>ESC</strong> or click Close to exit
+                inspector</span>
               <button onclick="closeInspectorModal()"
-                style="background: linear-gradient(135deg, #1a73e8, #00b0ff); color: #ffffff; border: none; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 2px 8px rgba(26,115,232,0.3);">Close Inspector</button>
+                style="background: linear-gradient(135deg, #1a73e8, #00b0ff); color: #ffffff; border: none; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; box-shadow: 0 2px 8px rgba(26,115,232,0.3);">Close
+                Inspector</button>
             </div>
           </div>
         </div>
@@ -4520,8 +4580,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <td style="padding: 8px 12px; font-family: monospace; color: var(--text-secondary);">${ord.order_id}</td>
                 <td style="padding: 8px 12px;"><span style="background: var(--method-get-bg); color: var(--method-get-text); padding: 2px 8px; border-radius: 4px; font-weight: 700;">${ord.status}</span></td>
                 <td style="padding: 8px 12px; text-align: right;">
-                  <button onclick="openOrderModalByIndex(${idx})" style="background: var(--method-post-bg); color: var(--method-post-text); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-                    <span style="background: rgba(26,115,232,0.15); padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 10px; font-weight: 800;">{ }</span> Order Payload
+                  <button onclick="openOrderModalByIndex(${idx})" style="background: linear-gradient(135deg, #1a73e8, #00b0ff); color: #ffffff; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(26, 115, 232, 0.3);">
+                    <span style="background: rgba(255,255,255,0.22); padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 10px; font-weight: 800;">{ }</span> Order Payload
                   </button>
                 </td>
               `;
@@ -4581,9 +4641,11 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             const statAvgOrderReqsEl = document.getElementById('stat-avg-order-reqs');
             const statAvgOrderTimeEl = document.getElementById('stat-avg-order-time');
 
+            const avgApiLatencyMs = allLats.length > 0 ? Math.round(allLats.reduce((a, b) => a + b, 0) / allLats.length) : overallP50;
+
             if (statTotalReqsEl) statTotalReqsEl.textContent = totalReqs;
-            if (statAvgApiReqsEl) statAvgApiReqsEl.textContent = avgReqsPerApi + ' reqs';
-            if (statAvgOrderReqsEl) statAvgOrderReqsEl.textContent = avgReqsPerOrder + ' reqs/đơn';
+            if (statAvgApiReqsEl) statAvgApiReqsEl.textContent = avgApiLatencyMs + ' ms';
+            if (statAvgOrderReqsEl) statAvgOrderReqsEl.textContent = avgReqsPerOrder + ' Reqs/Order';
             if (statAvgOrderTimeEl) statAvgOrderTimeEl.textContent = avgOrderTimeSec + 's (' + (avgOrderTimeSec * 1000).toFixed(0) + 'ms)';
 
             const box1 = document.getElementById('chart-percentiles-box');
@@ -4734,11 +4796,27 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             });
           }
 
+          function togglePasswordVisibility() {
+            const pwdEl = document.getElementById('pwd-text');
+            const btnEl = document.getElementById('pwd-toggle-btn');
+            if (!pwdEl || !btnEl) return;
+            if (pwdEl.textContent === '••••••••••••') {
+              pwdEl.textContent = 'Theluong1503@';
+              pwdEl.style.letterSpacing = 'normal';
+              btnEl.innerHTML = `<svg id="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            } else {
+              pwdEl.textContent = '••••••••••••';
+              pwdEl.style.letterSpacing = '2px';
+              btnEl.innerHTML = `<svg id="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+            }
+          }
+
           window.startWebStressTest = startWebStressTest;
           window.openInspectorModal = openInspectorModal;
           window.openOrderModalByIndex = openOrderModalByIndex;
           window.closeInspectorModal = closeInspectorModal;
           window.copyInspectorJSON = copyInspectorJSON;
+          window.togglePasswordVisibility = togglePasswordVisibility;
 
           const themeBtnEl = document.getElementById('theme-toggle');
           if (themeBtnEl) {
