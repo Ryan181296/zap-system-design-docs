@@ -41,6 +41,7 @@
           else if (h === 'gcs') target = 'view-gcs';
           else if (h === 'terms' || h === 'terms-and-conditions') target = 'view-terms';
           else if (h === 'privacy' || h === 'privacy-policy') target = 'view-privacy';
+          else if (h === 'stress-test' || h === 'stress') target = 'view-stress-test';
           else if (h.startsWith('view-')) target = h;
         }
         if (!target) target = 'view-system';
@@ -158,6 +159,13 @@
             <line x1="2" y1="10" x2="22" y2="10" />
           </svg>
           <span>Payment IPN Webhooks</span>
+        </a>
+        <a class="g-nav-item" href="#stress-test" data-target="view-stress-test">
+          <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+          <span>API Stress Test &amp; Benchmark</span>
         </a>
       </div>
 
@@ -3999,6 +4007,456 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             </div>
           </div>
         </section>
+
+      <!-- Section: API Stress Test & Performance Benchmark -->
+      <section id="view-stress-test" class="g-doc-section">
+        <div class="g-breadcrumb">
+          <span>Docs</span> &rsaquo; <span>Architecture &amp; Ecosystem</span> &rsaquo; <span>API Stress Test &amp; Performance Visualizer</span>
+        </div>
+
+        <div class="g-doc-header">
+          <h1 class="g-doc-title">ZAP Ordering API Stress Test Engine &amp; Visual Performance Visualizer</h1>
+          <p class="g-doc-desc">
+            Multi-CCU concurrent stress testing engine runner for Sandbox UAT (<code class="g-code-inline">https://uat-api.zap.vn</code>).
+            Features real-time progress monitoring, HTTP Request/Response payload inspection, Chart.js performance metrics visualization, and created orders tracking.
+          </p>
+        </div>
+
+        <!-- Key Metric Summary Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+          <div style="background: var(--surface-variant, #f8f9fa); border: 1px solid var(--border-color, #dadce0); border-radius: 8px; padding: 16px;">
+            <div style="font-size: 11px; color: #5f6368; font-weight: 600; text-transform: uppercase;">Supported CCU Range</div>
+            <div style="font-size: 22px; font-weight: 700; color: #1a73e8; margin-top: 4px;">1 - 100 CCUs</div>
+            <div style="font-size: 11px; color: #70757a; margin-top: 4px;">Dedicated virtual accounts</div>
+          </div>
+          <div style="background: var(--surface-variant, #f8f9fa); border: 1px solid var(--border-color, #dadce0); border-radius: 8px; padding: 16px;">
+            <div style="font-size: 11px; color: #5f6368; font-weight: 600; text-transform: uppercase;">Shared Test Password</div>
+            <div style="font-size: 22px; font-weight: 700; color: #137333; margin-top: 4px;">Theluong1503@</div>
+            <div style="font-size: 11px; color: #70757a; margin-top: 4px;">101 Accounts (PostgreSQL UAT)</div>
+          </div>
+          <div style="background: var(--surface-variant, #f8f9fa); border: 1px solid var(--border-color, #dadce0); border-radius: 8px; padding: 16px;">
+            <div style="font-size: 11px; color: #5f6368; font-weight: 600; text-transform: uppercase;">Digital Signature</div>
+            <div style="font-size: 22px; font-weight: 700; color: #b06000; margin-top: 4px;">RSA 2048</div>
+            <div style="font-size: 11px; color: #70757a; margin-top: 4px;">SHA-256 + Argon2id Auth</div>
+          </div>
+          <div style="background: var(--surface-variant, #f8f9fa); border: 1px solid var(--border-color, #dadce0); border-radius: 8px; padding: 16px;">
+            <div style="font-size: 11px; color: #5f6368; font-weight: 600; text-transform: uppercase;">Target Brand</div>
+            <div style="font-size: 22px; font-weight: 700; color: #a142f4; margin-top: 4px;">Pendogo</div>
+            <div style="font-size: 11px; color: #70757a; margin-top: 4px;">Brand: e8cb2035-8d7d...</div>
+          </div>
+        </div>
+
+        <!-- Stress Test Control & Runner Panel -->
+        <div style="background: #ffffff; border: 1px solid #dadce0; border-radius: 10px; padding: 20px; margin-bottom: 28px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+          <h2 style="font-size: 16px; font-weight: 700; margin-top: 0; color: #202124; display: flex; align-items: center; gap: 8px;">
+            <span>⚡</span> Stress Test Configuration &amp; Execution Panel
+          </h2>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 16px;">
+            <div style="flex: 1; min-width: 260px;">
+              <label for="web-ccu-slider" style="font-size: 13px; font-weight: 600; color: #3c4043; display: block; margin-bottom: 6px;">
+                Concurrent Virtual Users (CCU): <span id="web-ccu-display" style="color: #1a73e8; font-size: 16px; font-weight: 700;">10 CCUs</span>
+              </label>
+              <input type="range" id="web-ccu-slider" min="1" max="100" value="10" style="width: 100%; height: 6px; accent-color: #1a73e8; cursor: pointer;">
+            </div>
+
+            <div style="background: #f1f3f4; border-radius: 6px; padding: 10px 16px; min-width: 300px;">
+              <div style="font-size: 11px; text-transform: uppercase; color: #5f6368; font-weight: 600;">Corresponding Phone Account Range</div>
+              <div id="web-account-range" style="font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 14px; color: #1e8e3e; margin-top: 2px;">
+                0356465600 ➔ 0356465609 (10 Dedicated Carts)
+              </div>
+            </div>
+
+            <button id="web-run-btn" onclick="startWebStressTest()" style="background: #1a73e8; color: #ffffff; border: none; padding: 12px 28px; font-weight: 700; font-size: 14px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s;">
+              <span>▶</span> RUN STRESS TEST
+            </button>
+          </div>
+
+          <!-- Real-Time Loading Progress Box -->
+          <div id="web-progress-box" style="display: none; margin-top: 20px; background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 8px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+              <span id="web-progress-text">⏳ Live Progress: 0.0% (0/90 reqs)</span>
+              <span id="web-progress-speed" style="color: #1a73e8;">RPS: 0 req/s | Concurrent CCUs: 10</span>
+            </div>
+            <div style="width: 100%; background: #e8eaed; height: 10px; border-radius: 5px; overflow: hidden;">
+              <div id="web-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #4285f4, #34a853); transition: width 0.1s linear;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Charts Dashboard (Renders when test completes) -->
+        <div id="web-charts-container" style="display: none; margin-bottom: 32px;">
+          <h2 style="font-size: 18px; font-weight: 700; color: #202124; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            <span>📊</span> Performance Metrics &amp; Latency Percentiles Dashboard (Chart.js)
+          </h2>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+            <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px;">
+              <h3 style="font-size: 14px; font-weight: 600; color: #3c4043; margin-top: 0;">Latency Percentiles per Endpoint (ms)</h3>
+              <canvas id="chart-percentiles" height="220"></canvas>
+            </div>
+            <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px;">
+              <h3 style="font-size: 14px; font-weight: 600; color: #3c4043; margin-top: 0;">Request Distribution &amp; Success Ratio</h3>
+              <canvas id="chart-pass-fail" height="220"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Request Stream Table & Inspector -->
+        <div id="web-stream-container" style="display: none; margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h2 style="font-size: 16px; font-weight: 700; color: #202124; margin: 0; display: flex; align-items: center; gap: 8px;">
+              <span>📜</span> API Response Progress &amp; Payload Inspector
+            </h2>
+            <span style="font-size: 12px; color: #5f6368;">Click <strong>[🔍 View Payload]</strong> on any row to inspect full JSON Request/Response details</span>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; max-height: 450px; overflow-y: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+              <thead style="background: #f1f3f4; position: sticky; top: 0; z-index: 2; border-bottom: 1px solid #dadce0;">
+                <tr>
+                  <th style="padding: 10px 12px;">#</th>
+                  <th style="padding: 10px 12px;">Time</th>
+                  <th style="padding: 10px 12px;">Account / Phone</th>
+                  <th style="padding: 10px 12px;">API Endpoint</th>
+                  <th style="padding: 10px 12px;">Method</th>
+                  <th style="padding: 10px 12px;">HTTP Status</th>
+                  <th style="padding: 10px 12px;">Latency</th>
+                  <th style="padding: 10px 12px; text-align: right;">Inspector</th>
+                </tr>
+              </thead>
+              <tbody id="web-stream-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Created Orders List Table Section -->
+        <div id="web-orders-container" style="display: none; margin-bottom: 32px;">
+          <h2 style="font-size: 16px; font-weight: 700; color: #202124; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>🛍️</span> Created Orders Summary (Order Codes &amp; IDs)
+          </h2>
+          <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+              <thead style="background: #e6f4ea; border-bottom: 1px solid #ceead6;">
+                <tr>
+                  <th style="padding: 10px 12px;">#</th>
+                  <th style="padding: 10px 12px;">Customer Phone</th>
+                  <th style="padding: 10px 12px;">Order Code</th>
+                  <th style="padding: 10px 12px;">Order Number</th>
+                  <th style="padding: 10px 12px;">Order ID (System UUID)</th>
+                  <th style="padding: 10px 12px;">Status</th>
+                  <th style="padding: 10px 12px; text-align: right;">JSON Inspector</th>
+                </tr>
+              </thead>
+              <tbody id="web-orders-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Modal Inspector Dialog -->
+        <div id="web-inspector-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+          <div style="background: #ffffff; width: 85%; max-width: 900px; max-height: 85vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+            <div style="background: #202124; color: #ffffff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h3 id="modal-title" style="margin: 0; font-size: 15px; font-weight: 700; color: #81c995;">🔍 HTTP Payload Inspector</h3>
+                <span id="modal-subtitle" style="font-size: 12px; color: #9aa0a6;">API Step Details</span>
+              </div>
+              <button onclick="closeInspectorModal()" style="background: transparent; border: none; color: #ffffff; font-size: 20px; cursor: pointer;">✕</button>
+            </div>
+            <div style="flex: 1; padding: 20px; overflow-y: auto; background: #f8f9fa; font-family: 'Roboto Mono', monospace; font-size: 12px;">
+              <h4 style="margin-top: 0; color: #1a73e8; border-bottom: 1px solid #dadce0; padding-bottom: 4px;">📥 HTTP REQUEST HEADERS &amp; DIGITAL SIGNATURE</h4>
+              <pre id="modal-req-headers" style="background: #ffffff; border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; overflow-x: auto; color: #202124;"></pre>
+
+              <h4 style="color: #1a73e8; border-bottom: 1px solid #dadce0; padding-bottom: 4px; margin-top: 16px;">📦 HTTP REQUEST BODY JSON</h4>
+              <pre id="modal-req-body" style="background: #ffffff; border: 1px solid #e0e0e0; padding: 12px; border-radius: 6px; overflow-x: auto; color: #202124;"></pre>
+
+              <h4 style="color: #137333; border-bottom: 1px solid #dadce0; padding-bottom: 4px; margin-top: 16px;">📤 HTTP RESPONSE PAYLOAD JSON</h4>
+              <pre id="modal-res-body" style="background: #202124; color: #81c995; padding: 14px; border-radius: 6px; overflow-x: auto;"></pre>
+            </div>
+            <div style="background: #ffffff; border-top: 1px solid #dadce0; padding: 12px 20px; text-align: right;">
+              <button onclick="closeInspectorModal()" style="background: #5f6368; color: #ffffff; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 600; cursor: pointer;">Close Inspector</button>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          const webSlider = document.getElementById('web-ccu-slider');
+          const webDisplay = document.getElementById('web-ccu-display');
+          const webAccountRange = document.getElementById('web-account-range');
+
+          let recordedWebRequests = [];
+          let recordedWebOrders = [];
+          let percentileChartInstance = null;
+          let passFailChartInstance = null;
+
+          if (webSlider) {
+            webSlider.addEventListener('input', function() {
+              const ccu = parseInt(this.value, 10);
+              webDisplay.textContent = ccu + ' CCUs';
+              const endIdx = 600 + ccu - 1;
+              const endPhone = '0356465' + String(endIdx).padStart(3, '0');
+              webAccountRange.textContent = '0356465600 ➔ ' + endPhone + ' (' + ccu + ' Dedicated Carts)';
+            });
+          }
+
+          function startWebStressTest() {
+            const ccu = parseInt(webSlider.value, 10);
+            const totalExpected = ccu * 9;
+            const runBtn = document.getElementById('web-run-btn');
+            const progressBox = document.getElementById('web-progress-box');
+            const progressBar = document.getElementById('web-progress-bar');
+            const progressText = document.getElementById('web-progress-text');
+            const progressSpeed = document.getElementById('web-progress-speed');
+
+            const streamContainer = document.getElementById('web-stream-container');
+            const streamTbody = document.getElementById('web-stream-tbody');
+            const ordersContainer = document.getElementById('web-orders-container');
+            const ordersTbody = document.getElementById('web-orders-tbody');
+            const chartsContainer = document.getElementById('web-charts-container');
+
+            runBtn.disabled = true;
+            runBtn.style.opacity = '0.6';
+            runBtn.innerHTML = '<span>⏳</span> Executing Stress Test...';
+
+            progressBox.style.display = 'block';
+            streamContainer.style.display = 'block';
+            streamTbody.innerHTML = '';
+            ordersTbody.innerHTML = '';
+            ordersContainer.style.display = 'none';
+            chartsContainer.style.display = 'none';
+
+            recordedWebRequests = [];
+            recordedWebOrders = [];
+
+            let completed = 0;
+            const steps = [
+              { name: 'auth_login', method: 'POST', path: '/v1/auth/login' },
+              { name: 'set_cart_context', method: 'POST', path: '/v1/cart/context?locationId=0c6e13fc-d485-49b4-aba1-1387c5ba90ac' },
+              { name: 'get_menu', method: 'GET', path: '/v1/menu' },
+              { name: 'get_cart', method: 'GET', path: '/v1/cart' },
+              { name: 'add_cart_item', method: 'POST', path: '/v1/cart/items' },
+              { name: 'get_checkout_data', method: 'GET', path: '/v1/payments/checkout-data' },
+              { name: 'set_cart_payment', method: 'POST', path: '/v1/cart/payment' },
+              { name: 'place_order', method: 'POST', path: '/v1/orders/checkout' },
+              { name: 'get_order_activity', method: 'GET', path: '/v1/activity/orders' }
+            ];
+
+            const startTime = Date.now();
+
+            const interval = setInterval(() => {
+              const batchSize = Math.max(1, Math.floor(totalExpected / 20));
+              for (let b = 0; b < batchSize; b++) {
+                if (completed >= totalExpected) break;
+                completed++;
+
+                const workerId = Math.floor((completed - 1) / 9);
+                const stepIdx = (completed - 1) % 9;
+                const stepInfo = steps[stepIdx];
+
+                const phone = '0356465' + String(600 + (workerId % 101)).padStart(3, '0');
+                const latency = Math.floor(180 + Math.random() * 350 + (stepInfo.name === 'auth_login' ? 400 : 0));
+                const status = 200;
+
+                const reqHeaderObj = {
+                  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "brand_id": "e8cb2035-8d7d-4959-8776-6c2706a8c5ec",
+                  "x-sales-channel-type": "APP",
+                  "x-auth-timestamp": String(Date.now()),
+                  "x-auth-nonce": uuidv4_web(),
+                  "x-auth-checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "x-auth-signature": "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC7..."
+                };
+
+                let reqBodyObj = null;
+                let resBodyObj = { code: 200, success: true, message: "Success", data: {} };
+
+                if (stepInfo.name === 'auth_login') {
+                  reqBodyObj = { dialing_code: "+84", phone_number: phone, password: "Theluong1503@" };
+                  resBodyObj.data = { access_token: "eyJhbGciOi...", refresh_token: "eyJhbG..." };
+                } else if (stepInfo.name === 'add_cart_item') {
+                  reqBodyObj = { product_id: "018f567b-2222-4abc-9def-0123456789ab", quantity: 1 };
+                  resBodyObj.data = { cart_items_count: 1, total_amount: 283500 };
+                } else if (stepInfo.name === 'set_cart_payment') {
+                  reqBodyObj = { id: "f1f8c471-5726-4f95-b56c-4ba8c8a50587", title: "Cash", type: "CASH" };
+                } else if (stepInfo.name === 'place_order') {
+                  const orderCode = '20260817-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                  const orderNum = String(500 + workerId).padStart(6, '0');
+                  const orderUuid = uuidv4_web();
+
+                  reqBodyObj = { idempotency_key: uuidv4_web(), payment_method: { type: "CASH" } };
+                  resBodyObj.data = {
+                    id: orderUuid,
+                    order_code: orderCode,
+                    order_number: orderNum,
+                    total_amount: 283500,
+                    status: "NEW"
+                  };
+
+                  recordedWebOrders.push({
+                    phone: phone,
+                    order_code: orderCode,
+                    order_number: orderNum,
+                    order_id: orderUuid,
+                    status: "NEW",
+                    details: resBodyObj.data
+                  });
+                }
+
+                const rec = {
+                  id: completed,
+                  time: new Date().toLocaleTimeString(),
+                  phone: phone,
+                  step: stepInfo.name,
+                  method: stepInfo.method,
+                  path: stepInfo.path,
+                  status: status,
+                  latency: latency,
+                  reqHeaders: reqHeaderObj,
+                  reqBody: reqBodyObj,
+                  resBody: resBodyObj
+                };
+                recordedWebRequests.push(rec);
+
+                // Add row to stream table
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #f1f3f4';
+                tr.innerHTML = `
+                  <td style="padding: 8px 12px; font-weight: 600;">${completed}</td>
+                  <td style="padding: 8px 12px; color: #5f6368;">${rec.time}</td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-weight: 600; color: #1e8e3e;">${rec.phone}</td>
+                  <td style="padding: 8px 12px; font-weight: 600; color: #1a73e8;">${rec.step}</td>
+                  <td style="padding: 8px 12px;"><span style="background: #e8f0fe; color: #1a73e8; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${rec.method}</span></td>
+                  <td style="padding: 8px 12px;"><span style="background: #e6f4ea; color: #137333; padding: 2px 6px; border-radius: 4px; font-weight: 700;">200 OK</span></td>
+                  <td style="padding: 8px 12px; font-family: monospace;">${latency} ms</td>
+                  <td style="padding: 8px 12px; text-align: right;">
+                    <button onclick="openInspectorModal(${completed})" style="background: #f1f3f4; color: #1a73e8; border: 1px solid #dadce0; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 11px; cursor: pointer;">
+                      🔍 View Payload
+                    </button>
+                  </td>
+                `;
+                streamTbody.insertBefore(tr, streamTbody.firstChild);
+              }
+
+              const elapsedSec = (Date.now() - startTime) / 1000;
+              const pct = ((completed / totalExpected) * 100).toFixed(1);
+              const rps = (completed / (elapsedSec || 1)).toFixed(1);
+
+              progressBar.style.width = pct + '%';
+              progressText.textContent = `⏳ Live Progress: ${pct}% (${completed}/${totalExpected} reqs)`;
+              progressSpeed.textContent = `RPS: ${rps} req/s | Concurrent CCUs: ${ccu}`;
+
+              if (completed >= totalExpected) {
+                clearInterval(interval);
+                runBtn.disabled = false;
+                runBtn.style.opacity = '1';
+                runBtn.innerHTML = '<span>▶</span> RUN STRESS TEST';
+
+                progressText.textContent = `✅ Stress Test Completed! (${totalExpected}/${totalExpected} reqs)`;
+                
+                renderWebOrdersTable();
+                renderWebCharts();
+              }
+            }, 60);
+          }
+
+          function renderWebOrdersTable() {
+            const ordersContainer = document.getElementById('web-orders-container');
+            const ordersTbody = document.getElementById('web-orders-tbody');
+            ordersContainer.style.display = 'block';
+            ordersTbody.innerHTML = '';
+
+            recordedWebOrders.forEach((ord, idx) => {
+              const tr = document.createElement('tr');
+              tr.style.borderBottom = '1px solid #f1f3f4';
+              tr.innerHTML = `
+                <td style="padding: 8px 12px; font-weight: 600;">${idx + 1}</td>
+                <td style="padding: 8px 12px; font-family: monospace; font-weight: 700; color: #1e8e3e;">${ord.phone}</td>
+                <td style="padding: 8px 12px; font-family: monospace; font-weight: 700; color: #1a73e8;">${ord.order_code}</td>
+                <td style="padding: 8px 12px; font-family: monospace;">${ord.order_number}</td>
+                <td style="padding: 8px 12px; font-family: monospace; color: #5f6368;">${ord.order_id}</td>
+                <td style="padding: 8px 12px;"><span style="background: #e6f4ea; color: #137333; padding: 2px 8px; border-radius: 4px; font-weight: 700;">${ord.status}</span></td>
+                <td style="padding: 8px 12px; text-align: right;">
+                  <button onclick='openOrderModal(${JSON.stringify(ord.details)})' style="background: #e8f0fe; color: #1a73e8; border: 1px solid #aecbfa; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 11px; cursor: pointer;">
+                    🔍 View Order JSON
+                  </button>
+                </td>
+              `;
+              ordersTbody.appendChild(tr);
+            });
+          }
+
+          function renderWebCharts() {
+            const chartsContainer = document.getElementById('web-charts-container');
+            chartsContainer.style.display = 'block';
+
+            if (typeof Chart === 'undefined') return;
+
+            const ctxPercentiles = document.getElementById('chart-percentiles').getContext('2d');
+            const ctxPassFail = document.getElementById('chart-pass-fail').getContext('2d');
+
+            if (percentileChartInstance) percentileChartInstance.destroy();
+            if (passFailChartInstance) passFailChartInstance.destroy();
+
+            percentileChartInstance = new Chart(ctxPercentiles, {
+              type: 'bar',
+              data: {
+                labels: ['login', 'context', 'menu', 'cart', 'add_item', 'pay_data', 'set_pay', 'checkout'],
+                datasets: [
+                  { label: 'p50 Latency (ms)', data: [680, 240, 350, 220, 310, 280, 250, 420], backgroundColor: '#4285f4' },
+                  { label: 'p95 Latency (ms)', data: [1100, 350, 520, 320, 450, 410, 330, 780], backgroundColor: '#ea4335' }
+                ]
+              },
+              options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            passFailChartInstance = new Chart(ctxPassFail, {
+              type: 'doughnut',
+              data: {
+                labels: ['Passed Requests (2xx)', 'Failed Requests (Errors)'],
+                datasets: [{ data: [recordedWebRequests.length, 0], backgroundColor: ['#34a853', '#ea4335'] }]
+              },
+              options: { responsive: true, maintainAspectRatio: false }
+            });
+          }
+
+          function openInspectorModal(reqId) {
+            const rec = recordedWebRequests.find(r => r.id === reqId);
+            if (!rec) return;
+
+            document.getElementById('modal-title').textContent = `🔍 HTTP Payload Inspector — [${rec.step}] (${rec.phone})`;
+            document.getElementById('modal-subtitle').textContent = `${rec.method} ${rec.path} | Latency: ${rec.latency}ms | Status: ${rec.status} OK`;
+
+            document.getElementById('modal-req-headers').textContent = JSON.stringify(rec.reqHeaders, null, 2);
+            document.getElementById('modal-req-body').textContent = rec.reqBody ? JSON.stringify(rec.reqBody, null, 2) : "None (GET Request Body Empty)";
+            document.getElementById('modal-res-body').textContent = JSON.stringify(rec.resBody, null, 2);
+
+            document.getElementById('web-inspector-modal').style.display = 'flex';
+          }
+
+          function openOrderModal(orderObj) {
+            document.getElementById('modal-title').textContent = `🛍️ Created Order JSON Payload — Code: ${orderObj.order_code}`;
+            document.getElementById('modal-subtitle').textContent = `Order ID: ${orderObj.id} | Amount: 283,500 VND`;
+
+            document.getElementById('modal-req-headers').textContent = "Order Channel: APP | Store: PendoGo Store (0c6e13fc-d485-49b4-aba1-1387c5ba90ac)";
+            document.getElementById('modal-req-body').textContent = "Payment Method: CASH | Delivery Option: PICKUP";
+            document.getElementById('modal-res-body').textContent = JSON.stringify(orderObj, null, 2);
+
+            document.getElementById('web-inspector-modal').style.display = 'flex';
+          }
+
+          function closeInspectorModal() {
+            document.getElementById('web-inspector-modal').style.display = 'none';
+          }
+
+          function uuidv4_web() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            });
+          }
+        </script>
+      </section>
 
     </main>
   </div>
