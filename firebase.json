@@ -1,0 +1,41 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "**/.*",
+      "**/node_modules/**",
+      "Dockerfile",
+      "app.yaml",
+      "nginx.conf",
+      "server.py",
+      "deploy*.sh",
+      "*.py",
+      ".git/**",
+      ".github/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/privacy",
+        "destination": "/privacy-policy.html"
+      },
+      {
+        "source": "/privacy-policy",
+        "destination": "/privacy-policy.html"
+      },
+      {
+        "source": "/terms",
+        "destination": "/terms-and-conditions.html"
+      },
+      {
+        "source": "/terms-and-conditions",
+        "destination": "/terms-and-conditions.html"
+      },
+      {
+        "source": "/terms-of-service",
+        "destination": "/terms-and-conditions.html"
+      }
+    ]
+  }
+}
