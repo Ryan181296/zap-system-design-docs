@@ -2,40 +2,93 @@
 import os
 import sys
 import base64
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
+import tty
+import termios
+import argon2
+from argon2.low_level import hash_secret_raw, Type
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-
-DEFAULT_PASSCODE = "zap2026@internal"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SOURCE_FILE = os.path.join(SCRIPT_DIR, "index_source.html")
 OUTPUT_FILE = os.path.join(SCRIPT_DIR, "index.html")
 
-def build_encrypted_html(passcode=DEFAULT_PASSCODE):
+def getpass_stars(prompt="🔑 Enter Secret Passcode: "):
+    """Reads password interactively displaying asterisks (*) for visual feedback."""
+    if not sys.stdin.isatty():
+        return input(prompt)
+    
+    print(prompt, end="", flush=True)
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    chars = []
+    try:
+        tty.setraw(fd)
+        while True:
+            ch = sys.stdin.read(1)
+            if ch in ('\r', '\n'):
+                print("\r\n", end="", flush=True)
+                break
+            elif ch in ('\x7f', '\x08'):  # Backspace / Delete
+                if chars:
+                    chars.pop()
+                    print("\b \b", end="", flush=True)
+            elif ch == '\x03':  # Ctrl+C
+                print("\r\n", end="", flush=True)
+                raise KeyboardInterrupt
+            elif ch == '\x04':  # Ctrl+D
+                break
+            elif ord(ch) >= 32:  # Printable character
+                chars.append(ch)
+                print("*", end="", flush=True)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+    return "".join(chars)
+
+def build_encrypted_html(passcode=None):
     if not os.path.exists(SOURCE_FILE):
         print(f"❌ Error: Source file {SOURCE_FILE} not found!")
         sys.exit(1)
 
+    if not passcode:
+        while True:
+            p1 = getpass_stars("🔑 Enter Secret Passcode to Encrypt: ")
+            if not p1:
+                print("⚠️ Passcode cannot be empty!\n")
+                continue
+            p2 = getpass_stars("🔑 Re-enter Secret Passcode to Confirm: ")
+            if p1 != p2:
+                print("❌ Passwords do not match! Please try again.\n")
+                continue
+            passcode = p1
+            break
+
     with open(SOURCE_FILE, "rb") as f:
         plaintext = f.read()
 
-    print(f"🔒 Encrypting {len(plaintext):,} bytes of System Architecture documentation with AES-256-GCM...")
+    print(f"🔒 Deriving AES-256 key with Argon2id and encrypting {len(plaintext):,} bytes...")
 
     salt = os.urandom(16)
     iv = os.urandom(12)
 
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
+    # Argon2id key derivation (32 bytes AES key)
+    key = hash_secret_raw(
+        secret=passcode.encode("utf-8"),
         salt=salt,
-        iterations=100000
+        time_cost=2,
+        memory_cost=19456, # 19MB (RFC 9106 recommended)
+        parallelism=1,
+        hash_len=32,
+        type=Type.ID
     )
-    key = kdf.derive(passcode.encode("utf-8"))
+
+    # Argon2id verification hash for match/mismatch check
+    ph = argon2.PasswordHasher(time_cost=2, memory_cost=19456, parallelism=1, hash_len=32, type=Type.ID)
+    argon2_verify_hash = ph.hash(passcode)
+
     aesgcm = AESGCM(key)
     ciphertext = aesgcm.encrypt(iv, plaintext, None)
 
-    # Packed payload: salt (16) + iv (12) + ciphertext+tag
+    # Pack: salt(16) + iv(12) + ciphertext
     payload_b64 = base64.b64encode(salt + iv + ciphertext).decode("utf-8")
 
     template = f"""<!DOCTYPE html>
@@ -43,7 +96,9 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZAP Internal Engineering Docs - Protected</title>
+  <title>ZAP Architecture Portal - Protected</title>
+  <!-- Fast WASM Argon2id & WebCrypto -->
+  <script src="https://cdn.jsdelivr.net/npm/hash-wasm@4.12.0/dist/argon2.umd.min.js"></script>
   <style>
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
@@ -157,13 +212,13 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
   <div class="auth-card">
     <div class="auth-icon">🛡️</div>
     <h1 class="auth-title">ZAP Architecture Portal</h1>
-    <p class="auth-desc">This documentation is encrypted with military-grade <strong>AES-256-GCM</strong>. Please enter the team key to decrypt and view.</p>
+    <p class="auth-desc">Protected by <strong>Argon2id &amp; AES-256-GCM</strong>. Please enter your team passcode to decrypt and access.</p>
     
-    <div id="error-box" class="error-msg">❌ Invalid Passcode. Decryption failed.</div>
+    <div id="error-box" class="error-msg">❌ Invalid Passcode. Access denied.</div>
 
     <form id="unlock-form" onsubmit="event.preventDefault(); handleUnlock();">
       <div class="input-group">
-        <input type="password" id="passcode-field" class="pass-input" placeholder="Enter Internal Passcode..." autofocus required autocomplete="off">
+        <input type="password" id="passcode-field" class="pass-input" placeholder="Enter Secret Passcode..." autofocus required autocomplete="off">
       </div>
       <button type="submit" id="submit-btn" class="unlock-btn">Decrypt Documentation 🔓</button>
     </form>
@@ -175,6 +230,7 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
 
   <script>
     const CIPHER_PAYLOAD = "{payload_b64}";
+    const ARGON2_VERIFY_HASH = "{argon2_verify_hash}";
 
     function base64ToBytes(b64) {{
       const bin = atob(b64);
@@ -183,23 +239,32 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
       return bytes;
     }}
 
+    async function deriveArgon2Key(passcode, salt) {{
+      if (typeof hashwasm === "undefined" || !hashwasm.argon2id) {{
+        throw new Error("Argon2 WASM engine not loaded");
+      }}
+      const keyHex = await hashwasm.argon2id({{
+        password: passcode,
+        salt: salt,
+        parallelism: 1,
+        iterations: 2,
+        memorySize: 19456,
+        hashLength: 32,
+        outputType: "hex"
+      }});
+      const match = keyHex.match(/.{{1,2}}/g);
+      return new Uint8Array(match.map(byte => parseInt(byte, 16)));
+    }}
+
     async function decryptDoc(passcode) {{
       const raw = base64ToBytes(CIPHER_PAYLOAD);
       const salt = raw.slice(0, 16);
       const iv = raw.slice(16, 28);
       const data = raw.slice(28);
 
-      const enc = new TextEncoder();
-      const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(passcode), "PBKDF2", false, ["deriveKey"]);
-      const key = await crypto.subtle.deriveKey(
-        {{ name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" }},
-        keyMaterial,
-        {{ name: "AES-GCM", length: 256 }},
-        false,
-        ["decrypt"]
-      );
-
-      const decrypted = await crypto.subtle.decrypt({{ name: "AES-GCM", iv: iv }}, key, data);
+      const rawKey = await deriveArgon2Key(passcode, salt);
+      const cryptoKey = await crypto.subtle.importKey("raw", rawKey, {{ name: "AES-GCM" }}, false, ["decrypt"]);
+      const decrypted = await crypto.subtle.decrypt({{ name: "AES-GCM", iv: iv }}, cryptoKey, data);
       return new TextDecoder().decode(decrypted);
     }}
 
@@ -220,7 +285,7 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
 
       if (btn) {{
         btn.disabled = true;
-        btn.textContent = "Decrypting...";
+        btn.textContent = "Verifying Argon2id...";
       }}
       if (err) err.style.display = "none";
 
@@ -235,7 +300,7 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
       }} catch (e) {{
         if (err) {{
           err.style.display = "block";
-          err.textContent = "❌ Invalid Passcode. Decryption failed.";
+          err.textContent = "❌ Invalid Passcode. Access denied.";
         }}
         if (btn) {{
           btn.disabled = false;
@@ -248,11 +313,11 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
       }}
     }}
 
-    // Auto unlock if active session exists
+    // Auto unlock if active session exists in sessionStorage
     (function() {{
       const saved = sessionStorage.getItem("zap_docs_session_key");
       if (saved) {{
-        handleUnlock(saved);
+        window.addEventListener("DOMContentLoaded", () => handleUnlock(saved));
       }}
     }})();
   </script>
@@ -262,9 +327,10 @@ def build_encrypted_html(passcode=DEFAULT_PASSCODE):
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(template)
 
-    print(f"✅ Generated encrypted index.html ({len(template):,} bytes).")
-    print(f"🔑 Passcode: {passcode}")
+    print(f"✅ Generated Argon2id + AES-256 encrypted index.html ({len(template):,} bytes).")
+    print(f"🛡️ Argon2 verification hash embedded.")
+    print("🔒 Passcode is NOT saved anywhere in plaintext.")
 
 if __name__ == "__main__":
-    passcode = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_PASSCODE
+    passcode = sys.argv[1] if len(sys.argv) > 1 else None
     build_encrypted_html(passcode)

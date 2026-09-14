@@ -1,12 +1,11 @@
 #!/bin/bash
 # ==============================================================================
-# ZAP Documentation & Legal Portal — AES-256 Encrypted Deployment Script
+# ZAP Documentation & Legal Portal — Argon2id + AES-256 Deployment Script
 # ==============================================================================
 
 set -eo pipefail
 
 PROJECT_ID="zap-ecosystem-production-2f7e9"
-PASSCODE="${INTERNAL_PASSCODE:-zap2026@internal}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LEGAL_PORTAL_DIR="$(cd "$SCRIPT_DIR/../legal-portal" 2>/dev/null && pwd || echo "")"
 
@@ -118,24 +117,23 @@ echo "🚀 ZAP DEPLOYMENT — FIREBASE HOSTING ($PROJECT_ID)"
 echo "======================================================================"
 
 prompt_select "Select Deployment Target" \
-  "1) Deploy ALL (AES-256 Encrypted Architecture Portal + Public Privacy & Terms)" \
+  "1) Deploy ALL (Argon2id Encrypted Architecture Portal + Public Privacy & Terms)" \
   "2) Deploy Legal Pages only (Public Privacy Policy & Terms of Service)" \
-  "3) Deploy Architecture Docs only (AES-256 Encrypted Portal)"
+  "3) Deploy Architecture Docs only (Argon2id Encrypted Portal)"
 
 cd "$SCRIPT_DIR"
 
 case $SELECTED_INDEX in
   0)
-    echo "🔐 [1/2] Encrypting Architecture Portal with AES-256-GCM..."
-    python3 "$SCRIPT_DIR/build_encrypted.py" "$PASSCODE"
+    echo "🔐 [1/2] Encrypting Architecture Portal with Argon2id & AES-256-GCM..."
+    python3 "$SCRIPT_DIR/build_encrypted.py"
 
     echo "📦 [2/2] Deploying ALL to Firebase Hosting ($PROJECT_ID)..."
     firebase deploy --only hosting --project "$PROJECT_ID"
     echo ""
     echo "======================================================================"
     echo "✅ DEPLOYMENT SUCCESSFUL (ALL)!"
-    echo "🔒 Architecture Portal (AES-256 Encrypted): https://$PROJECT_ID.web.app"
-    echo "🔑 Decryption Passcode:                    $PASSCODE"
+    echo "🔒 Architecture Portal (Argon2id Encrypted): https://$PROJECT_ID.web.app"
     echo "🔓 Privacy Policy (Public 100%):            https://$PROJECT_ID.web.app/privacy"
     echo "🔓 Terms of Service (Public 100%):          https://$PROJECT_ID.web.app/terms"
     echo "======================================================================"
@@ -185,16 +183,15 @@ EOF
     ;;
 
   2)
-    echo "🔐 [1/2] Encrypting Architecture Portal with AES-256-GCM..."
-    python3 "$SCRIPT_DIR/build_encrypted.py" "$PASSCODE"
+    echo "🔐 [1/2] Encrypting Architecture Portal with Argon2id & AES-256-GCM..."
+    python3 "$SCRIPT_DIR/build_encrypted.py"
 
     echo "📦 [2/2] Deploying Encrypted Architecture Docs to Firebase Hosting..."
     firebase deploy --only hosting --project "$PROJECT_ID"
     echo ""
     echo "======================================================================"
     echo "✅ DEPLOYMENT SUCCESSFUL (ARCHITECTURE DOCS)!"
-    echo "🔒 Architecture Portal (AES-256 Encrypted): https://$PROJECT_ID.web.app"
-    echo "🔑 Decryption Passcode:                    $PASSCODE"
+    echo "🔒 Architecture Portal (Argon2id Encrypted): https://$PROJECT_ID.web.app"
     echo "======================================================================"
     ;;
 esac
