@@ -1,13 +1,14 @@
 #!/bin/bash
 # ==============================================================================
-# ZAP System Documentation Portal — Deployment Script
+# ZAP Documentation & Legal Portal — AES-256 Encrypted Deployment Script
 # ==============================================================================
 
 set -eo pipefail
 
-SERVICE_NAME="zap-docs-portal"
-REGION="asia-southeast1" # Singapore region (low latency for Vietnam)
+PROJECT_ID="zap-ecosystem-production-2f7e9"
+PASSCODE="${INTERNAL_PASSCODE:-zap2026@internal}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LEGAL_PORTAL_DIR="$(cd "$SCRIPT_DIR/../legal-portal" 2>/dev/null && pwd || echo "")"
 
 # Helper function to read single keypress from /dev/tty
 read_key() {
@@ -105,136 +106,95 @@ prompt_select() {
   SELECTED_INDEX="$current"
 }
 
+# Check Firebase CLI
+if ! command -v firebase &> /dev/null; then
+    echo "❌ Error: 'firebase' CLI is not installed or not in PATH."
+    echo "👉 Please install: npm install -g firebase-tools"
+    exit 1
+fi
+
 echo "======================================================================"
-echo "🚀 ZAP System Architecture & API Documentation Deployment"
+echo "🚀 ZAP DEPLOYMENT — FIREBASE HOSTING ($PROJECT_ID)"
 echo "======================================================================"
 
 prompt_select "Select Deployment Target" \
-  "Firebase Hosting (Deploy ALL: System Design Portal + Privacy + Terms)" \
-  "Google Cloud Run (Recommended — Serverless Nginx, Auto SSL, Custom Domain)" \
-  "Google App Engine (gcloud app deploy — Managed Static Hosting)" \
-  "Google Cloud Storage Bucket (GCS Static Web Bucket)"
+  "1) Deploy ALL (AES-256 Encrypted Architecture Portal + Public Privacy & Terms)" \
+  "2) Deploy Legal Pages only (Public Privacy Policy & Terms of Service)" \
+  "3) Deploy Architecture Docs only (AES-256 Encrypted Portal)"
+
+cd "$SCRIPT_DIR"
 
 case $SELECTED_INDEX in
   0)
-    echo "📦 Deploying all documentation & legal pages to Firebase Hosting ($PROJECT_ID)..."
-    cd "$SCRIPT_DIR"
-    firebase deploy --only hosting --project "zap-ecosystem-production-2f7e9"
+    echo "🔐 [1/2] Encrypting Architecture Portal with AES-256-GCM..."
+    python3 "$SCRIPT_DIR/build_encrypted.py" "$PASSCODE"
 
+    echo "📦 [2/2] Deploying ALL to Firebase Hosting ($PROJECT_ID)..."
+    firebase deploy --only hosting --project "$PROJECT_ID"
+    echo ""
     echo "======================================================================"
-    echo "✅ DEPLOYMENT TO FIREBASE HOSTING SUCCESSFUL!"
-    echo "🌐 System Design Portal: https://zap-ecosystem-production-2f7e9.web.app"
-    echo "🌐 Privacy Policy:       https://zap-ecosystem-production-2f7e9.web.app/privacy"
-    echo "🌐 Terms & Conditions:   https://zap-ecosystem-production-2f7e9.web.app/terms"
+    echo "✅ DEPLOYMENT SUCCESSFUL (ALL)!"
+    echo "🔒 Architecture Portal (AES-256 Encrypted): https://$PROJECT_ID.web.app"
+    echo "🔑 Decryption Passcode:                    $PASSCODE"
+    echo "🔓 Privacy Policy (Public 100%):            https://$PROJECT_ID.web.app/privacy"
+    echo "🔓 Terms of Service (Public 100%):          https://$PROJECT_ID.web.app/terms"
     echo "======================================================================"
-    exit 0
     ;;
 
   1)
-    # Check if gcloud CLI is installed
-    if ! command -v gcloud &> /dev/null; then
-        echo "❌ Error: 'gcloud' CLI is not installed or not in PATH."
-        echo "👉 Please install Google Cloud SDK: https://cloud.google.com/sdk/docs/install"
-        exit 1
+    echo "📦 Deploying Legal Pages only (Privacy & Terms) to Firebase Hosting..."
+    TMP_DIR=$(mktemp -d)
+    mkdir -p "$TMP_DIR/public/css"
+    cp "$SCRIPT_DIR/privacy-policy.html" "$TMP_DIR/public/"
+    cp "$SCRIPT_DIR/terms-and-conditions.html" "$TMP_DIR/public/"
+    if [ -f "$LEGAL_PORTAL_DIR/public/index.html" ]; then
+        cp "$LEGAL_PORTAL_DIR/public/index.html" "$TMP_DIR/public/index.html"
+    else
+        cp "$SCRIPT_DIR/privacy-policy.html" "$TMP_DIR/public/index.html"
     fi
-
-    PROJECT_ID=$(gcloud config get-value project 2>/dev/null)
-    if [ -z "$PROJECT_ID" ]; then
-        echo "⚠️ No GCP project currently active in gcloud config."
-        read -p "Enter your GCP Project ID: " INPUT_PROJECT_ID
-        gcloud config set project "$INPUT_PROJECT_ID"
-        PROJECT_ID="$INPUT_PROJECT_ID"
-    fi
-
-    echo "📌 Active GCP Project: $PROJECT_ID"
-    echo "📌 Deployment Region: $REGION"
-    echo "----------------------------------------------------------------------"
-
-    echo "🔨 [1/2] Building container image and deploying to Cloud Run..."
-    gcloud services enable run.googleapis.com cloudbuild.googleapis.com --project "$PROJECT_ID"
+    cp -r "$SCRIPT_DIR/css" "$TMP_DIR/public/" 2>/dev/null || true
     
-    cd "$SCRIPT_DIR"
-    gcloud run deploy "$SERVICE_NAME" \
-        --source . \
-        --region "$REGION" \
-        --platform managed \
-        --allow-unauthenticated \
-        --port 8080
+    cat <<EOF > "$TMP_DIR/firebase.json"
+{
+  "hosting": {
+    "public": "public",
+    "rewrites": [
+      { "source": "/privacy", "destination": "/privacy-policy.html" },
+      { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
+      { "source": "/terms", "destination": "/terms-and-conditions.html" },
+      { "source": "/terms-and-conditions", "destination": "/terms-and-conditions.html" },
+      { "source": "/terms-of-service", "destination": "/terms-and-conditions.html" }
+    ]
+  }
+}
+EOF
+    cat <<EOF > "$TMP_DIR/.firebaserc"
+{
+  "projects": { "default": "$PROJECT_ID" }
+}
+EOF
+    (cd "$TMP_DIR" && firebase deploy --only hosting --project "$PROJECT_ID")
+    rm -rf "$TMP_DIR"
 
-    CLOUD_RUN_URL=$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --format 'value(status.url)')
-    echo "======================================================================"
-    echo "✅ DEPLOYMENT SUCCESSFUL!"
-    echo "🌐 Cloud Run Live URL: $CLOUD_RUN_URL"
     echo ""
-    echo "🔗 CUSTOM DOMAIN MAPPING INSTRUCTIONS:"
-    echo "Run the following command to map your custom domain e.g. docs.zap.com:"
-    echo "  gcloud beta run domain-mappings create --service=$SERVICE_NAME --domain=YOUR_DOMAIN --region=$REGION"
+    echo "======================================================================"
+    echo "✅ DEPLOYMENT SUCCESSFUL (LEGAL PAGES)!"
+    echo "🔓 Privacy Policy:  https://$PROJECT_ID.web.app/privacy"
+    echo "🔓 Terms of Service: https://$PROJECT_ID.web.app/terms"
     echo "======================================================================"
     ;;
 
   2)
-    # Check if gcloud CLI is installed
-    if ! command -v gcloud &> /dev/null; then
-        echo "❌ Error: 'gcloud' CLI is not installed or not in PATH."
-        echo "👉 Please install Google Cloud SDK: https://cloud.google.com/sdk/docs/install"
-        exit 1
-    fi
+    echo "🔐 [1/2] Encrypting Architecture Portal with AES-256-GCM..."
+    python3 "$SCRIPT_DIR/build_encrypted.py" "$PASSCODE"
 
-    PROJECT_ID=$(gcloud config get-value project 2>/dev/null)
-    if [ -z "$PROJECT_ID" ]; then
-        echo "⚠️ No GCP project currently active in gcloud config."
-        read -p "Enter your GCP Project ID: " INPUT_PROJECT_ID
-        gcloud config set project "$INPUT_PROJECT_ID"
-        PROJECT_ID="$INPUT_PROJECT_ID"
-    fi
-
-    echo "📌 Active GCP Project: $PROJECT_ID"
-    echo "----------------------------------------------------------------------"
-
-    echo "🔨 Deploying to App Engine..."
-    cd "$SCRIPT_DIR"
-    gcloud app deploy app.yaml --quiet
-    
-    APP_URL=$(gcloud app browse --no-launch-browser 2>&1 | grep "http" || echo "https://$PROJECT_ID.appspot.com")
-    echo "======================================================================"
-    echo "✅ APPSPOT DEPLOYMENT SUCCESSFUL!"
-    echo "🌐 App Engine Live URL: $APP_URL"
+    echo "📦 [2/2] Deploying Encrypted Architecture Docs to Firebase Hosting..."
+    firebase deploy --only hosting --project "$PROJECT_ID"
     echo ""
-    echo "🔗 CUSTOM DOMAIN MAPPING INSTRUCTIONS:"
-    echo "  gcloud app domain-mappings create YOUR_DOMAIN"
     echo "======================================================================"
-    ;;
-
-  3)
-    # Check if gcloud CLI is installed
-    if ! command -v gcloud &> /dev/null; then
-        echo "❌ Error: 'gcloud' CLI is not installed or not in PATH."
-        echo "👉 Please install Google Cloud SDK: https://cloud.google.com/sdk/docs/install"
-        exit 1
-    fi
-
-    PROJECT_ID=$(gcloud config get-value project 2>/dev/null)
-    if [ -z "$PROJECT_ID" ]; then
-        echo "⚠️ No GCP project currently active in gcloud config."
-        read -p "Enter your GCP Project ID: " INPUT_PROJECT_ID
-        gcloud config set project "$INPUT_PROJECT_ID"
-        PROJECT_ID="$INPUT_PROJECT_ID"
-    fi
-
-    BUCKET_NAME="${PROJECT_ID}-zap-docs"
-    echo "🔨 Creating GCS Bucket: gs://$BUCKET_NAME..."
-    gcloud storage buckets create "gs://$BUCKET_NAME" --location="$REGION" --web-main-page-suffix="index.html" || true
-    
-    echo "🔓 Setting public read access..."
-    gcloud storage buckets add-iam-policy-binding "gs://$BUCKET_NAME" --member="allUsers" --role="roles/storage.objectViewer" || true
-
-    echo "📤 Uploading static site assets..."
-    cd "$SCRIPT_DIR"
-    gcloud storage rsync . "gs://$BUCKET_NAME" --recursive --exclude=".*" --exclude="*.sh" --exclude="Dockerfile"
-
-    echo "======================================================================"
-    echo "✅ GCS BUCKET DEPLOYMENT SUCCESSFUL!"
-    echo "🌐 Direct GCS URL: https://storage.googleapis.com/$BUCKET_NAME/index.html"
+    echo "✅ DEPLOYMENT SUCCESSFUL (ARCHITECTURE DOCS)!"
+    echo "🔒 Architecture Portal (AES-256 Encrypted): https://$PROJECT_ID.web.app"
+    echo "🔑 Decryption Passcode:                    $PASSCODE"
     echo "======================================================================"
     ;;
 esac
