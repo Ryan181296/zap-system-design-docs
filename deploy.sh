@@ -117,8 +117,8 @@ echo "🚀 ZAP DEPLOYMENT — FIREBASE HOSTING ($PROJECT_ID)"
 echo "======================================================================"
 
 prompt_select "Select Deployment Target" \
-  "1) Deploy ALL (Argon2id Encrypted Architecture Portal + Public Privacy & Terms)" \
-  "2) Deploy Legal Pages only (Public Privacy Policy & Terms of Service)" \
+  "1) Deploy ALL (Argon2id Encrypted Portal + Privacy + Terms + Delete Account)" \
+  "2) Deploy Legal Pages only (Privacy Policy, Terms of Service, Delete Account)" \
   "3) Deploy Architecture Docs only (Argon2id Encrypted Portal)"
 
 cd "$SCRIPT_DIR"
@@ -136,15 +136,17 @@ case $SELECTED_INDEX in
     echo "🔒 Architecture Portal (Argon2id Encrypted): https://$PROJECT_ID.web.app"
     echo "🔓 Privacy Policy (Public 100%):            https://$PROJECT_ID.web.app/privacy"
     echo "🔓 Terms of Service (Public 100%):          https://$PROJECT_ID.web.app/terms"
+    echo "🔓 Delete Account Request (Public 100%):    https://$PROJECT_ID.web.app/delete-account"
     echo "======================================================================"
     ;;
 
   1)
-    echo "📦 Deploying Legal Pages only (Privacy & Terms) to Firebase Hosting..."
+    echo "📦 Deploying Legal Pages only (Privacy, Terms, Delete Account) to Firebase Hosting..."
     TMP_DIR=$(mktemp -d)
     mkdir -p "$TMP_DIR/public/css"
     cp "$SCRIPT_DIR/privacy-policy.html" "$TMP_DIR/public/"
     cp "$SCRIPT_DIR/terms-and-conditions.html" "$TMP_DIR/public/"
+    cp "$SCRIPT_DIR/delete-account.html" "$TMP_DIR/public/"
     if [ -f "$LEGAL_PORTAL_DIR/public/index.html" ]; then
         cp "$LEGAL_PORTAL_DIR/public/index.html" "$TMP_DIR/public/index.html"
     else
@@ -161,7 +163,9 @@ case $SELECTED_INDEX in
       { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
       { "source": "/terms", "destination": "/terms-and-conditions.html" },
       { "source": "/terms-and-conditions", "destination": "/terms-and-conditions.html" },
-      { "source": "/terms-of-service", "destination": "/terms-and-conditions.html" }
+      { "source": "/terms-of-service", "destination": "/terms-and-conditions.html" },
+      { "source": "/delete-account", "destination": "/delete-account.html" },
+      { "source": "/account-deletion", "destination": "/delete-account.html" }
     ]
   }
 }
@@ -177,8 +181,9 @@ EOF
     echo ""
     echo "======================================================================"
     echo "✅ DEPLOYMENT SUCCESSFUL (LEGAL PAGES)!"
-    echo "🔓 Privacy Policy:  https://$PROJECT_ID.web.app/privacy"
+    echo "🔓 Privacy Policy:   https://$PROJECT_ID.web.app/privacy"
     echo "🔓 Terms of Service: https://$PROJECT_ID.web.app/terms"
+    echo "🔓 Delete Account:   https://$PROJECT_ID.web.app/delete-account"
     echo "======================================================================"
     ;;
 

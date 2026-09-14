@@ -224,7 +224,7 @@ def build_encrypted_html(passcode=None):
     </form>
 
     <div class="footer-links">
-      Looking for Public Policies? <a href="/privacy">Privacy Policy</a> &bull; <a href="/terms">Terms of Service</a>
+      Looking for Public Policies? <a href="/privacy">Privacy Policy</a> &bull; <a href="/terms">Terms of Service</a> &bull; <a href="/delete-account">Account Deletion</a>
     </div>
   </div>
 

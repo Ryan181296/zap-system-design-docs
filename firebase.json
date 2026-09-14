@@ -35,6 +35,18 @@
       {
         "source": "/terms-of-service",
         "destination": "/terms-and-conditions.html"
+      },
+      {
+        "source": "/delete-account",
+        "destination": "/delete-account.html"
+      },
+      {
+        "source": "/account-deletion",
+        "destination": "/delete-account.html"
+      },
+      {
+        "source": "/delete_account",
+        "destination": "/delete-account.html"
       }
     ]
   }
