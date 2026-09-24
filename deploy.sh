@@ -9,32 +9,6 @@ PROJECT_ID="zap-ecosystem-production-2f7e9"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LEGAL_PORTAL_DIR="$(cd "$SCRIPT_DIR/../legal-portal" 2>/dev/null && pwd || echo "")"
 
-# Helper function to read single keypress from /dev/tty
-read_key() {
-  local key rest
-  IFS= read -rsn1 key < /dev/tty 2>/dev/null
-  if [[ $key == $'\x1b' ]]; then
-    read -rsn2 -t 1 rest < /dev/tty 2>/dev/null
-    case "$rest" in
-      "[A" | "OA") echo "UP" ;;
-      "[B" | "OB") echo "DOWN" ;;
-      "[C" | "OC") echo "RIGHT" ;;
-      "[D" | "OD") echo "LEFT" ;;
-      *) echo "ESC" ;;
-    esac
-  elif [[ $key == "" ]]; then
-    echo "ENTER"
-  elif [[ $key == " " ]]; then
-    echo "SPACE"
-  elif [[ $key == "k" || $key == "K" ]]; then
-    echo "UP"
-  elif [[ $key == "j" || $key == "J" ]]; then
-    echo "DOWN"
-  else
-    echo "$key"
-  fi
-}
-
 prompt_select() {
   local prompt_title="$1"
   shift
@@ -42,66 +16,82 @@ prompt_select() {
   local current=0
   local count=${#options[@]}
 
+  # Save terminal state
   local old_stty
-  old_stty=$(stty -g < /dev/tty 2>/dev/null || true)
-  stty -echo -icanon min 1 time 0 < /dev/tty 2>/dev/null
-  printf "\033[?25l" > /dev/tty
+  old_stty=$(stty -g 2>/dev/null || true)
 
   cleanup_select() {
-    printf "\033[?25h" > /dev/tty
+    printf "\033[?25h" # Show cursor
     if [ -n "$old_stty" ]; then
-      stty "$old_stty" < /dev/tty 2>/dev/null || true
+      stty "$old_stty" 2>/dev/null || true
     fi
   }
-  trap 'cleanup_select; exit 1' INT TERM
+  trap 'cleanup_select; echo ""; exit 1' INT TERM
 
-  printf "\033[36m?\033[0m \033[1m%s:\033[0m \033[2m(Use arrow keys ↑/↓ or j/k, Enter to select)\033[0m\n" "$prompt_title" > /dev/tty
+  # Hide cursor and disable echo
+  printf "\033[?25l"
+  stty -icanon -echo min 1 time 0 2>/dev/null || true
 
-  render_select() {
+  render_menu() {
     for i in "${!options[@]}"; do
       if [ "$i" -eq "$current" ]; then
-        printf " \033[36m❯ ${options[$i]}\033[0m\n" > /dev/tty
+        printf "\r\033[2K \033[1;36m❯\033[0m \033[1;37m${options[$i]}\033[0m\n"
       else
-        printf "   ${options[$i]}\n" > /dev/tty
+        printf "\r\033[2K   \033[2;37m${options[$i]}\033[0m\n"
       fi
     done
   }
 
-  render_select
+  printf "\n\033[1;32m?\033[0m \033[1m%s\033[0m \033[2m(Use ↑/↓ arrows, 1-%d, or Enter to select)\033[0m\n" "$prompt_title" "$count"
+  render_menu
 
   while true; do
-    local key
-    key=$(read_key)
+    local key=""
+    # Read 1-3 bytes for raw key handling (handles escape sequences reliably on macOS bash & zsh)
+    IFS= read -r -s -n 1 key 2>/dev/null || true
+    if [[ "$key" == $'\x1b' ]]; then
+      local rest=""
+      IFS= read -r -s -n 2 rest 2>/dev/null || true
+      key="$key$rest"
+    fi
+
     case "$key" in
-      UP)
-        ((current--))
+      $'\x1b[A'|$'\x1bOA'|[kK]) # UP Arrow
+        ((current--)) || true
         if [ "$current" -lt 0 ]; then current=$((count - 1)); fi
         ;;
-      DOWN)
-        ((current++))
+      $'\x1b[B'|$'\x1bOB'|[jJ]) # DOWN Arrow
+        ((current++)) || true
         if [ "$current" -ge "$count" ]; then current=0; fi
         ;;
-      ENTER)
+      [1-9]) # Direct number selection (e.g. 1, 2, 3)
+        local num=$((key - 1))
+        if [ "$num" -ge 0 ] && [ "$num" -lt "$count" ]; then
+          current="$num"
+          break
+        fi
+        ;;
+      ""|$'\n'|$'\r') # Enter / Return
         break
         ;;
     esac
 
-    printf "\033[%dA" "$count" > /dev/tty
-    render_select
+    # Move cursor back up to re-render without clearing text artifacts
+    printf "\033[%dA" "$count"
+    render_menu
   done
 
-  # Clear options and show choice
-  printf "\033[%dA" "$count" > /dev/tty
-  for i in "${!options[@]}"; do
-    printf "\033[K\n" > /dev/tty
+  # Clear menu options and print clean result
+  printf "\033[%dA" "$count"
+  for ((i=0; i<count; i++)); do
+    printf "\r\033[2K\n"
   done
-  printf "\033[%dA" "$count" > /dev/tty
+  printf "\033[%dA" "$count"
 
-  printf "\033[32m✔\033[0m \033[1mSelected:\033[0m \033[36m${options[$current]}\033[0m\n\n" > /dev/tty
+  printf "\r\033[2K\033[1;32m✔\033[0m \033[1mSelected:\033[0m \033[1;36m${options[$current]}\033[0m\n\n"
 
   cleanup_select
   trap - INT TERM
-
   SELECTED_INDEX="$current"
 }
 
@@ -123,7 +113,7 @@ prompt_select "Select Deployment Target" \
 
 cd "$SCRIPT_DIR"
 
-case $SELECTED_INDEX in
+case "$SELECTED_INDEX" in
   0)
     echo "🔐 [1/2] Encrypting Architecture Portal with Argon2id & AES-256-GCM..."
     python3 "$SCRIPT_DIR/build_encrypted.py"
