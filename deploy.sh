@@ -5,7 +5,7 @@
 
 set -eo pipefail
 
-PROJECT_ID="zap-ecosystem-production-2f7e9"
+PROJECT_ID="${GCP_PROJECT_ID:-zap-ecosystem-production-2f7e9}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LEGAL_PORTAL_DIR="$(cd "$SCRIPT_DIR/../legal-portal" 2>/dev/null && pwd || echo "")"
 

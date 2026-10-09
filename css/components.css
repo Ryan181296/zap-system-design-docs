@@ -1,0 +1,50 @@
+/* Tables, Badges, Callouts, Breadcrumbs & Pulse Animations */
+.g-breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+.g-breadcrumb span { color: var(--text-secondary); }
+.g-doc-header { margin-bottom: 28px; }
+.g-doc-title { font-size: 28px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+.g-doc-subtitle { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+.g-badge {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.g-badge.g-get { background-color: var(--method-get-bg); color: var(--method-get-text); }
+.g-badge.g-post { background-color: var(--method-post-bg); color: var(--method-post-text); }
+.g-badge.g-put { background-color: var(--method-put-bg); color: var(--method-put-text); }
+.g-badge.g-delete { background-color: var(--method-delete-bg); color: var(--method-delete-text); }
+.g-table {
+  width: 100%; border-collapse: collapse; margin: 18px 0 28px;
+  font-size: 13.5px; background-color: var(--bg-primary);
+  border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;
+}
+.g-table th {
+  background-color: var(--bg-secondary); color: var(--text-primary);
+  font-weight: 700; text-align: left; padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color); font-size: 12.5px;
+}
+.g-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); vertical-align: top; }
+.g-table tr:last-child td { border-bottom: none; }
+.g-table tr:hover td { background-color: var(--bg-secondary); }
+.g-callout {
+  background-color: var(--bg-secondary); border-left: 4px solid var(--accent-color);
+  border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0;
+}
+.g-callout-title { font-weight: 700; font-size: 14.5px; color: var(--text-primary); margin-bottom: 4px; }
+.health-pulse-dot {
+  width: 9px; height: 9px; background: #10b981; border-radius: 50%;
+  display: inline-block; animation: pulseHealth 1.8s infinite;
+}
+@keyframes pulseHealth {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+.btn-refresh-health {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  color: var(--text-primary); padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.btn-refresh-health.is-loading .spin-icon { animation: spinIcon 0.8s linear infinite; }
+@keyframes spinIcon { to { transform: rotate(360deg); } }

@@ -1,0 +1,22 @@
+/* Diagram Viewer & Code Card Styles */
+.g-diagram-container {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; overflow: hidden; position: relative; margin: 24px 0;
+}
+.g-diagram-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color); font-size: 12.5px; font-weight: 600;
+}
+.g-zoom-btn {
+  background: var(--bg-primary); border: 1px solid var(--border-color);
+  border-radius: 6px; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-primary); font-weight: 700;
+}
+.g-zoom-btn:hover { background: var(--bg-secondary); }
+.g-code-block {
+  background: #1e1e1e; color: #d4d4d4; padding: 12px 16px;
+  border-radius: 8px; font-family: "Roboto Mono", monospace; font-size: 12px;
+  overflow-x: auto; margin: 8px 0 14px; border: 1px solid #333;
+}

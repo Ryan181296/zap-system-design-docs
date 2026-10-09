@@ -68,7 +68,7 @@
 
     <a href="#" class="g-brand">
       <img src="images/logo.png" alt="ZAP Logo" class="g-logo-img">
-      <div class="g-title">Documentation</div>
+      <div class="g-title" data-i18n="header_title">Documentation</div>
     </a>
 
     <div class="g-search-container">
@@ -78,13 +78,14 @@
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
       <input type="text" id="api-search" class="g-search-input"
-        placeholder="Search ZAP APIs, Java Controllers, methods...">
+        placeholder="Search ZAP APIs, Java Controllers, methods..." data-i18n-placeholder="search_placeholder">
     </div>
 
     <div class="header-right">
+      <div id="google_translate_element" class="g-translate-wrapper"></div>
       <div class="g-stats-badge">
-        <span>APIs:</span>
-        <strong>350 Endpoints</strong>
+        <span data-i18n="stats_apis">APIs:</span>
+        <strong data-i18n="stats_endpoints">350 Endpoints</strong>
       </div>
       <button onclick="lockDocs()" class="theme-toggle-btn" title="Lock Documentation" aria-label="Lock Documentation" style="font-size: 14px;">
         🔒
@@ -109,7 +110,7 @@
     <!-- Left Navigation Sidebar Drawer -->
     <nav class="g-sidebar">
       <div class="g-nav-section">
-        <div class="g-nav-title">Architecture & Ecosystem</div>
+        <div class="g-nav-title" data-i18n="nav_sec_arch">Architecture & Ecosystem</div>
         <a class="g-nav-item active" href="#system" data-target="view-system">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
@@ -118,28 +119,28 @@
             <line x1="6" y1="6" x2="6.01" y2="6" />
             <line x1="6" y1="18" x2="6.01" y2="18" />
           </svg>
-          <span>Ecosystem Topology</span>
+          <span data-i18n="nav_system">Ecosystem Topology</span>
         </a>
         <a class="g-nav-item" href="#security" data-target="view-security">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
-          <span>Security Architecture</span>
+          <span data-i18n="nav_security">Security Architecture</span>
         </a>
         <a class="g-nav-item" href="#cart" data-target="view-cart">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
           </svg>
-          <span>Redis Lua Engine</span>
+          <span data-i18n="nav_cart">Redis Lua Engine</span>
         </a>
         <a class="g-nav-item" href="#events" data-target="view-events">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <path d="M4 4h16v4H4V4zm0 6h16v4H4v-4zm0 6h16v4H4v-4z" />
           </svg>
-          <span>Message Queue Topics</span>
+          <span data-i18n="nav_events">Message Queue Topics</span>
         </a>
         <a class="g-nav-item" href="#database" data-target="view-database">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -148,14 +149,14 @@
             <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
             <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
           </svg>
-          <span>PostgreSQL ERD Schemas</span>
+          <span data-i18n="nav_database">PostgreSQL ERD Schemas</span>
         </a>
         <a class="g-nav-item" href="#sequence" data-target="view-sequence">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
           </svg>
-          <span>End-to-End Sequence Flows</span>
+          <span data-i18n="nav_sequence">End-to-End Sequence Flows</span>
         </a>
         <a class="g-nav-item" href="#webhook" data-target="view-webhook">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -163,33 +164,33 @@
             <rect x="2" y="4" width="20" height="16" rx="2" />
             <line x1="2" y1="10" x2="22" y2="10" />
           </svg>
-          <span>Payment IPN Webhooks</span>
+          <span data-i18n="nav_webhook">Payment IPN Webhooks</span>
         </a>
         <a class="g-nav-item" href="#stress-test" data-target="view-stress-test">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
           </svg>
-          <span>API Stress Test</span>
+          <span data-i18n="nav_stress">API Stress Test</span>
         </a>
         <a class="g-nav-item" href="#cloud-infra" data-target="view-cloud-infra">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
           </svg>
-          <span>Cloud Physical Infra &amp; Cost</span>
+          <span data-i18n="nav_infra">Cloud Physical Infra & Cost</span>
         </a>
       </div>
 
       <div class="g-nav-section">
-        <div class="g-nav-title">DevOps &amp; Setup Standards</div>
+        <div class="g-nav-title" data-i18n="nav_sec_devops">DevOps & Setup Standards</div>
         <a class="g-nav-item" href="#devops-fe" data-target="view-devops-fe">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
             <line x1="12" y1="18" x2="12.01" y2="18" />
           </svg>
-          <span>FE &amp; Mobile Setup Guide</span>
+          <span data-i18n="nav_devops_fe">FE & Mobile Setup Guide</span>
         </a>
         <a class="g-nav-item" href="#devops-cd" data-target="view-devops-cd">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -197,7 +198,7 @@
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
-          <span>Continuous Deployment (CD)</span>
+          <span data-i18n="nav_devops_cd">Continuous Deployment (CD)</span>
         </a>
         <a class="g-nav-item" href="#devops-git" data-target="view-devops-git">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -206,7 +207,7 @@
             <circle cx="6" cy="6" r="3" />
             <path d="M6 21V9a9 9 0 0 0 9 9" />
           </svg>
-          <span>Git Repo &amp; Branching Strategy</span>
+          <span data-i18n="nav_devops_git">Git Repo & Branching Strategy</span>
         </a>
         <a class="g-nav-item" href="#commit-chart" data-target="view-commit-chart">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -215,12 +216,12 @@
             <line x1="1.05" y1="12" x2="7" y2="12" />
             <line x1="17" y1="12" x2="22.95" y2="12" />
           </svg>
-          <span>Git Commit Velocity Chart</span>
+          <span data-i18n="nav_commit_chart">Git Commit Velocity Chart</span>
         </a>
       </div>
 
       <div class="g-nav-section">
-        <div class="g-nav-title">API Reference Catalog</div>
+        <div class="g-nav-title" data-i18n="nav_sec_api">API Reference Catalog</div>
         <a class="g-nav-item" href="#exporter" data-target="view-exporter">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
@@ -228,7 +229,7 @@
             <polyline points="7 10 12 15 17 10" />
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
-          <span>Postman &amp; OpenAPI Exporter</span>
+          <span data-i18n="nav_exporter">Postman & OpenAPI Exporter</span>
         </a>
         <a class="g-nav-item" href="#api" data-target="view-api" data-svc="all">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -237,7 +238,7 @@
             <line x1="2" y1="12" x2="22" y2="12" />
             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
           </svg>
-          <span>All Services (350 APIs)</span>
+          <span data-i18n="nav_api_all">All Services (350 APIs)</span>
         </a>
         <a class="g-nav-item" href="#api-commerce" data-target="view-api" data-svc="commerce">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -246,7 +247,7 @@
             <circle cx="20" cy="21" r="1" />
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
-          <span>Commerce Service (215)</span>
+          <span data-i18n="nav_api_commerce">Commerce Service (215)</span>
         </a>
         <a class="g-nav-item" href="#api-identity" data-target="view-api" data-svc="identity">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -254,7 +255,7 @@
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
-          <span>Identity Service (83)</span>
+          <span data-i18n="nav_api_identity">Identity Service (83)</span>
         </a>
         <a class="g-nav-item" href="#api-payment" data-target="view-api" data-svc="payment">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -262,7 +263,7 @@
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
             <line x1="1" y1="10" x2="23" y2="10" />
           </svg>
-          <span>Payment Service (44)</span>
+          <span data-i18n="nav_api_payment">Payment Service (44)</span>
         </a>
         <a class="g-nav-item" href="#api-notification" data-target="view-api" data-svc="notification">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -270,7 +271,7 @@
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
-          <span>Notification Service (7)</span>
+          <span data-i18n="nav_api_notification">Notification Service (7)</span>
         </a>
         <a class="g-nav-item" href="#api-gateway" data-target="view-api" data-svc="gateway">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -280,12 +281,12 @@
             <line x1="6" y1="6" x2="6.01" y2="6" />
             <line x1="6" y1="18" x2="6.01" y2="18" />
           </svg>
-          <span>API Gateway (1)</span>
+          <span data-i18n="nav_api_gateway">API Gateway (1)</span>
         </a>
       </div>
 
       <div class="g-nav-section">
-        <div class="g-nav-title">Project Roadmap</div>
+        <div class="g-nav-title" data-i18n="nav_sec_roadmap">Project Roadmap</div>
         <a class="g-nav-item" href="#gantt" data-target="view-gantt">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
@@ -293,12 +294,12 @@
             <rect x="3" y="10" width="12" height="3" rx="1" />
             <rect x="3" y="16" width="16" height="3" rx="1" />
           </svg>
-          <span>Development Roadmap</span>
+          <span data-i18n="nav_gantt">Development Roadmap</span>
         </a>
       </div>
 
       <div class="g-nav-section">
-        <div class="g-nav-title">Developer Guidelines</div>
+        <div class="g-nav-title" data-i18n="nav_sec_guidelines">Developer Guidelines</div>
         <a class="g-nav-item" href="#design" data-target="view-design">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
@@ -308,7 +309,7 @@
             <line x1="16" y1="17" x2="8" y2="17" />
             <polyline points="10 9 9 9 8 9" />
           </svg>
-          <span>ApiResponse&lt;T&gt; & Errors</span>
+          <span data-i18n="nav_design">ApiResponse&lt;T&gt; & Errors</span>
         </a>
         <a class="g-nav-item" href="#env" data-target="view-env">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -317,7 +318,7 @@
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
-          <span>Environment &amp; Health Monitor</span>
+          <span data-i18n="nav_env">Environment & Health Monitor</span>
         </a>
         <a class="g-nav-item" href="#circuit" data-target="view-circuit">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -326,19 +327,19 @@
             <path
               d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
           </svg>
-          <span>Circuit Breaker Policies</span>
+          <span data-i18n="nav_circuit">Circuit Breaker Policies</span>
         </a>
         <a class="g-nav-item" href="#gcs" data-target="view-gcs">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
           </svg>
-          <span>GCS Media Upload Flow</span>
+          <span data-i18n="nav_gcs">GCS Media Upload Flow</span>
         </a>
       </div>
 
       <div class="g-nav-section">
-        <div class="g-nav-title">Legal &amp; Compliance</div>
+        <div class="g-nav-title" data-i18n="nav_sec_legal">Legal & Compliance</div>
         <a class="g-nav-item" href="#terms" data-target="view-terms">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
@@ -347,14 +348,14 @@
             <line x1="16" y1="13" x2="8" y2="13" />
             <line x1="16" y1="17" x2="8" y2="17" />
           </svg>
-          <span>Terms of Service</span>
+          <span data-i18n="nav_terms">Terms of Service</span>
         </a>
         <a class="g-nav-item" href="#privacy" data-target="view-privacy">
           <svg class="nav-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
-          <span>Privacy Policy</span>
+          <span data-i18n="nav_privacy">Privacy Policy</span>
         </a>
       </div>
     </nav>
@@ -389,13 +390,13 @@
               style="background: var(--bg-primary); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 14px;">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                 <span class="g-badge g-post" style="background: #10B981; color: white;">PRODUCTION (PROD)</span>
-                <code style="color: #10B981; font-weight: bold; font-size: 13px;">https://prod-api.zap.vn</code>
+                <code style="color: #10B981; font-weight: bold; font-size: 13px;">https://prod-***.zap.vn</code>
               </div>
               <ul
                 style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 16px;">
-                <li><strong>GCP Project:</strong> <code>zap-ecosystem-production</code></li>
-                <li><strong>Cloud SQL DB:</strong> <code>zap-postgres-db-prod</code> (PostgreSQL 15)</li>
-                <li><strong>SSL Certificate:</strong> <code>zap-prod-api-cert</code> (Managed SSL)</li>
+                <li><strong>GCP Project:</strong> <code>zap-***-prod-****</code></li>
+                <li><strong>Cloud SQL DB:</strong> <code>zap-postgres-db-****</code> (PostgreSQL 15)</li>
+                <li><strong>SSL Certificate:</strong> <code>zap-prod-***-cert</code> (Managed SSL)</li>
                 <li><strong>Target Clients:</strong> Merchant POS WPF, Kiosk &amp; Branded Ordering Apps (Pendogo,
                   Pho24)</li>
               </ul>
@@ -410,9 +411,9 @@
               </div>
               <ul
                 style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 16px;">
-                <li><strong>GCP Project:</strong> <code>zap-ecosystem-sandbox-504003</code></li>
-                <li><strong>Cloud SQL DB:</strong> <code>zap-postgres-db-final</code> (Sandbox DB)</li>
-                <li><strong>SSL Certificate:</strong> <code>zap-uat-api-cert-v2</code> (Managed SSL)</li>
+                <li><strong>GCP Project:</strong> <code>zap-***-sandbox-****</code></li>
+                <li><strong>Cloud SQL DB:</strong> <code>zap-postgres-db-****</code> (Sandbox DB)</li>
+                <li><strong>SSL Certificate:</strong> <code>zap-uat-***-cert</code> (Managed SSL)</li>
                 <li><strong>Target Clients:</strong> Internal TestFlight QA, Staging Build &amp; Developer Sandbox</li>
               </ul>
             </div>
@@ -452,7 +453,7 @@
             style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
             <strong style="color: var(--accent-color); font-size: 15px;">notification-service (:8084)</strong>
             <p style="font-size: 13px; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
-              FCM Push Notification Dispatcher for Customer Apps and Telegram Ops Bot (@zap_ops_alert_bot) for instant
+              FCM Push Notification Dispatcher for Customer Apps and Telegram Ops Bot (@zap_***_bot) for instant
               merchant order &amp; alert triggers.
             </p>
           </div>
@@ -1625,7 +1626,7 @@ end</pre>
       <!-- Section 1E-2: End-to-End Sequence Flows -->
       <section id="view-sequence" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Architecture</span> &rsaquo; <span>End-to-End Sequence Flows</span>
+          <span>Docs</span> &rsaquo; <span>Architecture</span> &rsaquo; <span data-i18n="nav_sequence">End-to-End Sequence Flows</span>
         </div>
 
         <div class="g-doc-header">
@@ -1964,7 +1965,7 @@ end</pre>
               &amp; Latency Monitor</h3>
             <span id="health-env-badge" class="g-badge"
               style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px; padding: 2px 8px;">PROD
-              (prod-api.zap.vn)</span>
+              (prod-***.zap.vn)</span>
           </div>
 
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -2048,19 +2049,19 @@ end</pre>
               <td><span class="g-badge"
                   style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);">PROD
                   (Production)</span></td>
-              <td><code>https://prod-api.zap.vn</code></td>
-              <td><code>zap-ecosystem-production</code></td>
-              <td><code>zap-postgres-db-prod</code> (:5432)</td>
-              <td><code>zap-prod-api-cert</code></td>
+              <td><code>https://prod-***.zap.vn</code></td>
+              <td><code>zap-***-prod-****</code></td>
+              <td><code>zap-postgres-db-****</code> (:5432)</td>
+              <td><code>zap-prod-***-cert</code></td>
             </tr>
             <tr>
               <td><span class="g-badge"
                   style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3);">SANDBOX
                   / UAT</span></td>
               <td><code>https://uat-api.zap.vn</code></td>
-              <td><code>zap-ecosystem-sandbox-504003</code></td>
-              <td><code>zap-postgres-db-final</code> (:5432)</td>
-              <td><code>zap-uat-api-cert-v2</code></td>
+              <td><code>zap-***-sandbox-****</code></td>
+              <td><code>zap-postgres-db-****</code> (:5432)</td>
+              <td><code>zap-uat-***-cert</code></td>
             </tr>
           </tbody>
         </table>
@@ -2353,9 +2354,9 @@ end</code></pre>
                 <text x="110" y="27" text-anchor="middle" font-weight="bold" font-size="10.5" fill="#10B981">PRODUCTION
                   (PROD)</text>
                 <text x="12" y="54" font-size="9" fill="var(--text-secondary)">• Single App Store / Installer</text>
-                <text x="12" y="74" font-size="9" fill="var(--text-secondary)">• Base API: prod-api.zap.vn</text>
+                <text x="12" y="74" font-size="9" fill="var(--text-secondary)">• Base API: prod-***.zap.vn</text>
                 <text x="12" y="94" font-size="9" fill="var(--text-secondary)">• SSL Cert Pin:
-                  zap-prod-api-cert</text>
+                  zap-prod-***-cert</text>
                 <text x="12" y="114" font-size="9" fill="var(--text-secondary)">• Firebase: firebase-staff-proj</text>
                 <text x="12" y="134" font-size="9" fill="var(--text-secondary)">• Scope: All Merchant Outlets</text>
                 <rect x="12" y="160" width="181" height="26" rx="4" fill="#10B981" opacity="0.15" />
@@ -2448,7 +2449,7 @@ end</code></pre>
                     <rect width="130" height="106" rx="4" fill="var(--bg-primary)" stroke="#FF6600" />
                     <text x="8" y="18" font-weight="bold" font-size="8.5" fill="#FF6600">Pendogo Pizza App</text>
                     <text x="8" y="32" font-size="7.5" fill="var(--text-secondary)">com.pendogo.order</text>
-                    <text x="8" y="46" font-size="7.5" fill="#10B981">prod-api.zap.vn</text>
+                    <text x="8" y="46" font-size="7.5" fill="#10B981">prod-***.zap.vn</text>
                     <rect x="6" y="56" width="118" height="42" rx="3" fill="#FF6600" opacity="0.12" />
                     <text x="65" y="70" text-anchor="middle" font-weight="bold" font-size="7.5" fill="#FF6600">Separate
                       App Store</text>
@@ -2461,7 +2462,7 @@ end</code></pre>
                     <rect width="131" height="106" rx="4" fill="var(--bg-primary)" stroke="#D82C20" />
                     <text x="8" y="18" font-weight="bold" font-size="8.5" fill="#D82C20">Pho24 Noodle App</text>
                     <text x="8" y="32" font-size="7.5" fill="var(--text-secondary)">com.pho24.delivery</text>
-                    <text x="8" y="46" font-size="7.5" fill="#10B981">prod-api.zap.vn</text>
+                    <text x="8" y="46" font-size="7.5" fill="#10B981">prod-***.zap.vn</text>
                     <rect x="6" y="56" width="119" height="42" rx="3" fill="#D82C20" opacity="0.12" />
                     <text x="65" y="70" text-anchor="middle" font-weight="bold" font-size="7.5" fill="#D82C20">Separate
                       App Store</text>
@@ -2476,7 +2477,7 @@ end</code></pre>
                       Apps</text>
                     <text x="10" y="34" font-size="8" fill="var(--text-secondary)">• Bundles: com.brandx.order,
                       com.brandy.order, etc.</text>
-                    <text x="10" y="48" font-size="8" fill="#10B981">• Connected to Base API: prod-api.zap.vn</text>
+                    <text x="10" y="48" font-size="8" fill="#10B981">• Connected to Base API: prod-***.zap.vn</text>
                     <rect x="8" y="58" width="253" height="36" rx="3" fill="#4285F4" opacity="0.12" />
                     <text x="134" y="72" text-anchor="middle" font-weight="bold" font-size="8" fill="#4285F4">Each
                       Merchant Brand uploaded as independent Apps</text>
@@ -2989,9 +2990,9 @@ end</code></pre>
           <div class="g-callout-title">🚀 Automated Deployment Lifecycle</div>
           <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">
             Every pull request merged to <code>uat</code> automatically triggers Cloud Build &amp; deploys to UAT
-            (<code>zap-ecosystem-sandbox-504003</code>). Merges to <code>main</code> trigger a tagged release
+            (<code>zap-***-sandbox-****</code>). Merges to <code>main</code> trigger a tagged release
             requiring
-            1-click manual approval before deploying to Production (<code>zap-ecosystem-production</code>).
+            1-click manual approval before deploying to Production (<code>zap-***-prod-****</code>).
           </p>
         </div>
 
@@ -3105,7 +3106,7 @@ end</code></pre>
               <g transform="translate(15, 165)">
                 <rect width="305" height="50" rx="4" fill="var(--bg-secondary)" stroke="#0088CC" />
                 <text x="15" y="20" font-weight="bold" font-size="9.5" fill="#0088CC">🤖 Telegram Ops Alert
-                  (@zap_ops_alert_bot)</text>
+                  (@zap_***_bot)</text>
                 <text x="15" y="36" font-size="8.5" fill="var(--text-secondary)">Instant notification on success or
                   deployment failure</text>
               </g>
@@ -3386,7 +3387,7 @@ end</code></pre>
       <!-- Section 1G: Circuit Breaker Resilience4j Policies -->
       <section id="view-circuit" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span>Circuit Breaker Policies</span>
+          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span data-i18n="nav_circuit">Circuit Breaker Policies</span>
         </div>
 
         <div class="g-doc-header">
@@ -3494,7 +3495,7 @@ public class FallbackController {
       <!-- Section 1H: GCS Media Upload Flow -->
       <section id="view-gcs" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span>GCS Media Upload Flow</span>
+          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span data-i18n="nav_gcs">GCS Media Upload Flow</span>
         </div>
 
         <div class="g-doc-header">
@@ -3663,7 +3664,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       ═══════════════════════════════════════════════════════════════════ -->
       <section id="view-gantt" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Project Roadmap</span> &rsaquo; <span>Development Roadmap</span>
+          <span>Docs</span> &rsaquo; <span>Project Roadmap</span> &rsaquo; <span data-i18n="nav_gantt">Development Roadmap</span>
         </div>
         <div class="g-doc-header">
           <h1 class="g-doc-title">ZAP Platform &mdash; Development Roadmap</h1>
@@ -3872,7 +3873,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       <!-- Section: ZAP CRM Terms of Service -->
       <section id="view-terms" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span>Terms of Service</span>
+          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span data-i18n="nav_terms">Terms of Service</span>
         </div>
 
         <div class="g-doc-header">
@@ -3964,7 +3965,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       <!-- Section: ZAP CRM Privacy Policy -->
       <section id="view-privacy" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span>Privacy Policy</span>
+          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span data-i18n="nav_privacy">Privacy Policy</span>
         </div>
 
         <div class="g-doc-header">
@@ -4073,7 +4074,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       <!-- Section: API Stress Test & Performance Benchmark -->
       <section id="view-stress-test" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Architecture &amp; Ecosystem</span> &rsaquo; <span>API Stress Test</span>
+          <span>Docs</span> &rsaquo; <span>Architecture &amp; Ecosystem</span> &rsaquo; <span data-i18n="nav_stress">API Stress Test</span>
         </div>
 
         <div class="g-doc-header">
@@ -4140,7 +4141,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
               Target Brand
             </div>
             <div style="font-size: 22px; font-weight: 700; color: #a142f4; margin-top: 4px;">Pendogo</div>
-            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">Brand: e8cb2035-8d7d...
+            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">Brand: e8cb2035-****
             </div>
           </div>
         </div>
@@ -4172,7 +4173,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 Phone Account Range</div>
               <div id="web-account-range"
                 style="font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 14px; color: #1e8e3e; margin-top: 2px;">
-                0356465600 (1 Dedicated Cart)
+                0356465*** (1 Dedicated Cart)
               </div>
             </div>
 
@@ -4469,7 +4470,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             if (webDisplay) webDisplay.textContent = ccu + (ccu === 1 ? ' CCU' : ' CCUs');
             const endIdx = 600 + ccu - 1;
             const endPhone = '0356465' + String(endIdx).padStart(3, '0');
-            const rangeText = ccu === 1 ? '0356465600 (1 Dedicated Cart)' : ('0356465600 ➔ ' + endPhone + ' (' + ccu + ' Dedicated Carts)');
+            const rangeText = ccu === 1 ? '0356465*** (1 Dedicated Cart)' : ('0356465*** ➔ ' + endPhone + ' (' + ccu + ' Dedicated Carts)');
             if (webAccountRange) webAccountRange.textContent = rangeText;
           }
 
@@ -4825,8 +4826,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             const btnEl = document.getElementById('pwd-toggle-btn');
             if (!pwdEl || !btnEl) return;
             if (pwdEl.textContent === '••••••••••••') {
-              pwdEl.textContent = 'Theluong1503@';
-              pwdEl.style.letterSpacing = 'normal';
+              pwdEl.textContent = "******** (Masked in Prod)"; pwdEl.style.letterSpacing = "normal";
               btnEl.innerHTML = `<svg id="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
             } else {
               pwdEl.textContent = '••••••••••••';
@@ -4988,7 +4988,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
 
             document.getElementById('modal-req-headers').textContent = JSON.stringify({
               "x-sales-channel-type": "APP",
-              "brand_id": "e8cb2035-8d7d-4959-8776-6c2706a8c5ec",
+              "brand_id": "e8cb2035-****-****-****-************",
               "location_id": "0c6e13fc-d485-49b4-aba1-1387c5ba90ac"
             }, null, 2);
 
@@ -5068,8 +5068,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
               </svg>
               Custom Private VPC
             </div>
-            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">10.0.0.0/16 + VPC
-              Connector 10.8.0.0/28</div>
+            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">10.***.***.***/16 + VPC Connector 10.***.***.***/28</div>
           </div>
           <div
             style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 10px; padding: 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
@@ -5239,7 +5238,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <!-- Serverless VPC Access Connector UAT -->
                 <rect x="0" y="64" width="455" height="24" rx="6" fill="#1a73e8" />
                 <text x="227" y="80" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">🔌 Serverless
-                  VPC Access Connector: zap-vpc-connector (10.8.0.0/28)</text>
+                  VPC Access Connector: zap-vpc-**** (10.***.***.***/28)</text>
               </g>
 
               <!-- PROD Container Compute Box -->
@@ -5247,7 +5246,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 stroke-width="1.5" />
               <rect x="570" y="180" width="475" height="24" rx="4" fill="#e6f4ea" />
               <text x="580" y="196" fill="#137333" font-size="11" font-weight="700">PRODUCTION ENVIRONMENT
-                (prod-api.zap.vn | Auto-Scale &amp; Min-Instances=1)</text>
+                (prod-***.zap.vn | Auto-Scale &amp; Min-Instances=1)</text>
 
               <g transform="translate(580, 215)">
                 <!-- PROD Services -->
@@ -5307,7 +5306,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 stroke-dasharray="6,4" />
               <rect x="55" y="395" width="990" height="24" rx="4" fill="#e2e8f0" stroke="#64748b" stroke-width="1" />
               <text x="70" y="411" fill="#0f172a" font-size="11" font-weight="700" font-family="monospace">🔒 ISOLATED
-                PRIVATE VPC NETWORK: zap-vpc | SUBNET: zap-subnet (10.0.0.0/16 in asia-southeast1)</text>
+                PRIVATE VPC NETWORK: zap-vpc | SUBNET: zap-subnet (10.***.***.***/16 in asia-southeast1)</text>
 
               <!-- UAT VPC Private Resources -->
               <g transform="translate(65, 430)">
@@ -5452,7 +5451,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
             </div>
             <ul
               style="list-style: none; padding: 0; margin: 0; font-size: 12px; line-height: 1.8; color: var(--text-primary);">
-              <li><strong>• Target Gateway URL:</strong> <code style="color: #137333;">https://prod-api.zap.vn</code>
+              <li><strong>• Target Gateway URL:</strong> <code style="color: #137333;">https://prod-***.zap.vn</code>
               </li>
               <li><strong>• ConfigMap Active Profile:</strong> <code style="color: #137333;">prod</code>
                 (configmap-prod.yaml)</li>
@@ -5526,7 +5525,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                   <td style="padding: 10px 14px; font-family: monospace; font-weight: 600;">PUBLIC_BASE_URL</td>
                   <td style="padding: 10px 14px; color: var(--text-secondary);">API Gateway Base Domain</td>
                   <td style="padding: 10px 14px;"><code style="color: #1a73e8;">https://uat-api.zap.vn</code></td>
-                  <td style="padding: 10px 14px;"><code style="color: #137333;">https://prod-api.zap.vn</code></td>
+                  <td style="padding: 10px 14px;"><code style="color: #137333;">https://prod-***.zap.vn</code></td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border-color);">
                   <td style="padding: 10px 14px; font-family: monospace; font-weight: 600;">CLOUDRUN_MEMORY_LIMIT</td>
@@ -5753,7 +5752,7 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <tr style="border-bottom: 1px solid var(--border-color);">
                   <td style="padding: 12px 16px; font-weight: 700; color: #a142f4;">Serverless VPC Access Connector</td>
                   <td style="padding: 12px 16px; color: var(--text-secondary);">Dedicated Serverless VPC Connector
-                    instances (10.8.0.0/28)</td>
+                    instances (10.***.***.***/28)</td>
                   <td style="padding: 12px 16px; font-weight: 600;">$15.00</td>
                   <td style="padding: 12px 16px; font-weight: 600;">$15.00</td>
                   <td style="padding: 12px 16px; font-weight: 700; text-align: right; color: #a142f4;">$30.00 / mo</td>
@@ -5844,7 +5843,11 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
   </div>
 
   <script src="js/api-data.js?v=153"></script>
-  <script src="js/app.js?v=153"></script>
+    <script src="js/theme.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/health.js"></script>
+  <script src="js/exporter.js"></script>
+  <script src="js/app.js"></script>
   <!-- Prism.js Core + Language Components for Code Syntax Highlighting -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
@@ -5960,6 +5963,19 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       }
     });
   </script>
+
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,vi,ja,zh-CN,ko,fr,de,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 
 </html>

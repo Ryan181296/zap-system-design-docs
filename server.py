@@ -46,12 +46,14 @@ class DocsStressTestHandler(SimpleHTTPRequestHandler):
         def run_worker(worker_idx):
             phone_idx = 600 + (worker_idx % 101)
             phone = f"0356465{phone_idx:03d}"
+            target_brand_id = os.environ.get("STRESS_TEST_BRAND_ID", "e8cb2035-8d7d-4959-8776-6c2706a8c5ec")
+            target_password = os.environ.get("STRESS_TEST_PASSWORD", "********")
             session = stress_test_engine.ZapUserSession(
-                base_url="https://uat-api.zap.vn",
-                brand_id="e8cb2035-8d7d-4959-8776-6c2706a8c5ec",
+                base_url=os.environ.get("STRESS_TEST_BASE_URL", "https://uat-api.zap.vn"),
+                brand_id=target_brand_id,
                 stats=stats
             )
-            success = session.run_user_flow(phone=phone, password="Theluong1503@", dialing_code="+84", worker_idx=worker_idx)
+            success = session.run_user_flow(phone=phone, password=target_password, dialing_code="+84", worker_idx=worker_idx)
             return session.request_logs
 
         # Execute parallel worker flows against live UAT API
