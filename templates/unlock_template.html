@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZAP Architecture Portal</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/hash-wasm@4.12.0/dist/argon2.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #030712; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;
+    }
+    #particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+    .glow-spotlight {
+      position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.05) 40%, transparent 70%);
+      pointer-events: none; z-index: 2; transform: translate(-50%, -50%);
+    }
+    .auth-container { position: relative; z-index: 10; width: 100%; max-width: 440px; padding: 24px; }
+    .auth-card {
+      background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(24px) saturate(190%); -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: none; border-radius: 24px; padding: 40px 32px; text-align: center;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(59, 130, 246, 0.08); position: relative;
+    }
+    .logo-wrap {
+      display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; padding: 10px;
+      border-radius: 16px; background: rgba(255, 255, 255, 0.03); border: none;
+    }
+    .zap-logo { height: 38px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3)); }
+    .auth-title { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; color: #ffffff; margin-bottom: 6px; }
+    .auth-subtitle { font-size: 13.5px; color: #94a3b8; line-height: 1.5; margin-bottom: 24px; }
+    .input-wrapper { position: relative; margin-bottom: 16px; }
+    .pass-input {
+      width: 100%; padding: 14px 44px 14px 16px; background: rgba(3, 7, 18, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; color: #ffffff;
+      font-size: 14.5px; outline: none; transition: all 0.25s ease; font-family: inherit;
+    }
+    .pass-input:focus {
+      border-color: #3b82f6; background: rgba(3, 7, 18, 0.85);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 0 20px rgba(59, 130, 246, 0.2);
+    }
+    .pass-input.shake {
+      animation: shakeInput 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      border-color: #f87171 !important;
+      box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.2) !important;
+    }
+    @keyframes shakeInput {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(4px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+    .enter-badge {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 11px; font-weight: 700; color: #64748b; background: rgba(255, 255, 255, 0.06);
+      padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.08);
+      user-select: none; pointer-events: none;
+    }
+    .unlock-btn {
+      width: 100%; padding: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff; font-size: 14.5px; font-weight: 600; border: none; border-radius: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.25s ease; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+    .unlock-btn:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5); transform: translateY(-1px);
+    }
+    .error-msg {
+      color: #f87171; font-size: 12.5px; margin-bottom: 12px; padding: 8px 12px;
+      border-radius: 8px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); display: none;
+    }
+    .footer-note { margin-top: 24px; font-size: 12px; color: #64748b; }
+    .footer-note a { color: #94a3b8; text-decoration: none; }
+    .footer-note a:hover { color: #38bdf8; }
+  </style>
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+  <div id="glow-spotlight" class="glow-spotlight"></div>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="logo-wrap"><img src="__LOGO_SRC__" alt="ZAP Logo" class="zap-logo"></div>
+      <h1 class="auth-title">ZAP Architecture Portal</h1>
+      <p class="auth-subtitle">Protected System Architecture &amp; API Specifications</p>
+      <div id="error-box" class="error-msg">❌ Invalid Passcode. Access denied.</div>
+      <form onsubmit="event.preventDefault(); handleUnlock();" novalidate>
+        <div class="input-wrapper">
+          <input type="password" id="passcode-field" class="pass-input" placeholder="Enter Team Passcode..." autofocus autocomplete="off">
+          <span class="enter-badge">↵</span>
+        </div>
+        <button type="submit" id="submit-btn" class="unlock-btn">
+          <span>Authenticate &amp; Access</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </form>
+      <div class="footer-note">
+        <a href="/privacy">Privacy</a> &bull; <a href="/terms">Terms</a> &bull; <a href="/delete-account">Account Deletion</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d'), spotlight = document.getElementById('glow-spotlight');
+      let w = canvas.width = window.innerWidth, h = canvas.height = window.innerHeight;
+      let mouse = { x: w / 2, y: h / 2, radius: 160, isMoved: false };
+
+      window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; initParticles(); });
+      window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.isMoved = true; if (spotlight) { spotlight.style.left = e.clientX + 'px'; spotlight.style.top = e.clientY + 'px'; } });
+      window.addEventListener('touchmove', (e) => { if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.isMoved = true; } });
+
+      const count = Math.min(120, Math.floor((w * h) / 10000));
+      let particles = [];
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * w; this.y = Math.random() * h;
+          this.vx = (Math.random() - 0.5) * 0.7; this.vy = (Math.random() - 0.5) * 0.7;
+          this.radius = Math.random() * 1.8 + 1.0; this.baseAlpha = Math.random() * 0.4 + 0.3;
+        }
+        update() {
+          this.x += this.vx; this.y += this.vy;
+          if (this.x < 0) this.x = w; if (this.x > w) this.x = 0;
+          if (this.y < 0) this.y = h; if (this.y > h) this.y = 0;
+          if (mouse.isMoved) {
+            const dx = mouse.x - this.x, dy = mouse.y - this.y, dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < mouse.radius) {
+              const force = (mouse.radius - dist) / mouse.radius, angle = Math.atan2(dy, dx);
+              this.x -= Math.cos(angle) * force * 2; this.y -= Math.sin(angle) * force * 2;
+            }
+          }
+        }
+        draw() {
+          ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(147, 197, 253, ${this.baseAlpha})`; ctx.fill();
+        }
+      }
+
+      function initParticles() { particles = []; for (let i = 0; i < count; i++) particles.push(new Particle()); }
+      function render() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update(); particles[i].draw();
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 110) {
+              ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(99, 102, 241, ${(1 - dist / 110) * 0.25})`; ctx.lineWidth = 0.8; ctx.stroke();
+            }
+          }
+          if (mouse.isMoved) {
+            const mdx = mouse.x - particles[i].x, mdy = mouse.y - particles[i].y, mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+            if (mDist < 130) {
+              ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - mDist / 130) * 0.45})`; ctx.lineWidth = 1; ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(render);
+      }
+      initParticles(); render();
+    })();
+
+    const CIPHER_PAYLOAD = "__CIPHER_PAYLOAD__";
+    function b64ToBytes(b64) { const bin = atob(b64); return Uint8Array.from(bin, c => c.charCodeAt(0)); }
+
+    async function deriveArgon2Key(passcode, salt) {
+      const keyHex = await hashwasm.argon2id({
+        password: passcode, salt: salt, parallelism: 1, iterations: 2,
+        memorySize: 19456, hashLength: 32, outputType: "hex"
+      });
+      return new Uint8Array(keyHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+    }
+
+    async function decryptDoc(passcode) {
+      const raw = b64ToBytes(CIPHER_PAYLOAD), salt = raw.slice(0, 16), iv = raw.slice(16, 28), data = raw.slice(28);
+      const rawKey = await deriveArgon2Key(passcode, salt);
+      const cryptoKey = await crypto.subtle.importKey("raw", rawKey, { name: "AES-GCM" }, false, ["decrypt"]);
+      return new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, cryptoKey, data));
+    }
+
+    async function handleUnlock(preset) {
+      const input = document.getElementById("passcode-field"), btn = document.getElementById("submit-btn"), err = document.getElementById("error-box");
+      const code = preset || (input ? input.value : "").trim();
+      
+      if (!code) {
+        if (input) {
+          input.classList.remove("shake");
+          void input.offsetWidth; // Trigger reflow
+          input.classList.add("shake");
+          input.focus();
+        }
+        if (err) {
+          err.style.display = "block";
+          err.textContent = "⚠️ Please enter your team passcode.";
+        }
+        return;
+      }
+
+      if (btn) { btn.disabled = true; btn.innerHTML = `<span>Verifying Argon2id...</span>`; }
+      if (err) err.style.display = "none";
+      try {
+        const html = await decryptDoc(code);
+        sessionStorage.setItem("zap_docs_session_key", code);
+        document.open(); document.write(html); document.close();
+      } catch (e) {
+        if (err) { err.style.display = "block"; err.textContent = "❌ Invalid Passcode. Access denied."; }
+        if (btn) { btn.disabled = false; btn.innerHTML = `<span>Authenticate &amp; Access</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"></polyline></svg>`; }
+        if (input) {
+          input.classList.remove("shake");
+          void input.offsetWidth;
+          input.classList.add("shake");
+          input.value = "";
+          input.focus();
+        }
+      }
+    }
+
+    (function() {
+      const saved = sessionStorage.getItem("zap_docs_session_key");
+      if (saved) window.addEventListener("DOMContentLoaded", () => handleUnlock(saved));
+    })();
+  </script>
+</body>
+</html>
