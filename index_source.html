@@ -82,12 +82,12 @@
     </div>
 
     <div class="header-right">
-      <div id="google_translate_element" class="g-translate-wrapper"></div>
       <div class="g-stats-badge">
-        <span data-i18n="stats_apis">APIs:</span>
-        <strong data-i18n="stats_endpoints">350 Endpoints</strong>
+        <span>APIs:</span>
+        <strong>350 Endpoints</strong>
       </div>
-      <button onclick="lockDocs()" class="theme-toggle-btn" title="Lock Documentation" aria-label="Lock Documentation" style="font-size: 14px;">
+      <button onclick="lockDocs()" class="theme-toggle-btn" title="Lock Documentation" aria-label="Lock Documentation"
+        style="font-size: 14px;">
         🔒
       </button>
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
@@ -1626,7 +1626,8 @@ end</pre>
       <!-- Section 1E-2: End-to-End Sequence Flows -->
       <section id="view-sequence" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Architecture</span> &rsaquo; <span data-i18n="nav_sequence">End-to-End Sequence Flows</span>
+          <span>Docs</span> &rsaquo; <span>Architecture</span> &rsaquo; <span data-i18n="nav_sequence">End-to-End
+            Sequence Flows</span>
         </div>
 
         <div class="g-doc-header">
@@ -3387,7 +3388,8 @@ end</code></pre>
       <!-- Section 1G: Circuit Breaker Resilience4j Policies -->
       <section id="view-circuit" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span data-i18n="nav_circuit">Circuit Breaker Policies</span>
+          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span data-i18n="nav_circuit">Circuit
+            Breaker Policies</span>
         </div>
 
         <div class="g-doc-header">
@@ -3495,7 +3497,8 @@ public class FallbackController {
       <!-- Section 1H: GCS Media Upload Flow -->
       <section id="view-gcs" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span data-i18n="nav_gcs">GCS Media Upload Flow</span>
+          <span>Docs</span> &rsaquo; <span>Developer Guidelines</span> &rsaquo; <span data-i18n="nav_gcs">GCS Media
+            Upload Flow</span>
         </div>
 
         <div class="g-doc-header">
@@ -3664,7 +3667,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       ═══════════════════════════════════════════════════════════════════ -->
       <section id="view-gantt" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Project Roadmap</span> &rsaquo; <span data-i18n="nav_gantt">Development Roadmap</span>
+          <span>Docs</span> &rsaquo; <span>Project Roadmap</span> &rsaquo; <span data-i18n="nav_gantt">Development
+            Roadmap</span>
         </div>
         <div class="g-doc-header">
           <h1 class="g-doc-title">ZAP Platform &mdash; Development Roadmap</h1>
@@ -3873,7 +3877,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       <!-- Section: ZAP CRM Terms of Service -->
       <section id="view-terms" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span data-i18n="nav_terms">Terms of Service</span>
+          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span data-i18n="nav_terms">Terms of
+            Service</span>
         </div>
 
         <div class="g-doc-header">
@@ -3965,7 +3970,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       <!-- Section: ZAP CRM Privacy Policy -->
       <section id="view-privacy" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span data-i18n="nav_privacy">Privacy Policy</span>
+          <span>Docs</span> &rsaquo; <span>Legal &amp; Compliance</span> &rsaquo; <span data-i18n="nav_privacy">Privacy
+            Policy</span>
         </div>
 
         <div class="g-doc-header">
@@ -4074,7 +4080,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       <!-- Section: API Stress Test & Performance Benchmark -->
       <section id="view-stress-test" class="g-doc-section">
         <div class="g-breadcrumb">
-          <span>Docs</span> &rsaquo; <span>Architecture &amp; Ecosystem</span> &rsaquo; <span data-i18n="nav_stress">API Stress Test</span>
+          <span>Docs</span> &rsaquo; <span>Architecture &amp; Ecosystem</span> &rsaquo; <span data-i18n="nav_stress">API
+            Stress Test</span>
         </div>
 
         <div class="g-doc-header">
@@ -4183,8 +4190,13 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
                 <span>▶</span> RUN STRESS TEST
               </button>
               <button id="web-clear-btn" onclick="clearStressTestResults()"
-                style="background: var(--bg-tertiary, #f1f3f4); color: var(--text-secondary, #5f6368); border: 1px solid var(--border-color, #e0e0e0); padding: 12px 18px; font-weight: 600; font-size: 13px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" title="Clear saved stress test results from localStorage">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Clear Saved Results
+                style="background: var(--bg-tertiary, #f1f3f4); color: var(--text-secondary, #5f6368); border: 1px solid var(--border-color, #e0e0e0); padding: 12px 18px; font-weight: 600; font-size: 13px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;"
+                title="Clear saved stress test results from localStorage">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg> Clear Saved Results
               </button>
             </div>
           </div>
@@ -5068,7 +5080,8 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
               </svg>
               Custom Private VPC
             </div>
-            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">10.***.***.***/16 + VPC Connector 10.***.***.***/28</div>
+            <div style="font-size: 11px; color: var(--text-muted, #70757a); margin-top: 4px;">10.***.***.***/16 + VPC
+              Connector 10.***.***.***/28</div>
           </div>
           <div
             style="background: var(--bg-primary, #ffffff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 10px; padding: 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
@@ -5843,10 +5856,6 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
   </div>
 
   <script src="js/api-data.js?v=153"></script>
-    <script src="js/theme.js"></script>
-  <script src="js/navigation.js"></script>
-  <script src="js/health.js"></script>
-  <script src="js/exporter.js"></script>
   <script src="js/app.js"></script>
   <!-- Prism.js Core + Language Components for Code Syntax Highlighting -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
@@ -5963,19 +5972,6 @@ public String generateSignedUploadUrl(String fileName, String contentType) {
       }
     });
   </script>
-
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,vi,ja,zh-CN,ko,fr,de,es',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-  </script>
-  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
 </body>
 
 </html>
