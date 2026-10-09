@@ -209,7 +209,57 @@ body {
   bottom: 0;
   left: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 16px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+/* Slim Sleek Scrollbar for Sidebar (Cross-platform Windows & Mac) */
+.g-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.g-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.g-sidebar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.g-sidebar:hover::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+}
+
+.g-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Global Subtle Scrollbars for Windows & Chrome */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
 }
 
 .g-nav-section {
